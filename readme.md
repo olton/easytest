@@ -49,8 +49,8 @@ Update `package.json` to run tests with `easytest` command.
 - `test` - create simple test
 
 ### Matchers
-- `toBe` - compare values
-- `toEqual` - compare objects
+- `toBe` - compare values with `===`
+- `toEqual` - compare values with `==`
 - `toMatch` - compare strings with regex
 - `toBeDefained` - check if value is defined
 - `toBeUndefined` - check if value is undefined
