@@ -2,7 +2,7 @@
 
 Simple javascript test framework. The framework is developed for testing internal products: EasyData, EasyQuery, Metro UI.
 
-[![NPM Version](https://img.shields.io/npm/v/easytest)](https://www.npmjs.com/package/easytest)
+[![NPM Version](https://img.shields.io/npm/v/@olton/easytest)](https://www.npmjs.com/package/@olton/easytest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=7852a9)](https://opensource.org/licenses/MIT)
 
 ## Installation
