@@ -61,6 +61,10 @@ Update `package.json` to run tests with `easytest` command.
 - `toContain` - check if array contains value or string contains substring
 - `toBeArrayEqual` - check if arrays are equal
 
+### Not implemented
+- [ ] Testing async code
+- [ ] Testing typescript without compiling
+
 ## License
 EasyTest licensed under MIT license.
 
