@@ -22,6 +22,8 @@ let itScope = {}
 let passedTests = 0
 let failedTests = 0
 
+let expectedTests = 0
+
 const configFileName = 'easytest.config.json'
 
 const config = {
@@ -87,7 +89,7 @@ export function it (name, fn) {
         fn1.apply(this)
     }
 
-    fn.apply(this)
+    fn.apply(this); expectedTests++;
 
     for (let fn1 of afterEachFunctions) {
         fn1.apply(this)
@@ -109,7 +111,7 @@ export function test (name, fn) {
         fn1.apply(this)
     }
 
-    fn.apply(this)
+    fn.apply(this); expectedTests++;
 
     for (let fn1 of afterAllFunctions) {
         fn1.apply(this)
@@ -153,7 +155,7 @@ export function expect (actual) {
             } else {
                 failedTests++
                 itScope.expects.push({
-                    name: `Expected ${expected} received ${actual}`,
+                    name: `Expected object not equal to received`,
                     actual,
                     expected,
                     result,
