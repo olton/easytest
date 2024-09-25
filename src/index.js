@@ -19,8 +19,6 @@ let currentTests = {
 }
 let currentDescribe = {}
 let itScope = {}
-let passedTests = 0
-let failedTests = 0
 
 const configFileName = 'easytest.config.json'
 
@@ -143,12 +141,10 @@ export function expect (actual) {
             let result = deepEqual(actual, expected)
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected object not equal to received`,
                     actual,
@@ -161,12 +157,10 @@ export function expect (actual) {
             let result = actual == expected
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                passedTests++
                 itScope.expects.push({
                     name: `Expected ${expected} received ${actual}`,
                     actual,
@@ -179,12 +173,10 @@ export function expect (actual) {
             let result = actual.match(expected)
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected ${expected} received ${actual}`,
                     actual,
@@ -197,12 +189,10 @@ export function expect (actual) {
             let result = actual !== undefined
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected defined var received ${actual}`,
                     actual,
@@ -215,12 +205,10 @@ export function expect (actual) {
             let result = actual === undefined
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected undefined received ${actual}`,
                     actual,
@@ -233,12 +221,10 @@ export function expect (actual) {
             let result = actual === null
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected null received ${actual}`,
                     actual,
@@ -251,12 +237,10 @@ export function expect (actual) {
             let result = actual === true
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected true received ${actual}`,
                     actual,
@@ -269,12 +253,10 @@ export function expect (actual) {
             let result = actual === false
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected false received ${actual}`,
                     actual,
@@ -287,12 +269,10 @@ export function expect (actual) {
             let result = actual.includes(expected)
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected ${actual} contain ${expected}`,
                     actual,
@@ -305,12 +285,10 @@ export function expect (actual) {
             let result = actual > expected
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected the ${actual} greater than ${expected}`,
                     actual,
@@ -323,12 +301,10 @@ export function expect (actual) {
             let result = actual < expected
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected the ${actual} less than ${expected}`,
                     actual,
@@ -346,12 +322,10 @@ export function expect (actual) {
             }
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `The code is expected to throw an Exception`,
                     actual,
@@ -371,12 +345,10 @@ export function expect (actual) {
             }
 
             if (result) {
-                passedTests++
                 itScope.expects.push({
                     result,
                 })
             } else {
-                failedTests++
                 itScope.expects.push({
                     name: `The error message is expected to be "${expected}" but received "${message}"`,
                     actual,
@@ -387,7 +359,6 @@ export function expect (actual) {
         },
         toBeArrayEqual: (expected) => {
             if (actual.length !== expected.length) {
-                failedTests++
                 itScope.expects.push({
                     name: `Expected [${expected.join(',')}] received [${actual.join(',')}]`,
                     actual,
@@ -399,7 +370,6 @@ export function expect (actual) {
 
             for (let i = 0; i < actual.length; i++) {
                 if (actual[i] !== expected[i]) {
-                    failedTests++
                     itScope.expects.push({
                         name: `Expected [${expected.join(',')}] received [${actual.join(',')}]`,
                         actual,
@@ -410,7 +380,6 @@ export function expect (actual) {
                 }
             }
 
-            passedTests++
             itScope.expects.push({
                 result: true,
             })
