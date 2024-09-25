@@ -30,7 +30,9 @@ Passed: ${chalk.green.bold(passed)}, Failed: ${chalk.red.bold(failed)}
                     log(chalk.green(`  [✓] ${it.name} [${it.duration}ms]`))
                 } else {
                     log(chalk.red(`  [✗] ${it.name} (${expect.name})`))
+                    log(chalk.gray(`Expected`))
                     deb(expect.expected)
+                    log(chalk.gray(`Actual`))
                     deb(expect.actual)
                 }
             }

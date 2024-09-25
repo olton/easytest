@@ -140,35 +140,7 @@ export let afterAll = (fn) => {
 export function expect (actual) {
     return {
         toBe: (expected) => {
-            let result = false
-
-            if (typeof actual === 'object' && typeof expected === 'object') {
-                const actualKeys = Object.keys(actual)
-                const expectedKeys = Object.keys(expected)
-                if (actualKeys.length === expectedKeys.length) {
-                    for (const key of actualKeys) {
-                        if (actual[key] === expected[key]) {
-                            result = true
-                        } else {
-                            result = false
-                            break
-                        }
-                    }
-                }
-            } else if (Array.isArray(actual)) {
-                if (actual.length === expected.length) {
-                    for (let i = 0; i < actual.length; i++) {
-                        if (actual[i] === expected[i]) {
-                            result = true
-                        } else {
-                            result = false
-                            break
-                        }
-                    }
-                }
-            } else {
-                result = actual === expected
-            }
+            let result = deepEqual(actual, expected)
 
             if (result) {
                 passedTests++
@@ -176,7 +148,7 @@ export function expect (actual) {
                     name: `Expect ${actual} toBe ${expected}`,
                     actual,
                     expected,
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -184,18 +156,20 @@ export function expect (actual) {
                     name: `Expected ${expected} received ${actual}`,
                     actual,
                     expected,
-                    result: false,
+                    result,
                 })
             }
         },
         toEqual: (expected) => {
-            if (actual == expected) {
+            let result = actual == expected
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} toEqual ${expected}`,
                     actual,
                     expected,
-                    result: true,
+                    result,
                 })
             } else {
                 passedTests++
@@ -203,18 +177,20 @@ export function expect (actual) {
                     name: `Expected ${expected} received ${actual}`,
                     actual,
                     expected,
-                    result: false,
+                    result,
                 })
             }
         },
         toBeDefined: () => {
-            if (actual !== undefined) {
+            let result = actual !== undefined
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} toBeDefined`,
                     actual,
                     expected: 'defined',
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -222,18 +198,20 @@ export function expect (actual) {
                     name: `Expected defined var received ${actual}`,
                     actual,
                     expected: 'defined',
-                    result: false,
+                    result,
                 })
             }
         },
         toBeUndefined: () => {
-            if (actual === undefined) {
+            let result = actual === undefined
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} toBeUndefined`,
                     actual,
                     expected: 'undefined',
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -241,18 +219,20 @@ export function expect (actual) {
                     name: `Expected undefined received ${actual}`,
                     actual,
                     expected: 'undefined',
-                    result: false,
+                    result,
                 })
             }
         },
         toBeNull: () => {
-            if (actual === null) {
+            let result = actual === null
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} toBeNull`,
                     actual,
                     expected: 'null',
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -260,18 +240,20 @@ export function expect (actual) {
                     name: `Expected null received ${actual}`,
                     actual,
                     expected: 'null',
-                    result: false,
+                    result,
                 })
             }
         },
         toBeTruthy: () => {
-            if (actual === true) {
+            let result = actual === true
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} toBeTruthy`,
                     actual,
                     expected: 'true',
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -279,18 +261,20 @@ export function expect (actual) {
                     name: `Expected true received ${actual}`,
                     actual,
                     expected: 'true',
-                    result: false,
+                    result,
                 })
             }
         },
         toBeFalsy: () => {
-            if (actual === false) {
+            let result = actual === false
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} toBeFalsy`,
                     actual,
                     expected: 'false',
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -298,18 +282,20 @@ export function expect (actual) {
                     name: `Expected false received ${actual}`,
                     actual,
                     expected: 'false',
-                    result: false,
+                    result,
                 })
             }
         },
         toContain: (expected) => {
-            if (actual.includes(expected)) {
+            let result = actual.includes(expected)
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} contain ${expected}`,
                     actual,
                     expected,
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -317,18 +303,20 @@ export function expect (actual) {
                     name: `Expected ${actual} contain ${expected}`,
                     actual,
                     expected,
-                    result: false,
+                    result,
                 })
             }
         },
         toBeGreaterThan: (expected) => {
-            if (actual > expected) {
+            let result = actual > expected
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} > ${expected}`,
                     actual,
                     expected,
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -336,18 +324,20 @@ export function expect (actual) {
                     name: `Expected the ${actual} greater than ${expected}`,
                     actual,
                     expected,
-                    result: false,
+                    result,
                 })
             }
         },
         toBeLessThan: (expected) => {
-            if (actual < expected) {
+            let result = actual < expected
+
+            if (result) {
                 passedTests++
                 itScope.expects.push({
                     name: `Expect ${actual} > ${expected}`,
                     actual,
                     expected,
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -355,7 +345,7 @@ export function expect (actual) {
                     name: `Expected the ${actual} less than ${expected}`,
                     actual,
                     expected,
-                    result: false,
+                    result,
                 })
             }
         },
@@ -373,7 +363,7 @@ export function expect (actual) {
                     name: `The code threw an Exception`,
                     actual,
                     expected: 'throw',
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -381,7 +371,7 @@ export function expect (actual) {
                     name: `The code is expected to throw an Exception`,
                     actual,
                     expected: 'throw',
-                    result: false,
+                    result,
                 })
             }
         },
@@ -403,7 +393,7 @@ export function expect (actual) {
                     name: `The error message received correctly`,
                     actual,
                     expected,
-                    result: true,
+                    result,
                 })
             } else {
                 failedTests++
@@ -411,45 +401,9 @@ export function expect (actual) {
                     name: `The error message is expected to be "${expected}" but received "${message}"`,
                     actual,
                     expected,
-                    result: false,
+                    result,
                 })
             }
-        },
-        toBeObjectEqual: (expected) => {
-            const actualKeys = Object.keys(actual)
-            const expectedKeys = Object.keys(expected)
-
-            if (actualKeys.length !== expectedKeys.length) {
-                failedTests++
-                itScope.expects.push({
-                    name: `Received object is not equal to expected object`,
-                    actual,
-                    expected,
-                    result: false,
-                })
-                return
-            }
-
-            for (const key of actualKeys) {
-                if (actual[key] !== expected[key]) {
-                    failedTests++
-                    itScope.expects.push({
-                        name: `Received object is not equal to expected object`,
-                        actual,
-                        expected,
-                        result: false,
-                    })
-                    return
-                }
-            }
-
-            passedTests++
-            itScope.expects.push({
-                name: `Expect ${actual} to be deep equal ${expected}`,
-                actual,
-                expected,
-                result: true,
-            })
         },
         toBeArrayEqual: (expected) => {
             if (actual.length !== expected.length) {
@@ -483,27 +437,6 @@ export function expect (actual) {
                 expected,
                 result: true,
             })
-        },
-        toBeDeepEqual: (expected) => {
-            let result = deepEqual(actual, expected)
-
-            if (result) {
-                passedTests++
-                itScope.expects.push({
-                    name: `Expect ${actual} deep equal to ${expected}`,
-                    actual,
-                    expected,
-                    result: true,
-                })
-            } else {
-                failedTests++
-                itScope.expects.push({
-                    name: `Objects are not deep equal`,
-                    actual,
-                    expected,
-                    result: false,
-                })
-            }
         },
     }
 }
