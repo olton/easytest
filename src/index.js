@@ -22,8 +22,6 @@ let itScope = {}
 let passedTests = 0
 let failedTests = 0
 
-let expectedTests = 0
-
 const configFileName = 'easytest.config.json'
 
 const config = {
@@ -44,8 +42,6 @@ export const runTests = async () => {
     }
 
     showTestsResults({
-        passed: passedTests,
-        failed: failedTests,
         suites: statsSuites,
         simple: statsSimpleTests,
         config,
@@ -78,7 +74,7 @@ export function describe (name, fn) {
     statsSuites.push(currentDescribe)
 }
 
-export async function it (name, fn) {
+export function it (name, fn) {
     itScope = {
         name: name,
         expects: [],
@@ -86,27 +82,22 @@ export async function it (name, fn) {
     }
 
     for (let fn1 of beforeEachFunctions) {
-        await fn1.apply(this)
+        fn1.apply(this)
     }
 
-    if (fn.constructor.name === 'AsyncFunction') {
-        await fn.apply(this);
-    } else {
-        fn.apply(this);
-    }
-
-    expectedTests++;
+    fn.apply(this);
 
     for (let fn1 of afterEachFunctions) {
-        await fn1.apply(this)
+        fn1.apply(this)
     }
 
     const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
     itScope.duration = (seconds * 1e9 + nanoseconds) / 1e6;
+
     currentDescribe.it.push(itScope)
 }
 
-export async function test (name, fn) {
+export function test (name, fn) {
     itScope = {
         name: `Test ${name}`,
         expects: [],
@@ -114,21 +105,18 @@ export async function test (name, fn) {
     }
 
     for (let fn1 of beforeAllFunctions) {
-        await fn1.apply(this)
+        fn1.apply(this)
     }
 
-    if (fn.constructor.name === 'AsyncFunction') {
-        await fn.apply(this);
-    } else {
-        fn.apply(this);
-    }
+    fn.apply(this);
 
     for (let fn1 of afterAllFunctions) {
-        await fn1.apply(this)
+        fn1.apply(this)
     }
 
     const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
     itScope.duration = (seconds * 1e9 + nanoseconds) / 1e6;
+
     currentTests.it.push(itScope)
     statsSimpleTests.push(currentTests)
 }
@@ -157,9 +145,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toBe ${expected}`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -178,9 +163,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toEqual ${expected}`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -199,9 +181,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toMatch ${expected}`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -220,9 +199,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toBeDefined`,
-                    actual,
-                    expected: 'defined',
                     result,
                 })
             } else {
@@ -241,9 +217,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toBeUndefined`,
-                    actual,
-                    expected: 'undefined',
                     result,
                 })
             } else {
@@ -262,9 +235,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toBeNull`,
-                    actual,
-                    expected: 'null',
                     result,
                 })
             } else {
@@ -283,9 +253,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toBeTruthy`,
-                    actual,
-                    expected: 'true',
                     result,
                 })
             } else {
@@ -304,9 +271,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} toBeFalsy`,
-                    actual,
-                    expected: 'false',
                     result,
                 })
             } else {
@@ -325,9 +289,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} contain ${expected}`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -346,9 +307,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} > ${expected}`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -367,9 +325,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `Expect ${actual} > ${expected}`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -393,9 +348,6 @@ export function expect (actual) {
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `The code threw an Exception`,
-                    actual,
-                    expected: 'throw',
                     result,
                 })
             } else {
@@ -415,17 +367,12 @@ export function expect (actual) {
                 actual()
             } catch (e) {
                 message = e.message
-                if (e.message === expected) {
-                    result = true
-                }
+                result = e.message.match(expected)
             }
 
             if (result) {
                 passedTests++
                 itScope.expects.push({
-                    name: `The error message received correctly`,
-                    actual,
-                    expected,
                     result,
                 })
             } else {
@@ -465,9 +412,6 @@ export function expect (actual) {
 
             passedTests++
             itScope.expects.push({
-                name: `Expect ${actual} to be equal ${expected}`,
-                actual,
-                expected,
                 result: true,
             })
         },

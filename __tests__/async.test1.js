@@ -6,16 +6,14 @@ async function fetchData() {
     });
 }
 
-describe('Async function tests', () => {
+describe('Async function tests', async () => {
     it('should return data after 1 second', async () => {
         const data = await fetchData();
-        console.log("Async test");
-        expect(data).toBe("Data received1");
+        expect(data).toBe("Bad Data");
     });
 });
 
 test('should return data after 1 second', async () => {
     const data = await fetchData();
-    console.log("Async test");
-    expect(data).toBe("Data received1");
+    expect(data).toBe("Bad Data");
 });

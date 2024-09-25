@@ -4,19 +4,45 @@ const log = console.log
 const dir = console.dir
 const deb = console.debug
 
-export const showTestsResults = ({passed, failed, suites, simple, config}) => {
+let passed = 0
+let failed = 0
+
+export const showTestsResults = ({suites, simple, config}) => {
     log(`
 ${chalk.yellow('EasyTest Process...')}
 --------------------------------
 Include: ${chalk.magenta(typeof config.include === "string" ? config.include : "["+config.include.join(', ')+"]")}
 Exclude: ${chalk.gray(typeof config.exclude === "string" ? config.exclude : config.exclude.join(', '))}
 --------------------------------    
-Total Test: ${passed + failed}
-Passed: ${chalk.green.bold(passed)}, Failed: ${chalk.red.bold(failed)}
     `)
 
-    const logTitleSuites = failed > 0 ? chalk.bgRed : chalk.bgGreen
-    log(logTitleSuites(failed > 0 ? 'Test chain incomplete' : 'Test chain complete'))
+    let testComplete = true
+    for (let index = 0; index < suites.length; index++) {
+        const desc = suites[index]
+        for (let it of desc.it) {
+            for (let expect of it.expects) {
+                if (!expect.result) {
+                    testComplete = false
+                    break
+                }
+            }
+        }
+    }
+    if (testComplete) for (let index = 0; index < simple.length; index++) {
+        const desc = simple[index]
+        for (let it of desc.it) {
+            for (let expect of it.expects) {
+                if (!expect.result) {
+                    testComplete = false
+                    break
+                }
+            }
+        }
+    }
+
+
+    const logTitleSuites = !testComplete ? chalk.bgRed : chalk.bgGreen
+    log(logTitleSuites(!testComplete ? 'Test chain incomplete' : 'Test chain complete'))
 
     log(chalk.blue.bold(`\nTest Suites`))
 
@@ -27,13 +53,15 @@ Passed: ${chalk.green.bold(passed)}, Failed: ${chalk.red.bold(failed)}
         for (let it of desc.it) {
             for (let expect of it.expects) {
                 if (expect.result) {
+                    passed++
                     log(chalk.green(`[✓] ${it.name} [${it.duration}ms]`))
                 } else {
+                    failed++
                     log(chalk.red(`[✗] ${it.name} (${expect.name})`))
-                    log(chalk.gray(`Expected`))
-                    deb(expect.expected)
-                    log(chalk.gray(`Actual`))
-                    deb(expect.actual)
+                    log(chalk.gray(`Expected:`))
+                    dir(expect.expected)
+                    log(chalk.gray(`Received:`))
+                    dir(expect.actual)
                 }
             }
         }
@@ -47,12 +75,20 @@ Passed: ${chalk.green.bold(passed)}, Failed: ${chalk.red.bold(failed)}
         for (let it of desc.it) {
             for (let expect of it.expects) {
                 if (expect.result) {
+                    passed++
                     log(chalk.green(`[✓] ${it.name} [${it.duration}ms]`))
                 } else {
+                    failed++
                     log(chalk.red(`[✗] ${it.name} ${expect.name}`))
                 }
             }
         }
     }
 
+    log(`
+--------------------------------
+Total Test: ${passed + failed}
+Passed: ${chalk.green.bold(passed)}, Failed: ${chalk.red.bold(failed)}
+--------------------------------    
+    `)
 }
