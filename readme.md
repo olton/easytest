@@ -52,13 +52,13 @@ Update `package.json` to run tests with `easytest` command.
 - `toBeDefained` - check if value is defined
 - `toBeUndefined` - check if value is undefined
 - `toThrow` - check if function throws an error
-- `toThrowError` - check if function throws an error
+- `toThrowError` - check if function throws an error with a specific message
 - `toBeGreaterThan` - check if value is greater than
 - `toBeLessThan` - check if value is less than
 - `toBeNull` - check if value is null
 - `toBeTruthy` - check if value is true
 - `toBeFalsy` - check if value is false
-- `toContain` - check if array contains value or string contains substring
+- `toContain` - check if an array contains value or string contains substring
 - `toBeArrayEqual` - check if arrays are equal
 
 ### Not implemented
