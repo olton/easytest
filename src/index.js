@@ -78,7 +78,7 @@ export function describe (name, fn) {
     statsSuites.push(currentDescribe)
 }
 
-export function it (name, fn) {
+export async function it (name, fn) {
     itScope = {
         name: name,
         expects: [],
@@ -86,13 +86,19 @@ export function it (name, fn) {
     }
 
     for (let fn1 of beforeEachFunctions) {
-        fn1.apply(this)
+        await fn1.apply(this)
     }
 
-    fn.apply(this); expectedTests++;
+    if (fn.constructor.name === 'AsyncFunction') {
+        await fn.apply(this);
+    } else {
+        fn.apply(this);
+    }
+
+    expectedTests++;
 
     for (let fn1 of afterEachFunctions) {
-        fn1.apply(this)
+        await fn1.apply(this)
     }
 
     const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
@@ -100,7 +106,7 @@ export function it (name, fn) {
     currentDescribe.it.push(itScope)
 }
 
-export function test (name, fn) {
+export async function test (name, fn) {
     itScope = {
         name: `Test ${name}`,
         expects: [],
@@ -108,13 +114,17 @@ export function test (name, fn) {
     }
 
     for (let fn1 of beforeAllFunctions) {
-        fn1.apply(this)
+        await fn1.apply(this)
     }
 
-    fn.apply(this); expectedTests++;
+    if (fn.constructor.name === 'AsyncFunction') {
+        await fn.apply(this);
+    } else {
+        fn.apply(this);
+    }
 
     for (let fn1 of afterAllFunctions) {
-        fn1.apply(this)
+        await fn1.apply(this)
     }
 
     const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
@@ -175,6 +185,27 @@ export function expect (actual) {
                 })
             } else {
                 passedTests++
+                itScope.expects.push({
+                    name: `Expected ${expected} received ${actual}`,
+                    actual,
+                    expected,
+                    result,
+                })
+            }
+        },
+        toMatch: (expected) => {
+            let result = actual.match(expected)
+
+            if (result) {
+                passedTests++
+                itScope.expects.push({
+                    name: `Expect ${actual} toMatch ${expected}`,
+                    actual,
+                    expected,
+                    result,
+                })
+            } else {
+                failedTests++
                 itScope.expects.push({
                     name: `Expected ${expected} received ${actual}`,
                     actual,
