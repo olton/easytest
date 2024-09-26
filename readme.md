@@ -7,6 +7,12 @@ Simple testing framework for JS, TS. Written in pure JavaScript. JavaScript and 
 [![NPM Version](https://img.shields.io/npm/v/@olton/easytest)](https://www.npmjs.com/package/@olton/easytest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=7852a9)](https://opensource.org/licenses/MIT)
 
+---
+
+![img.png](img.png)
+
+---
+
 ## Installation
 
 ```bash

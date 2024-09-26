@@ -5,6 +5,7 @@ import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
 import {deepEqual, compareStructure} from './helpers/objects.js'
 import {runner} from "./runner.js";
+import {stringify} from "./helpers/json.js";
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
@@ -360,6 +361,19 @@ export const expect = (actual) => {
         },
         toBeDeepEqual: (expected) => {
             let result = deepEqual(actual, expected)
+
+            return {
+                name: result ? 'Test passed' : `Expected object not equal to received`,
+                actual,
+                expected,
+                result,
+            }
+        },
+        toBeDeepEqualSafe: (expected) => {
+            let map1 = stringify(actual)
+            let map2 = stringify(expected)
+
+            const result = map1 === map2
 
             return {
                 name: result ? 'Test passed' : `Expected object not equal to received`,
