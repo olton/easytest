@@ -141,10 +141,6 @@ export NODE_OPTIONS="--import tsx"
 set NODE_OPTIONS="--import tsx"
 ```
 
-
-### Current problems
-- Testing async code (maybe we need to create a global queue of tests and then execute this her?)
-
 ## License
 EasyTest licensed under MIT license.
 
