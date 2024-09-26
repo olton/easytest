@@ -1,7 +1,6 @@
 import { glob } from 'glob'
 import { pathToFileURL } from 'url';
 import fs from 'fs'
-import { showTestsResults } from './result.js'
 import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
 import {deepEqual, compareStructure} from './helpers/objects.js'
@@ -11,13 +10,6 @@ const beforeEachFunctions = []
 const afterEachFunctions = []
 const beforeAllFunctions = []
 const afterAllFunctions = []
-const statsSuites = []
-const statsSimpleTests = []
-
-let simpleTests = {
-    name: 'Simple tests',
-    it: []
-}
 let currentDescribe = {}
 let itScope = {}
 let currentTestFile = ''
