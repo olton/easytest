@@ -8,7 +8,7 @@ Simple javascript test framework. The framework is developed for testing interna
 ## Installation
 
 ```bash
-npm install easytest -D
+npm install @olton/easytest -D
 ```
 
 ## Usage
