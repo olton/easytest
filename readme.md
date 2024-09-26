@@ -94,13 +94,31 @@ and then
 ```json
 {
     "scripts": {
-        "test": "easytest --compiler tsx"
+        "test": "cross-env NODE_OPTIONS=\"--import tsx\" easytest"
     }
 }
 ```
 
+### Environment variables to support TypeScript
+
+**powershell**
+```powershell
+$env:NODE_OPTIONS="--import tsx"
+```
+
+**linux**
+```powershell
+export NODE_OPTIONS="--import tsx"
+```
+
+**cmd**
+```powershell
+set NODE_OPTIONS="--import tsx"
+```
+
+
 ### Current problems
-- [ ] Testing async code (maybe we need to create a global queue of tests and then execute this her?)
+- Testing async code (maybe we need to create a global queue of tests and then execute this her?)
 
 ## License
 EasyTest licensed under MIT license.
