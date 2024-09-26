@@ -143,7 +143,14 @@ Update `package.json` to run tests with `easytest` command.
 - [ ] `toBeArrayBuffer` - check if value is array buffer
 - [ ] `toBeDataView` - check if value is data view
 - [ ] `toBePromise` - check if value is promise
-
+- [ ] `toBeHtmlElement` - check if object is HTML element
+- [ ] `toBeHtmlNode` - check if an object is HTML node
+- [ ] `toBeHtmlCollection` - check if an object is an HTML collection
+- [ ] `hasClass` - check if an HTML element has class
+- [ ] `hasAttribute` - check if an HTML element has attribute
+- [ ] `hasProperty` - check if an object has property
+- [ ] `hasChildren` - check if an HTML element has children
+- [ ] `hasParent` - check if an HTML element has parent
 
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.
