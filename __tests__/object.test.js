@@ -11,6 +11,27 @@ describe(`Objects tests suite`, () => {
     it(`Failed test`, () => {
         let obj1 = {a: 1}
         let obj2 = {b: 2}
-        expect(obj1).toBe(obj2)
+        expect(obj1).toBeEqualObject(obj2)
+    })
+    it(`Deep Equal`, () => {
+        let obj1 = {
+            data: {
+                get: "why",
+                set: "ohh"
+            },
+            val: "test",
+            prop: "hello",
+            column: "test"
+        }
+        let obj2 = {
+            data: {
+                get: "why",
+                set: "ohh"
+            },
+            val: "test",
+            prop: "hello",
+            column: "test"
+        }
+        expect(obj1).toBeDeepEqual(obj2)
     })
 })

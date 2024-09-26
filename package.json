@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "test": "node cli/easytest.js"
+    "test": "tsx cli/easytest.js"
   },
   "keywords": [
     "havascript",
@@ -27,8 +27,6 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.0",
-    "ts-node": "^10.9.2",
-    "tslib": "^2.7.0",
-    "typescript": "^5.6.2"
+    "tsx": "^4.19.1"
   }
 }

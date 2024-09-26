@@ -85,10 +85,22 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeDeepEqual` - check if objects are deeply equal
 - [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
 
+### TypeScript
+To use `EasyTest` with TypeScript you need to install `tsx` package.
+```bash
+npm install tsx -D
+```
+and then 
+```json
+{
+    "scripts": {
+        "test": "easytest --compiler tsx"
+    }
+}
+```
 
 ### Current problems
-- [ ] Testing async code
-- [ ] Testing typescript without compiling
+- [ ] Testing async code (maybe we need to create a global queue of tests and then execute this her?)
 
 ## License
 EasyTest licensed under MIT license.

@@ -4,7 +4,7 @@ import fs from 'fs'
 import { showTestsResults } from './result.js'
 import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
-import {equalStruct, deepEqual} from './helpers/objects.js'
+import {deepEqual, compareStructure} from './helpers/objects.js'
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
