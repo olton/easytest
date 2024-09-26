@@ -1,6 +1,10 @@
 # EasyTest
 
-Simple testing framework for JS, TS. Written in pure JavaScript. JavaScript and TypeScript tests. There is support for asynchronous code testing and TypeScript testing out of the box.
+Simple testing framework for JS, TS. 
+Written in pure JavaScript. 
+JavaScript and TypeScript tests. 
+There is support for asynchronous code testing and TypeScript testing out of the box.
+Global DOM object for testing out of the box.
 
 ---
 
