@@ -125,8 +125,10 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeDeepEqual` - check if objects are deeply equal
 - [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
 - [ ] `toBeInteger` - check if value is integer
+- [ ] `toBeSafeInteger` - check if value is safe integer
 - [ ] `toBeFloat` - check if value is float
 - [ ] `toBeNumber` - check if value is number
+- [ ] `toBeNaN` - check if value is NaN
 - [ ] `toBeString` - check if value is string
 - [ ] `toBeBoolean` - check if value is boolean
 - [ ] `toBeFunction` - check if value is function
