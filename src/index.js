@@ -140,178 +140,112 @@ export function expect (actual) {
         toBe: (expected) => {
             let result = deepEqual(actual, expected)
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected object not equal to received`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected object not equal to received`,
+                actual,
+                expected,
+                result,
+            })
         },
         toEqual: (expected) => {
             let result = actual == expected
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected ${expected} received ${actual}`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected ${expected} received ${actual}`,
+                actual,
+                expected,
+                result,
+            })
         },
         toMatch: (expected) => {
             let result = actual.match(expected)
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected ${expected} received ${actual}`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected ${expected} received ${actual}`,
+                actual,
+                expected,
+                result,
+            })
         },
         toBeDefined: () => {
             let result = actual !== undefined
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected defined var received ${actual}`,
-                    actual,
-                    expected: 'defined',
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected defined var received ${actual}`,
+                actual,
+                expected: 'defined',
+                result,
+            })
         },
         toBeUndefined: () => {
             let result = actual === undefined
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected undefined received ${actual}`,
-                    actual,
-                    expected: 'undefined',
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected undefined received ${actual}`,
+                actual,
+                expected: 'undefined',
+                result,
+            })
         },
         toBeNull: () => {
             let result = actual === null
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected null received ${actual}`,
-                    actual,
-                    expected: 'null',
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected null received ${actual}`,
+                actual,
+                expected: 'null',
+                result,
+            })
         },
         toBeTruthy: () => {
             let result = actual === true
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected true received ${actual}`,
-                    actual,
-                    expected: 'true',
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected true received ${actual}`,
+                actual,
+                expected: 'true',
+                result,
+            })
         },
         toBeFalsy: () => {
             let result = actual === false
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected false received ${actual}`,
-                    actual,
-                    expected: 'false',
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected false received ${actual}`,
+                actual,
+                expected: 'false',
+                result,
+            })
         },
         toContain: (expected) => {
             let result = actual.includes(expected)
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected ${actual} contain ${expected}`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected ${actual} contain ${expected}`,
+                actual,
+                expected,
+                result,
+            })
         },
         toBeGreaterThan: (expected) => {
             let result = actual > expected
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected the ${actual} greater than ${expected}`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected the ${actual} greater than ${expected}`,
+                actual,
+                expected,
+                result,
+            })
         },
         toBeLessThan: (expected) => {
             let result = actual < expected
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `Expected the ${actual} less than ${expected}`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected the ${actual} less than ${expected}`,
+                actual,
+                expected,
+                result,
+            })
         },
         toThrow: () => {
             let result = false
@@ -321,18 +255,12 @@ export function expect (actual) {
                 result = true
             }
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `The code is expected to throw an Exception`,
-                    actual,
-                    expected: 'throw',
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `The code is expected to throw an Exception`,
+                actual,
+                expected: 'throw',
+                result,
+            })
         },
         toThrowError: (expected) => {
             let result = false
@@ -344,44 +272,31 @@ export function expect (actual) {
                 result = e.message.match(expected)
             }
 
-            if (result) {
-                itScope.expects.push({
-                    result,
-                })
-            } else {
-                itScope.expects.push({
-                    name: `The error message is expected to be "${expected}" but received "${message}"`,
-                    actual,
-                    expected,
-                    result,
-                })
-            }
+            itScope.expects.push({
+                name: result ? 'Test passed' : `The error message is expected to be "${expected}" but received "${message}"`,
+                actual,
+                expected,
+                result,
+            })
         },
         toBeArrayEqual: (expected) => {
-            if (actual.length !== expected.length) {
-                itScope.expects.push({
-                    name: `Expected [${expected.join(',')}] received [${actual.join(',')}]`,
-                    actual,
-                    expected,
-                    result: false,
-                })
-                return
-            }
+            let result = true
 
-            for (let i = 0; i < actual.length; i++) {
-                if (actual[i] !== expected[i]) {
-                    itScope.expects.push({
-                        name: `Expected [${expected.join(',')}] received [${actual.join(',')}]`,
-                        actual,
-                        expected,
-                        result: false,
-                    })
-                    return
+            if (actual.length !== expected.length) {
+                result = false
+            } else {
+                for (let i = 0; i < actual.length; i++) {
+                    if (actual[i] !== expected[i]) {
+                        result = false
+                    }
                 }
             }
 
             itScope.expects.push({
-                result: true,
+                name: result ? 'Test passed' : `Expected [${expected.join(',')}] received [${actual.join(',')}]`,
+                actual,
+                expected,
+                result,
             })
         },
     }
