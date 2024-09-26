@@ -19,8 +19,9 @@ let currentTests = {
 }
 let currentDescribe = {}
 let itScope = {}
+let currentTestFile = ''
 
-let queue = []
+let queue = new Map()
 
 const configFileName = 'easytest.config.json'
 
@@ -38,6 +39,7 @@ export const runTests = async () => {
     let files = await glob(config.include, { ignore: config.exclude })
 
     for (const file of files) {
+        currentTestFile = file
         await import(pathToFileURL(fs.realpathSync(file)).href)
     }
 
@@ -104,15 +106,7 @@ export function test (name, fn) {
         startTime: process.hrtime(),
     }
 
-    for (let fn1 of beforeAllFunctions) {
-        fn1.apply(this)
-    }
-
     fn.apply(this);
-
-    for (let fn1 of afterAllFunctions) {
-        fn1.apply(this)
-    }
 
     const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
     itScope.duration = (seconds * 1e9 + nanoseconds) / 1e6;
