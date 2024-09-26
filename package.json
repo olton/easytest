@@ -1,6 +1,6 @@
 {
   "name": "@olton/easytest",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "src/index.js",
   "bin": {
     "easytest": "cli/easytest.js"
@@ -19,6 +19,14 @@
   "author": "Serhii Pimenov <serhii@pimenov.com.ua>",
   "license": "MIT",
   "description": "Simple test framework for JavaScript and TypeScript with DOM supports",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olton/easytest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/olton/easytest/issues",
+    "email": "serhii@pimenov.com.ua"
+  },
   "dependencies": {
     "chalk": "^5.3.0",
     "glob": "^11.0.0",

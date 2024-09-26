@@ -101,8 +101,8 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeLessThanOrEqual` - check if value is less than
 - [x] `toBeNull` - check if value is null
 - [x] `toBeNotNull` - check if value is not null
-- [x] `toBeTruthy` - check if value is true
-- [x] `toBeFalsy` - check if value is false
+- [x] `toBeTrue` - check if value is true
+- [x] `toBeFalse` - check if value is false
 - [x] `toContain` - check if an array contains value or string contains substring
 - [x] `toBeArrayEqual` - check if arrays are equal
 - [x] `toBeIP` - check if string is IPv4 address

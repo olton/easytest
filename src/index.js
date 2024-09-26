@@ -239,7 +239,7 @@ export const expect = (actual) => {
                 result,
             }
         },
-        toBeTruthy: () => {
+        toBeTrue: () => {
             let result = actual === true
 
             return {
@@ -249,7 +249,7 @@ export const expect = (actual) => {
                 result,
             }
         },
-        toBeFalsy: () => {
+        toBeFalse: () => {
             let result = actual === false
 
             return {
