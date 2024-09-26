@@ -72,16 +72,17 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeIPv4` - check if string is IPv4 address
 - [x] `toBeIPv6` - check if string is IPv6 address
 - [x] `toBeEmail` - check if string is email address
-- [ ] `toBeUrl` - check if string is url address
-- [ ] `toBeBetween` - check if value between two values
-- [ ] `toBeType` - check if value is of a specific type
-- [ ] `toBeInstanceOf` - check if value is instance of a specific class
-- [ ] `toBeEmpty` - check if value is empty
-- [ ] `toBeNotEmpty` - check if value is not empty
-- [ ] `toBeSorted` - check if array is sorted
-- [ ] `toBeUnique` - check if array has unique values
-- [ ] `toStructure` - check if object has a structure
-- [ ] `toBeDeepEqual` - check if objects are deeply equal\
+- [x] `toBeUrl` - check if string is url address
+- [x] `toBeBetween` - check if value between two values
+- [x] `toBeType` - check if value is of a specific type
+- [x] `toBeInstanceOf` - check if value is instance of a specific class
+- [x] `toBeEmpty` - check if value is empty
+- [x] `toBeNotEmpty` - check if value is not empty
+- [x] `toBeSorted` - check if array is sorted
+- [x] `toBeUnique` - check if array has unique values
+- [x] `toStructure` - check if object has a structure
+- [x] `toBeDeepEqual` - check if objects are deeply equal
+- [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
 
 
 ### Current problems

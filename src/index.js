@@ -4,7 +4,7 @@ import fs from 'fs'
 import { showTestsResults } from './result.js'
 import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
-import { deepEqual } from './helpers/deep-equal.js'
+import {equalStruct, deepEqual} from './helpers/objects.js'
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
@@ -152,6 +152,28 @@ export function expect (actual) {
 
             itScope.expects.push({
                 name: result ? 'Test passed' : `Expected value is equal to received`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeEqualObject: (expected) => {
+            let result = true
+            let key1 = Object.keys(actual)
+            let key2 = Object.keys(expected)
+
+            if (key1.length !== key2.length) {
+                result = false
+            } else {
+                for (let key of key1) {
+                    if (actual[key] !== expected[key]) {
+                        result = false
+                    }
+                }
+            }
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Two objects are not equal`,
                 actual,
                 expected,
                 result,
@@ -399,6 +421,97 @@ export function expect (actual) {
                 name: result ? 'Test passed' : `Expected value is not valid email address`,
                 actual,
                 expected: "Email",
+                result,
+            })
+        },
+        toBeUrl: () => {
+            let result = /^(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*$/i.test(actual)
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not valid url`,
+                actual,
+                expected: "Url",
+                result,
+            })
+        },
+        toBeBetween: (min, max) => {
+            let result = actual >= min && actual <= max
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not between ${min} and ${max}`,
+                actual,
+                expected: `Between ${min} and ${max}`,
+                result,
+            })
+        },
+        toBeType: (type) => {
+            let result = typeof actual === type
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not ${type}`,
+                actual,
+                expected: type,
+                result,
+            })
+        },
+        toBeInstanceOf: (type) => {
+            let result = actual instanceof type
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not instance of ${type}`,
+                actual,
+                expected: type,
+                result,
+            })
+        },
+        toBeEmpty: () => {
+            let result = actual.length === 0
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not empty`,
+                actual,
+                expected: 'Empty',
+                result,
+            })
+        },
+        toBeNotEmpty: () => {
+            let result = actual.length > 0
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is empty`,
+                actual,
+                expected: 'Empty',
+                result,
+            })
+        },
+        toBeSorted: () => {
+            let result = actual.every((v, i, a) => !i || a[i - 1] <= v)
+            let expected = actual.slice().sort((a, b) => a - b)
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not sorted`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeUnique: () => {
+            let result = new Set(actual).size === actual.length
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is not unique`,
+                actual,
+                expected: 'Unique',
+                result,
+            })
+        },
+        toStructureEqual: (expected) => {
+            let result = equalStruct(actual, expected)
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected object not equal to received`,
+                actual,
+                expected,
                 result,
             })
         },
