@@ -119,9 +119,9 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeInstanceOf` - check if value is instance of a specific class
 - [x] `toBeEmpty` - check if value is empty
 - [x] `toBeNotEmpty` - check if value is not empty
-- [x] `toBeSorted` - check if array is sorted
+- [x] `toBeSorted` - check if an array is sorted
 - [x] `toBeUnique` - check if array has unique values
-- [x] `toStructureEqual` - check if object has a structure
+- [x] `toStructureEqual` - check if an object has a structure
 - [x] `toBeDeepEqual` - check if objects are deeply equal
 - [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
 - [ ] `toBeInteger` - check if value is integer
@@ -130,15 +130,15 @@ Update `package.json` to run tests with `easytest` command.
 - [ ] `toBeString` - check if value is string
 - [ ] `toBeBoolean` - check if value is boolean
 - [ ] `toBeFunction` - check if value is function
-- [ ] `toBeObject` - check if value is object
-- [ ] `toBeArray` - check if value is array
+- [ ] `toBeObject` - check if value is an object
+- [ ] `toBeArray` - check if value is an array
 - [ ] `toBeDate` - check if value is date
 - [ ] `toBeRegExp` - check if value is regular expression
 - [ ] `toBeSymbol` - check if value is symbol
 - [ ] `toBeBigInt` - check if value is big int
-- [ ] `toBeMap` - check if value is map
+- [ ] `toBeMap` - check if value is a map
 - [ ] `toBeSet` - check if value is set
-- [ ] `toBeWeakMap` - check if value is weak map
+- [ ] `toBeWeakMap` - check if value is a weak map
 - [ ] `toBeWeakSet` - check if value is weak set
 - [ ] `toBeArrayBuffer` - check if value is array buffer
 - [ ] `toBeDataView` - check if value is data view
