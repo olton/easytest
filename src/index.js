@@ -41,7 +41,8 @@ export const runTests = async () => {
         await import(pathToFileURL(fs.realpathSync(file)).href)
     }
 
-    await runner(queue)
+    const result = await runner(queue)
+    process.exit(result)
 }
 
 export const DOM = (html = ``, options = {}) => {

@@ -63,4 +63,6 @@ export const runner = async (queue) => {
     log(`------------------------------------`)
     log(`Total: ${chalk.blue.bold(totalTests)}, Passed: ${chalk.green.bold(passedTests)}, Failed: ${chalk.red.bold(failedTests)}`)
     log(`------------------------------------`)
+
+    return failedTests > 0 ? 1 : 0
 }
