@@ -16,7 +16,7 @@
     "framework",
     "html"
   ],
-  "author": "Serhii Pimenov <serhii@pimenov.com.ua>",
+  "author": "Serhii Pimenov <serhii@pimenov.com.ua> (https://pimenov.com.ua)",
   "license": "MIT",
   "description": "Simple test framework for JavaScript and TypeScript with DOM supports",
   "repository": {
