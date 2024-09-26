@@ -99,6 +99,12 @@ and then
 }
 ```
 
+### cross-env
+Run scripts that set and use environment variables across platforms.
+```bash
+npm install --save-dev cross-env
+```
+
 ### Environment variables to support TypeScript
 
 **powershell**
@@ -106,7 +112,8 @@ and then
 $env:NODE_OPTIONS="--import tsx"
 ```
 
-**linux**
+**linux**, **macos**
+```bash
 ```powershell
 export NODE_OPTIONS="--import tsx"
 ```
