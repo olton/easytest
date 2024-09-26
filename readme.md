@@ -124,6 +124,26 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toStructureEqual` - check if object has a structure
 - [x] `toBeDeepEqual` - check if objects are deeply equal
 - [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
+- [ ] `toBeInteger` - check if value is integer
+- [ ] `toBeFloat` - check if value is float
+- [ ] `toBeNumber` - check if value is number
+- [ ] `toBeString` - check if value is string
+- [ ] `toBeBoolean` - check if value is boolean
+- [ ] `toBeFunction` - check if value is function
+- [ ] `toBeObject` - check if value is object
+- [ ] `toBeArray` - check if value is array
+- [ ] `toBeDate` - check if value is date
+- [ ] `toBeRegExp` - check if value is regular expression
+- [ ] `toBeSymbol` - check if value is symbol
+- [ ] `toBeBigInt` - check if value is big int
+- [ ] `toBeMap` - check if value is map
+- [ ] `toBeSet` - check if value is set
+- [ ] `toBeWeakMap` - check if value is weak map
+- [ ] `toBeWeakSet` - check if value is weak set
+- [ ] `toBeArrayBuffer` - check if value is array buffer
+- [ ] `toBeDataView` - check if value is data view
+- [ ] `toBePromise` - check if value is promise
+
 
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.
