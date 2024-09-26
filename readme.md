@@ -68,9 +68,10 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeFalsy` - check if value is false
 - [x] `toContain` - check if an array contains value or string contains substring
 - [x] `toBeArrayEqual` - check if arrays are equal
-- [ ] `toBeIPv4` - check if string is IPv4 address
-- [ ] `toBeIPv6` - check if string is IPv6 address
-- [ ] `toBeEmail` - check if string is email address
+- [x] `toBeIP` - check if string is IPv4 address
+- [x] `toBeIPv4` - check if string is IPv4 address
+- [x] `toBeIPv6` - check if string is IPv6 address
+- [x] `toBeEmail` - check if string is email address
 - [ ] `toBeUrl` - check if string is url address
 - [ ] `toBeBetween` - check if value between two values
 - [ ] `toBeType` - check if value is of a specific type
