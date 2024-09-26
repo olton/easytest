@@ -67,6 +67,8 @@ describe('Async function tests', async () => {
 });
 ```
 
+> **Each test suite and test case must execute ONE expect and return it.**
+
 Update `package.json` to run tests with `easytest` command.
 ```json
 {
