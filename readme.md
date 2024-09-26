@@ -114,12 +114,11 @@ $env:NODE_OPTIONS="--import tsx"
 
 **linux**, **macos**
 ```bash
-```powershell
 export NODE_OPTIONS="--import tsx"
 ```
 
 **cmd**
-```powershell
+```cmd
 set NODE_OPTIONS="--import tsx"
 ```
 
