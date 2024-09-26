@@ -29,7 +29,9 @@ To use `EasyTest` you don't need to import `it`, `test` or `describe` in your te
 But you must return value from `it` or `test` function.
 
 
-Create test file with `*.test.js` extension.
+Create a test file with `*.test.js` or `*.test.ts` extension.
+You can use both of them in the same project.
+For support `TypeScript` you need to install `tsx` package (read below).
 ```javascript
 function hello() {
     return "Hello"
@@ -76,7 +78,7 @@ Update `package.json` to run tests with `easytest` command.
 
 ### Functions
 - `describe` - create test suite
-- `it` - create test case
+- `it` - create a test case
 - `expect` - create assertion
 - `beforeEach` - run before each test case
 - `afterEach` - run after each test case
