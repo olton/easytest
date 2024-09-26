@@ -37,7 +37,21 @@ export const runner = async (queue) => {
 
         if (jobs.tests.length) {
             log(`  Simple tests ${jobs.tests.length}:`)
+            for (const test of jobs.tests) {
+                const expect = await test.fn()
+                if (expect.result) {
+                    passedTests++
+                } else {
+                    failedTests++
+                }
 
+                log(`    ${expect.result ? chalk.green('[√] '+test.name) : chalk.red('[✗] '+test.name + ' (' + expect.name + ')')}`)
+                if (!expect.result) {
+                    log(`      ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
+                    log(`      ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
+                }
+                totalTests++
+            }
         }
     }
 
@@ -45,7 +59,7 @@ export const runner = async (queue) => {
     const duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
     log(`------------------------------------`)
-    log(`Tests completed in ${duration}ms`)
+    log(`Tests completed in ${chalk.blueBright.bold(duration)}ms`)
     log(`------------------------------------`)
     log(`Total: ${chalk.blue.bold(totalTests)}, Passed: ${chalk.green.bold(passedTests)}, Failed: ${chalk.red.bold(failedTests)}`)
     log(`------------------------------------`)

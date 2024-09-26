@@ -1,12 +1,12 @@
 describe(`Throw tests suite`, () => {
     it(`throws an error`, () => {
-        expect(() => {
+        return expect(() => {
             throw new Error(`Error message`)
         }).toThrow()
     })
 
     it(`error message`, () => {
-        expect(() => {
+        return expect(() => {
             throw new Error(`Error message`)
         }).toThrowError(`Error message`)
     })
