@@ -30,6 +30,11 @@ describe(`Common tests suite`, () => {
         return expect(hello()).toBe("Hello")
     })
 })
+
+test(`Bad test 2 !== 1`, () => {
+    return expect(2).toBe(1)
+})
+
 ```
 
 ### Async tests
