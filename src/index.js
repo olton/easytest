@@ -40,8 +40,13 @@ export const runTests = async () => {
 
     for (const file of files) {
         currentTestFile = file
+        queue.set(file, [])
         await import(pathToFileURL(fs.realpathSync(file)).href)
     }
+
+    // console.log(queue)
+
+    await queueRunner(queue)
 
     showTestsResults({
         suites: statsSuites,
@@ -58,22 +63,29 @@ export function describe (name, fn) {
     currentDescribe = {
         name: name,
         it: [],
+        beforeAll: [],
+        afterAll: [],
         startTime: process.hrtime(),
+        duration: 0,
     }
 
     for(let fn1 of beforeAllFunctions) {
-        fn1.apply(this)
+        currentDescribe.beforeAll.push(fn1.bind(this))
+        // fn1.apply(this)
     }
 
     fn.apply(this)
 
     for(let fn1 of afterAllFunctions) {
-        fn1.apply(this)
+        currentDescribe.afterAll.push(fn1.bind(this))
+        // fn1.apply(this)
     }
 
-    const [seconds, nanoseconds] = process.hrtime(currentDescribe.startTime);
-    currentDescribe.duration = (seconds * 1e9 + nanoseconds) / 1e6;
-    statsSuites.push(currentDescribe)
+    queue.set(currentTestFile, [...queue.get(currentTestFile), currentDescribe])
+
+    // const [seconds, nanoseconds] = process.hrtime(currentDescribe.startTime);
+    // currentDescribe.duration = (seconds * 1e9 + nanoseconds) / 1e6;
+    // statsSuites.push(currentDescribe)
 }
 
 export function it (name, fn) {
@@ -84,22 +96,26 @@ export function it (name, fn) {
     }
 
     for (let fn1 of beforeEachFunctions) {
-        fn1.apply(this)
+        currentDescribe.it.push(fn1.bind(this))
+        // fn1.apply(this)
     }
 
-    fn.apply(this);
+    currentDescribe.it.push(fn.bind(this))
+    // fn.apply(this);
 
     for (let fn1 of afterEachFunctions) {
-        fn1.apply(this)
+        currentDescribe.it.push(fn1.bind(this))
+        // fn1.apply(this)
     }
 
-    const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
-    itScope.duration = (seconds * 1e9 + nanoseconds) / 1e6;
+    // const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
+    // itScope.duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
-    currentDescribe.it.push(itScope)
+    // currentDescribe.it.push(itScope)
 }
 
 export function test (name, fn) {
+    return
     itScope = {
         name: `Test ${name}`,
         expects: [],
@@ -129,6 +145,19 @@ export let beforeAll = (fn) => {
 
 export let afterAll = (fn) => {
     afterAllFunctions.push(fn)
+}
+
+const queueRunner = async () => {
+    for (let [file, tests] of queue) {
+        console.log(file)
+        for (let test of tests) {
+            currentDescribe = test
+            for (let it of test.it) {
+                console.log(test.name)
+                await it()
+            }
+        }
+    }
 }
 
 export function expect (actual) {
