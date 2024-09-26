@@ -20,6 +20,8 @@ let currentTests = {
 let currentDescribe = {}
 let itScope = {}
 
+let queue = []
+
 const configFileName = 'easytest.config.json'
 
 const config = {
@@ -46,7 +48,7 @@ export const runTests = async () => {
     })
 }
 
-export const dom = (html = ``, options = {}) => {
+export const DOM = (html = ``, options = {}) => {
     return new JSDOM(html, options)
 }
 

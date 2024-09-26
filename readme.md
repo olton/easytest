@@ -47,6 +47,7 @@ Update `package.json` to run tests with `easytest` command.
 - `beforeAll` - run before all test cases
 - `afterAll` - run after all test cases
 - `test` - create simple test
+- `DOM` - create DOM object (not global)
 
 ### Matchers
 - [x] `toBe` - compare values with `===`
@@ -80,7 +81,7 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeNotEmpty` - check if value is not empty
 - [x] `toBeSorted` - check if array is sorted
 - [x] `toBeUnique` - check if array has unique values
-- [x] `toStructure` - check if object has a structure
+- [x] `toStructureEqual` - check if object has a structure
 - [x] `toBeDeepEqual` - check if objects are deeply equal
 - [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
 
