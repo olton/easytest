@@ -50,17 +50,20 @@ Update `package.json` to run tests with `easytest` command.
 
 ### Matchers
 - [x] `toBe` - compare values with `===`
-- [x] `toEqual` - compare values with `==`
-- [x] `toMatch` - compare strings with regex
+- [x] `toBeNot` - compare values with `!==`
+- [x] `toBeEqual` - compare values with `==`
+- [x] `toBeNotEqual` - compare values with `!=`
+- [x] `toBeMatch` - compare strings with regex
 - [x] `toBeDefained` - check if value is defined
 - [x] `toBeUndefined` - check if value is undefined
 - [x] `toThrow` - check if function throws an error
 - [x] `toThrowError` - check if function throws an error with a specific message
 - [x] `toBeGreaterThan` - check if value is greater than
-- [ ] `toBeGreaterThanOrEqual` - check if value is greater than
+- [x] `toBeGreaterThanOrEqual` - check if value is greater than
 - [x] `toBeLessThan` - check if value is less than
-- [ ] `toBeLessThanOrEqual` - check if value is less than
+- [x] `toBeLessThanOrEqual` - check if value is less than
 - [x] `toBeNull` - check if value is null
+- [x] `toBeNotNull` - check if value is not null
 - [x] `toBeTruthy` - check if value is true
 - [x] `toBeFalsy` - check if value is false
 - [x] `toContain` - check if an array contains value or string contains substring
@@ -70,6 +73,15 @@ Update `package.json` to run tests with `easytest` command.
 - [ ] `toBeEmail` - check if string is email address
 - [ ] `toBeUrl` - check if string is url address
 - [ ] `toBeBetween` - check if value between two values
+- [ ] `toBeType` - check if value is of a specific type
+- [ ] `toBeInstanceOf` - check if value is instance of a specific class
+- [ ] `toBeEmpty` - check if value is empty
+- [ ] `toBeNotEmpty` - check if value is not empty
+- [ ] `toBeSorted` - check if array is sorted
+- [ ] `toBeUnique` - check if array has unique values
+- [ ] `toStructure` - check if object has a structure
+- [ ] `toBeDeepEqual` - check if objects are deeply equal\
+
 
 ### Current problems
 - [ ] Testing async code

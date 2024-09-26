@@ -138,26 +138,46 @@ export let afterAll = (fn) => {
 export function expect (actual) {
     return {
         toBe: (expected) => {
-            let result = deepEqual(actual, expected)
+            let result = actual === expected
 
             itScope.expects.push({
-                name: result ? 'Test passed' : `Expected object not equal to received`,
+                name: result ? 'Test passed' : `Expected value not equal to received`,
                 actual,
                 expected,
                 result,
             })
         },
-        toEqual: (expected) => {
+        toBeNot: (expected) => {
+            let result = actual !== expected
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is equal to received`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeEqual: (expected) => {
             let result = actual == expected
 
             itScope.expects.push({
-                name: result ? 'Test passed' : `Expected ${expected} received ${actual}`,
+                name: result ? 'Test passed' : `Expected value is not equal to received`,
                 actual,
                 expected,
                 result,
             })
         },
-        toMatch: (expected) => {
+        toBeNotEqual: (expected) => {
+            let result = actual != expected
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected value is equal to received`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeMatch: (expected) => {
             let result = actual.match(expected)
 
             itScope.expects.push({
@@ -191,7 +211,17 @@ export function expect (actual) {
             let result = actual === null
 
             itScope.expects.push({
-                name: result ? 'Test passed' : `Expected null received ${actual}`,
+                name: result ? 'Test passed' : `Expected null value but received ${actual}`,
+                actual,
+                expected: 'null',
+                result,
+            })
+        },
+        toBeNotNull: () => {
+            let result = actual !== null
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected not null value`,
                 actual,
                 expected: 'null',
                 result,
@@ -231,7 +261,17 @@ export function expect (actual) {
             let result = actual > expected
 
             itScope.expects.push({
-                name: result ? 'Test passed' : `Expected the ${actual} greater than ${expected}`,
+                name: result ? 'Test passed' : `Value must be greater than expected`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeGreaterThanOrEqual: (expected) => {
+            let result = actual >= expected
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Value must be greater than or equal to expected`,
                 actual,
                 expected,
                 result,
@@ -241,7 +281,17 @@ export function expect (actual) {
             let result = actual < expected
 
             itScope.expects.push({
-                name: result ? 'Test passed' : `Expected the ${actual} less than ${expected}`,
+                name: result ? 'Test passed' : `Value must be less than expected`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeLessThanOrEqual: (expected) => {
+            let result = actual <= expected
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Value must be less than or equal to expected`,
                 actual,
                 expected,
                 result,
@@ -294,6 +344,16 @@ export function expect (actual) {
 
             itScope.expects.push({
                 name: result ? 'Test passed' : `Expected [${expected.join(',')}] received [${actual.join(',')}]`,
+                actual,
+                expected,
+                result,
+            })
+        },
+        toBeDeepEqual: (expected) => {
+            let result = deepEqual(actual, expected)
+
+            itScope.expects.push({
+                name: result ? 'Test passed' : `Expected object not equal to received`,
                 actual,
                 expected,
                 result,
