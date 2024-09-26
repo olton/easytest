@@ -21,9 +21,22 @@ export const runner = async (queue) => {
             log(`  Tests  Suites ${jobs.describes.length}:`)
             for (const describe of jobs.describes) {
                 log(`    ${chalk.blue(describe.name)} (${describe.it.length} tests):`)
+
+                for (const fn of describe.beforeAll) {
+                    await fn()
+                }
+
                 for (const it of describe.it) {
 
+                    for (const fn of it.beforeEach) {
+                        await fn()
+                    }
+
                     const expect = await it.fn()
+
+                    for (const fn of it.afterEach) {
+                        await fn()
+                    }
 
                     if (expect.result) {
                         passedTests++
@@ -37,6 +50,10 @@ export const runner = async (queue) => {
                         log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
                     }
                     totalTests++
+                }
+
+                for (const fn of describe.afterAll) {
+                    await fn()
                 }
             }
         }
