@@ -13,7 +13,8 @@ npm install @olton/easytest -D
 
 ## Usage
 
-To use `EasyTest` you don't need to import `it` or `describe` in your test file.
+To use `EasyTest` you don't need to import `it`, `test` or `describe` in your test file.
+But you must return value from `it` or `test` function.
 
 
 Create test file with `*.test.js` extension.
@@ -24,9 +25,27 @@ function hello() {
 
 describe(`Common tests suite`, () => {
     it(`says hello`, () => {
-        expect(hello()).toBe("Hello")
+        return expect(hello()).toBe("Hello")
     })
 })
+```
+
+### Async tests
+```javascript
+async function fetchData() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("Data received");
+        }, 1000);
+    });
+}
+
+describe('Async function tests', async () => {
+    it('should return data after 1 second', async () => {
+        const data = await fetchData();
+        return expect(data).toBe("Bad Data");
+    });
+});
 ```
 
 Update `package.json` to run tests with `easytest` command.

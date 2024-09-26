@@ -4,9 +4,9 @@ function hello() {
 
 describe(`Common tests suite`, () => {
     it(`says hello`, () => {
-        expect(hello()).toBe("Hello")
+        return expect(hello()).toBe("Hello")
     })
     it(`To be 2 > 1`, () => {
-        expect(2).toBeGreaterThan(1)
+        return expect(2).toBe(1)
     })
 })
