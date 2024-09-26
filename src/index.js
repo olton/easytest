@@ -13,7 +13,7 @@ const afterAllFunctions = []
 const statsSuites = []
 const statsSimpleTests = []
 
-let currentTests = {
+let simpleTests = {
     name: 'Simple tests',
     it: []
 }
@@ -111,8 +111,8 @@ export function test (name, fn) {
     const [seconds, nanoseconds] = process.hrtime(itScope.startTime);
     itScope.duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
-    currentTests.it.push(itScope)
-    statsSimpleTests.push(currentTests)
+    simpleTests.it.push(itScope)
+    statsSimpleTests.push(simpleTests)
 }
 
 export let beforeEach = (fn) => {
