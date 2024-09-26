@@ -49,20 +49,27 @@ Update `package.json` to run tests with `easytest` command.
 - `test` - create simple test
 
 ### Matchers
-- `toBe` - compare values with `===`
-- `toEqual` - compare values with `==`
-- `toMatch` - compare strings with regex
-- `toBeDefained` - check if value is defined
-- `toBeUndefined` - check if value is undefined
-- `toThrow` - check if function throws an error
-- `toThrowError` - check if function throws an error with a specific message
-- `toBeGreaterThan` - check if value is greater than
-- `toBeLessThan` - check if value is less than
-- `toBeNull` - check if value is null
-- `toBeTruthy` - check if value is true
-- `toBeFalsy` - check if value is false
-- `toContain` - check if an array contains value or string contains substring
-- `toBeArrayEqual` - check if arrays are equal
+- [x] `toBe` - compare values with `===`
+- [x] `toEqual` - compare values with `==`
+- [x] `toMatch` - compare strings with regex
+- [x] `toBeDefained` - check if value is defined
+- [x] `toBeUndefined` - check if value is undefined
+- [x] `toThrow` - check if function throws an error
+- [x] `toThrowError` - check if function throws an error with a specific message
+- [x] `toBeGreaterThan` - check if value is greater than
+- [ ] `toBeGreaterThanOrEqual` - check if value is greater than
+- [x] `toBeLessThan` - check if value is less than
+- [ ] `toBeLessThanOrEqual` - check if value is less than
+- [x] `toBeNull` - check if value is null
+- [x] `toBeTruthy` - check if value is true
+- [x] `toBeFalsy` - check if value is false
+- [x] `toContain` - check if an array contains value or string contains substring
+- [x] `toBeArrayEqual` - check if arrays are equal
+- [ ] `toBeIPv4` - check if string is IPv4 address
+- [ ] `toBeIPv6` - check if string is IPv6 address
+- [ ] `toBeEmail` - check if string is email address
+- [ ] `toBeUrl` - check if string is url address
+- [ ] `toBeBetween` - check if value between two values
 
 ### Current problems
 - [ ] Testing async code
