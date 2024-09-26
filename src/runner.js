@@ -8,6 +8,12 @@ export const runner = async (queue) => {
     let failedTests = 0
     let totalTests = 0
 
+    log(`${chalk.bold("EasyTest Runner")}`)
+    log(`------------------------------------`)
+    log(`Copyright (c) 2024 by Serhii Pimenov <serhii@pimenov.com.ua>`)
+    log(`You can support EasyTest by PayPal to serhii@pimenov.com.ua`)
+    log(`------------------------------------`)
+
     for (const [file, jobs] of queue) {
         log(`${chalk.gray("Test spec:")} ${chalk.bold.yellow(file)}...`)
 
@@ -63,6 +69,12 @@ export const runner = async (queue) => {
     log(`------------------------------------`)
     log(`Total: ${chalk.blue.bold(totalTests)}, Passed: ${chalk.green.bold(passedTests)}, Failed: ${chalk.red.bold(failedTests)}`)
     log(`------------------------------------`)
+
+    if (failedTests > 0) {
+        log(chalk.bgRed.bold('Tests chain failed'))
+    } else {
+        log(chalk.bgGreen.bold('Tests chain passed'))
+    }
 
     return failedTests > 0 ? 1 : 0
 }

@@ -6,6 +6,7 @@ import { JSDOM } from 'jsdom'
 import {deepEqual, compareStructure} from './helpers/objects.js'
 import {runner} from "./runner.js";
 import {stringify} from "./helpers/json.js";
+import { exit } from 'node:process';
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
@@ -42,7 +43,7 @@ export const runTests = async () => {
     }
 
     const result = await runner(queue)
-    process.exit(result)
+    exit(result)
 }
 
 export const DOM = (html = ``, options = {}) => {
