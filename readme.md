@@ -145,6 +145,10 @@ Update `package.json` to run tests with `easytest` command.
 - [ ] `toBeArrayBuffer` - check if value is array buffer
 - [ ] `toBeDataView` - check if value is data view
 - [ ] `toBePromise` - check if value is promise
+- [ ] `toBeBase64` - check if string is base64
+- [ ] `toBeJson` - check if string is JSON
+- [ ] `toBeXml` - check if string is XML
+- [ ] `toBeHexColor` - check if string is hex color
 - [ ] `toBeHtmlElement` - check if object is HTML element
 - [ ] `toBeHtmlNode` - check if an object is HTML node
 - [ ] `toBeHtmlCollection` - check if an object is an HTML collection
