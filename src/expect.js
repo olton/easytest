@@ -207,7 +207,7 @@ export let expect = (actual) => {
                 actual()
             } catch (e) {
                 message = e.message
-                result = e.message.match(expected)
+                result = e.message.match(expected) !== null
             }
 
             return {

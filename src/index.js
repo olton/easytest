@@ -5,7 +5,7 @@ import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
 import {runner} from "./runner.js";
 import { exit } from 'node:process';
-import { expect } from './expect.js';
+import { expect as expectFn } from './expect.js';
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
@@ -48,6 +48,8 @@ export const runTests = async () => {
 export const DOM = (html = ``, options = {}) => {
     return new JSDOM(html, options)
 }
+
+export const expect = expectFn
 
 export function describe (name, fn) {
     const testObject = queue.get(currentTestFile)
