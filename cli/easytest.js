@@ -1,5 +1,5 @@
-#!/usr/bin/env -S node --import tsx
+#!/usr/bin/env node
 
-import { runTests } from '../src/index.js';
+import { run } from '../src/index.js';
 
-await runTests();
+await run();

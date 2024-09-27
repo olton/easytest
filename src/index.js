@@ -29,7 +29,7 @@ if (fs.existsSync(configFileName)) {
     Object.assign(config, userConfig)
 }
 
-export const runTests = async () => {
+export const run = async () => {
     let files = await glob(config.include, { ignore: config.exclude })
 
     for (const file of files) {

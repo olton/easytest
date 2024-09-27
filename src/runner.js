@@ -88,9 +88,9 @@ export const runner = async (queue) => {
     log(`------------------------------------`)
 
     if (failedTests > 0) {
-        log(chalk.bgRed.bold('Tests chain failed'))
+        log(chalk.bgRed.bold('💀 Tests chain failed 💀'))
     } else {
-        log(chalk.bgGreen.bold('Tests chain passed'))
+        log(chalk.bgGreen.bold('✅ Tests chain passed ✅'))
     }
 
     return failedTests > 0 ? 1 : 0
