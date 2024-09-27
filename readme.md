@@ -227,7 +227,7 @@ The default values are:
 
 EasyTest has a built-in coverage tool.
 
-![img_1.png](img_1.png)
+![img_2.png](img_2.png)
 
 To enable `coverage`, set parameter **coverage** to **true**.
 
