@@ -212,6 +212,25 @@ export NODE_OPTIONS="--import tsx"
 set NODE_OPTIONS="--import tsx"
 ```
 
+## Configuration
+To configure `EasyTest` you need to create a `easytest.config.json` file in the root of your project.
+The default values are:
+```json
+{
+  "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
+  "exclude": ["node_modules/**"],
+  "coverage": false
+}
+```
+
+## Coverage
+
+EasyTest has a built-in coverage tool.
+
+![img_1.png](img_1.png)
+
+To enable `coverage`, set parameter **coverage** to **true**.
+
 ## License
 EasyTest licensed under MIT license.
 

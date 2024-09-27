@@ -1,11 +1,14 @@
 import { glob } from 'glob'
-import { pathToFileURL } from 'url';
+import { pathToFileURL, fileURLToPath } from 'url';
 import fs from 'fs'
 import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
 import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
+import inspector from 'inspector/promises'
+import { dirname } from 'node:path'
+import { createReport } from './coverage.js'
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
@@ -17,11 +20,14 @@ let currentTestFile = ''
 
 let queue = new Map()
 
+const currentFile = fileURLToPath(import.meta.url)
+const __dirname = dirname(fileURLToPath(new URL('.', import.meta.url)))
 const configFileName = 'easytest.config.json'
 
 const config = {
     "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
-    "exclude": ["node_modules"],
+    "exclude": ["node_modules/**"],
+    "coverage": false,
 }
 
 if (fs.existsSync(configFileName)) {
@@ -29,7 +35,15 @@ if (fs.existsSync(configFileName)) {
     Object.assign(config, userConfig)
 }
 
-export const run = async () => {
+export const run = async (root) => {
+    const session  = new inspector.Session()
+    session.connect()
+    await session.post('Profiler.enable')
+    await session.post('Profiler.startPreciseCoverage', {
+        callCount: true,
+        detailed: true
+    })
+
     let files = await glob(config.include, { ignore: config.exclude })
 
     for (const file of files) {
@@ -42,6 +56,12 @@ export const run = async () => {
     }
 
     const result = await runner(queue)
+
+    const coverage = await session.post('Profiler.takePreciseCoverage')
+    await session.post('Profiler.stopPreciseCoverage')
+
+    if (config.coverage) createReport(coverage, root)
+
     exit(result)
 }
 
