@@ -128,39 +128,52 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toStructureEqual` - check if an object has a structure
 - [x] `toBeDeepEqual` - check if objects are deeply equal
 - [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
-- [ ] `toBeInteger` - check if value is integer
-- [ ] `toBeSafeInteger` - check if value is safe integer
-- [ ] `toBeFloat` - check if value is float
-- [ ] `toBeNumber` - check if value is number
-- [ ] `toBeNaN` - check if value is NaN
-- [ ] `toBeString` - check if value is string
-- [ ] `toBeBoolean` - check if value is boolean
-- [ ] `toBeFunction` - check if value is function
-- [ ] `toBeObject` - check if value is an object
-- [ ] `toBeArray` - check if value is an array
-- [ ] `toBeDate` - check if value is date
-- [ ] `toBeRegExp` - check if value is regular expression
-- [ ] `toBeSymbol` - check if value is symbol
-- [ ] `toBeBigInt` - check if value is big int
-- [ ] `toBeMap` - check if value is a map
-- [ ] `toBeSet` - check if value is set
-- [ ] `toBeWeakMap` - check if value is a weak map
-- [ ] `toBeWeakSet` - check if value is weak set
-- [ ] `toBeArrayBuffer` - check if value is array buffer
-- [ ] `toBeDataView` - check if value is data view
-- [ ] `toBePromise` - check if value is promise
-- [ ] `toBeBase64` - check if string is base64
-- [ ] `toBeJson` - check if string is JSON
-- [ ] `toBeXml` - check if string is XML
-- [ ] `toBeHexColor` - check if string is hex color
-- [ ] `toBeHtmlElement` - check if object is HTML element
-- [ ] `toBeHtmlNode` - check if an object is HTML node
-- [ ] `toBeHtmlCollection` - check if an object is an HTML collection
-- [ ] `hasClass` - check if an HTML element has class
-- [ ] `hasAttribute` - check if an HTML element has attribute
-- [ ] `hasProperty` - check if an object has property
-- [ ] `hasChildren` - check if an HTML element has children
-- [ ] `hasParent` - check if an HTML element has parent
+- [x] `toBeInteger` - check if value is integer
+- [x] `toBeSafeInteger` - check if value is safe integer
+- [x] `toBeFloat` - check if value is float
+- [x] `toBePositive` - check if value is positive
+- [x] `toBeNegative` - check if value is negative
+- [x] `toBeFinite` - check if value is finite
+- [x] `toBeNumber` - check if value is number
+- [x] `toBeNaN` - check if value is NaN
+- [x] `toBeString` - check if value is string
+- [x] `toBeBoolean` - check if value is boolean
+- [x] `toBeFunction` - check if value is function
+- [x] `toBeAsyncFunction` - check if value is async function
+- [x] `toBeObject` - check if value is an object
+- [x] `toBeArray` - check if value is an array
+- [x] `toBeDate` - check if value is date
+- [x] `toBeRegExp` - check if value is regular expression
+- [x] `toBeSymbol` - check if value is symbol
+- [x] `toBeBigInt` - check if value is big int
+- [x] `toBeMap` - check if value is a map
+- [x] `toBeSet` - check if value is set
+- [x] `toBeWeakMap` - check if value is a weak map
+- [x] `toBeWeakSet` - check if value is weak set
+- [x] `toBeArrayBuffer` - check if value is array buffer
+- [x] `toBePromise` - check if value is promise
+- [x] `toBeBase64` - check if string is base64
+- [x] `toBeJson` - check if string is JSON
+- [x] `toBeXml` - check if string is XML
+- [x] `toBeHEXColor` - check if string is hex color
+- [x] `toBeRGBColor` - check if string is RGB color
+- [x] `toBeRGBAColor` - check if string is RGBA color
+- [x] `toBeHSLColor` - check if string is HSL color
+- [x] `toBeHSLAColor` - check if string is HSLA color
+- [x] `toBeSMYKColor` - check if string is a cmyk color
+- [x] `toBeColor` - check if string is color
+- [x] `toBeHtmlElement` - check if object is HTML element
+- [x] `toBeHtmlNode` - check if an object is HTML node
+- [x] `toBeHtmlTextNode` - check if an object is HTML node
+- [x] `toBeHtmlCollection` - check if an object is an HTML collection
+- [x] `toBeHtmlDocument` - check if an object is an HTML document
+- [x] `toBeHtmlWindow` - check if an object is an HTML window
+- [x] `hasClass` - check if an HTML element has class
+- [x] `hasAttribute` - check if an HTML element has attribute
+- [x] `hasProperty` - check if an object has property
+- [x] `hasChildren` - check if an HTML element has children
+- [x] `hasParent` - check if an HTML element has parent
+- [x] `hasNoParent` - check if an HTML element hasn't a parent
 
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.
