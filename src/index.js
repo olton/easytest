@@ -35,7 +35,13 @@ if (fs.existsSync(configFileName)) {
     Object.assign(config, userConfig)
 }
 
-export const run = async (root) => {
+export const run = async (root, args) => {
+    if (args.length) {
+        if (args[0] === '--coverage') {
+            config.coverage = true
+        }
+    }
+
     const session  = new inspector.Session()
     session.connect()
     await session.post('Profiler.enable')

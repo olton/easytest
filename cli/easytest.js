@@ -2,4 +2,6 @@
 
 import { run } from '../src/index.js';
 
-await run(process.cwd());
+const args = process.argv.slice(2);
+
+await run(process.cwd(), args);

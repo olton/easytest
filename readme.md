@@ -230,7 +230,15 @@ EasyTest has a built-in coverage tool.
 
 ![img_2.png](img_2.png)
 
-To enable `coverage`, set parameter **coverage** to **true**.
+To enable `coverage`, set parameter **coverage** to **true** in config file or use argument `--coverage`.
+
+```json
+{
+    "scripts": {
+        "test": "easytest --coverage"
+    }
+}
+```
 
 ## License
 EasyTest licensed under MIT license.
