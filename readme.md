@@ -266,6 +266,18 @@ To enable `coverage`, set parameter **coverage** to **true** in config file or u
 }
 ```
 
+## Executing tests by name
+You can run a specific test by name using the `--test` argument.
+
+```json
+{
+    "scripts": {
+        "test": "easytest --test=\"Compare with 2\""
+    }
+}
+```
+In this case only the test with the name includes `Compare with 2` will be executed.
+
 ## License
 EasyTest licensed under MIT license.
 
