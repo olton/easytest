@@ -32,7 +32,7 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
 
                 for (const it of describe.it) {
                     if (specifiedTest) {
-                        if (it.name !== specifiedTest) {
+                        if (it.name.match (specifiedTest) === null) {
                             continue
                         }
                     }
@@ -76,7 +76,7 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
             if (verbose) log(`  Simple tests ${jobs.tests.length}:`)
             for (const test of jobs.tests) {
                 if (specifiedTest) {
-                    if (test.name !== specifiedTest) {
+                    if (test.name.match( specifiedTest ) === null) {
                         continue
                     }
                 }
