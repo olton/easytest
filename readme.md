@@ -17,7 +17,7 @@ Support for PayPal to **serhii@pimenov.com.ua**
 
 ---
 
-![img.png](img.png)
+![verbose-off.png](verbose-off.png)
 
 ---
 
@@ -215,7 +215,17 @@ set NODE_OPTIONS="--import tsx"
 
 ## Configuration
 To configure `EasyTest` you need to create a `easytest.config.json` file in the root of your project.
-The default values are:
+Also, you can use argument `--config fileName` to specify a configuration file.
+
+```json
+{
+    "scripts": {
+        "test": "easytest --config myconfig.json"
+    }
+}
+```
+
+**The default values are:**
 ```json
 {
   "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
@@ -227,6 +237,9 @@ The default values are:
 
 ### Verbose
 In verbose mode, you will see the detailed results in the console.
+
+![img_1.png](verbose-on.png)
+
 To enable `verbose` mode, set parameter **verbose** to **true** in config file or use argument `--verbose`.
 
 ```json
@@ -241,7 +254,7 @@ To enable `verbose` mode, set parameter **verbose** to **true** in config file o
 
 EasyTest has a built-in coverage tool.
 
-![img_2.png](img_2.png)
+![Coverage](coverage.png)
 
 To enable `coverage`, set parameter **coverage** to **true** in config file or use argument `--coverage`.
 
