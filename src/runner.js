@@ -2,7 +2,7 @@ import chalk from 'chalk'
 
 const log = console.log
 
-export const runner = async (queue, {verbose = false} = {}) => {
+export const runner = async (queue, {verbose = false, test: specifiedTest} = {}) => {
     const startTime = process.hrtime()
     let passedTests = 0
     let failedTests = 0
@@ -31,6 +31,11 @@ export const runner = async (queue, {verbose = false} = {}) => {
                 }
 
                 for (const it of describe.it) {
+                    if (specifiedTest) {
+                        if (it.name !== specifiedTest) {
+                            continue
+                        }
+                    }
 
                     for (const fn of it.beforeEach) {
                         await fn()
@@ -70,6 +75,12 @@ export const runner = async (queue, {verbose = false} = {}) => {
         if (jobs.tests.length) {
             if (verbose) log(`  Simple tests ${jobs.tests.length}:`)
             for (const test of jobs.tests) {
+                if (specifiedTest) {
+                    if (test.name !== specifiedTest) {
+                        continue
+                    }
+                }
+
                 const expect = await test.fn()
 
                 if (expect.result) {

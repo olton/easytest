@@ -51,6 +51,10 @@ export const run = async (root, args) => {
         config.verbose = true
     }
 
+    if (args.test) {
+        config.test = args.test
+    }
+
     const session  = new inspector.Session()
     session.connect()
     await session.post('Profiler.enable')
@@ -71,7 +75,8 @@ export const run = async (root, args) => {
     }
 
     const result = await runner(queue, {
-        verbose: config.verbose
+        verbose: config.verbose,
+        test: config.test,
     })
 
     const coverage = await session.post('Profiler.takePreciseCoverage')
