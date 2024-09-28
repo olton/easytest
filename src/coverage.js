@@ -58,7 +58,7 @@ export function createReport (coverage, root) {
     let coveredLines = 0
     let totalFiles = 0
 
-    data.push(["#", "File Path", "File Name", "Lines Total", "Covered Lines", '%'])
+    data.push(["#", "File Path", "File Name", "Lines", "Covered", '%'])
 
     coverageFilter(coverage, root).map(({url, functions}) => {
         const fileName = fileURLToPath(url)

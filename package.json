@@ -5,6 +5,7 @@
   "bin": {
     "easytest": "cli/easytest.js"
   },
+  "types": "src/easytest.d.ts",
   "type": "module",
   "scripts": {
     "test": "tsx cli/easytest.js"

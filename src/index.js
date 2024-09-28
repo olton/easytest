@@ -123,7 +123,7 @@ export async function it (name, fn) {
     currentDescribe.it.push(itScope)
 }
 
-export function test (name, fn) {
+export async function test (name, fn) {
     const testObject = queue.get(currentTestFile)
 
     itScope = {

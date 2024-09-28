@@ -44,7 +44,7 @@ export const runner = async (queue) => {
                         failedTests++
                     }
 
-                    log(`      ${expect.result ? chalk.green('[√] '+it.name) : chalk.red('[✗] '+it.name + ' (' + expect.name + ')')}`)
+                    log(`      ${expect.result ? chalk.green('[√] '+it.name) : chalk.red('[✗] '+it.name + ' (' + expect.message + ')')}`)
                     if (!expect.result) {
                         log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
                         log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
@@ -68,7 +68,7 @@ export const runner = async (queue) => {
                     failedTests++
                 }
 
-                log(`    ${expect.result ? chalk.green('[√] '+test.name) : chalk.red('[✗] '+test.name + ' (' + expect.name + ')')}`)
+                log(`    ${expect.result ? chalk.green('[√] '+test.name) : chalk.red('[✗] '+test.name + ' (' + expect.message + ')')}`)
                 if (!expect.result) {
                     log(`      ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
                     log(`      ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
