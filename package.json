@@ -8,7 +8,7 @@
   "types": "src/easytest.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js"
+    "test": "tsx cli/easytest.js --verbose"
   },
   "keywords": [
     "havascript",

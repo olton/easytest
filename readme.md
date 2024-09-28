@@ -220,7 +220,20 @@ The default values are:
 {
   "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
   "exclude": ["node_modules/**"],
-  "coverage": false
+  "coverage": false,
+  "verbose": false
+}
+```
+
+### Verbose
+In verbose mode, you will see the detailed results in the console.
+To enable `verbose` mode, set parameter **verbose** to **true** in config file or use argument `--verbose`.
+
+```json
+{
+    "scripts": {
+        "test": "easytest --verbose"
+    }
 }
 ```
 

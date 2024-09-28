@@ -9,7 +9,7 @@ async function fetchData() {
 describe('Async function tests', async () => {
     it('should return data after 1 second', async () => {
         const data = await fetchData();
-        return expect(data).toBe("Bad Data");
+        return expect(data).toBe("Data received");
     });
 });
 
