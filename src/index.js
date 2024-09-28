@@ -9,6 +9,7 @@ import { expect as expectFn } from './expect.js';
 import inspector from 'inspector/promises'
 import { dirname } from 'node:path'
 import { createReport } from './coverage.js'
+import chalk from "chalk";
 
 const beforeEachFunctions = []
 const afterEachFunctions = []
@@ -22,24 +23,32 @@ let queue = new Map()
 
 const currentFile = fileURLToPath(import.meta.url)
 const __dirname = dirname(fileURLToPath(new URL('.', import.meta.url)))
-const configFileName = 'easytest.config.json'
+let configFileName = 'easytest.config.json'
 
 const config = {
-    "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
-    "exclude": ["node_modules/**"],
-    "coverage": false,
-}
-
-if (fs.existsSync(configFileName)) {
-    const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
-    Object.assign(config, userConfig)
+    include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
+    exclude: ["node_modules/**"],
+    coverage: false,
+    verbose: false,
 }
 
 export const run = async (root, args) => {
-    if (args.length) {
-        if (args[0] === '--coverage') {
-            config.coverage = true
+    if (args.config) {
+        configFileName = args.config
+        if (fs.existsSync(configFileName)) {
+            const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
+            Object.assign(config, userConfig)
+        } else {
+            console.log(chalk.red(`💀 Config file ${configFileName} not found!`))
         }
+    }
+
+    if (args.coverage) {
+        config.coverage = true
+    }
+
+    if (args.verbose) {
+        config.verbose = true
     }
 
     const session  = new inspector.Session()
@@ -61,7 +70,9 @@ export const run = async (root, args) => {
         await import(pathToFileURL(fs.realpathSync(file)).href)
     }
 
-    const result = await runner(queue)
+    const result = await runner(queue, {
+        verbose: config.verbose
+    })
 
     const coverage = await session.post('Profiler.takePreciseCoverage')
     await session.post('Profiler.stopPreciseCoverage')

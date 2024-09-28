@@ -2,7 +2,7 @@ import chalk from 'chalk'
 
 const log = console.log
 
-export const runner = async (queue) => {
+export const runner = async (queue, {verbose = false} = {}) => {
     const startTime = process.hrtime()
     let passedTests = 0
     let failedTests = 0
@@ -15,12 +15,16 @@ export const runner = async (queue) => {
     log(`------------------------------------`)
 
     for (const [file, jobs] of queue) {
-        log(`${chalk.gray("Test spec:")} ${chalk.bold.yellow(file)}...`)
+        let testFileStatus = true
+        let testFilePassed = 0
+        let testFileFailed = 0
+
+        if (verbose) log(`${chalk.gray("Test spec:")} ${chalk.bold.yellow(file)}...`)
 
         if (jobs.describes.length) {
-            log(`  Tests  Suites ${jobs.describes.length}:`)
+            if (verbose) log(`  Tests  Suites ${jobs.describes.length}:`)
             for (const describe of jobs.describes) {
-                log(`    ${chalk.blue(describe.name)} (${describe.it.length} tests):`)
+                if (verbose) log(`    ${chalk.blue(describe.name)} (${describe.it.length} tests):`)
 
                 for (const fn of describe.beforeAll) {
                     await fn()
@@ -40,14 +44,19 @@ export const runner = async (queue) => {
 
                     if (expect.result) {
                         passedTests++
+                        testFilePassed++
                     } else {
                         failedTests++
+                        testFileFailed++
+                        testFileStatus = false
                     }
 
-                    log(`      ${expect.result ? chalk.green('[√] '+it.name) : chalk.red('[✗] '+it.name + ' (' + expect.message + ')')}`)
-                    if (!expect.result) {
-                        log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
-                        log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
+                    if (verbose) {
+                        log(`      ${expect.result ? chalk.green('✅  ' + it.name) : chalk.red('💀 ' + it.name + ' (' + expect.message + ')')}`)
+                        if (!expect.result) {
+                            log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
+                            log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
+                        }
                     }
                     totalTests++
                 }
@@ -59,22 +68,35 @@ export const runner = async (queue) => {
         }
 
         if (jobs.tests.length) {
-            log(`  Simple tests ${jobs.tests.length}:`)
+            if (verbose) log(`  Simple tests ${jobs.tests.length}:`)
             for (const test of jobs.tests) {
                 const expect = await test.fn()
+
                 if (expect.result) {
                     passedTests++
+                    testFilePassed++
                 } else {
                     failedTests++
+                    testFileFailed++
+                    testFileStatus = false
                 }
 
-                log(`    ${expect.result ? chalk.green('[√] '+test.name) : chalk.red('[✗] '+test.name + ' (' + expect.message + ')')}`)
-                if (!expect.result) {
-                    log(`      ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
-                    log(`      ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
+                if (verbose) {
+                    log(`    ${expect.result ? chalk.green('✅  ' + test.name) : chalk.red('💀 ' + test.name + ' (' + expect.message + ')')}`)
+                    if (!expect.result) {
+                        log(`      ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
+                        log(`      ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
+                    }
                 }
                 totalTests++
             }
+        }
+
+        if (!verbose) {
+            const fileStatus = testFileStatus ? chalk.green('✅  ') : chalk.red('💀 ')
+            const testsStatus = `[${chalk.green.bold(testFilePassed)} of ${chalk.red.cyanBright(testFilePassed+testFileFailed)}]`
+            const fileName = testFileStatus ? chalk.green(file) : chalk.red(file)
+            log(`${fileStatus} ${fileName}... ${testsStatus}`)
         }
     }
 
@@ -88,9 +110,9 @@ export const runner = async (queue) => {
     log(`------------------------------------`)
 
     if (failedTests > 0) {
-        log(chalk.bgRed.bold('💀 Tests chain failed 💀'))
+        log(chalk.bgRed.bold('💀 Tests chain failed!'))
     } else {
-        log(chalk.bgGreen.bold('✅ Tests chain passed ✅'))
+        log(chalk.bgGreen.bold('✅ Tests chain passed! Congrats!'))
     }
 
     return failedTests > 0 ? 1 : 0
