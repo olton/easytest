@@ -1,5 +1,6 @@
 import {compareStructure, deepEqual} from "./helpers/objects.js";
 import {stringify} from "./helpers/json.js";
+import {testValue} from "./helpers/test-value.js";
 
 /**
  * Provides various assertion methods to validate the actual value.
@@ -419,8 +420,8 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeIP: (msg = null) => {
-            let result4 = /^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)(?:[\/:]([1-9]\d{1,3}|[1-6]\d{4}))?$/.test(actual)
-            let result6 = /^(?:(?:[a-fA-F\d]{1,4}:){7}(?:[a-fA-F\d]{1,4}|:)|(?:[a-fA-F\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|:[a-fA-F\d]{1,4}|:)|(?:[a-fA-F\d]{1,4}:){5}(?::(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,2}|:)|(?:[a-fA-F\d]{1,4}:){4}(?:(?::[a-fA-F\d]{1,4}){0,1}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,3}|:)|(?:[a-fA-F\d]{1,4}:){3}(?:(?::[a-fA-F\d]{1,4}){0,2}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,4}|:)|(?:[a-fA-F\d]{1,4}:){2}(?:(?::[a-fA-F\d]{1,4}){0,3}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,5}|:)|(?:[a-fA-F\d]{1,4}:){1}(?:(?::[a-fA-F\d]{1,4}){0,4}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,6}|:)|(?::(?:(?::[a-fA-F\d]{1,4}){0,5}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,7}|:)))(?:%[0-9a-zA-Z]{1,})?$/gm.test(actual)
+            let result4 = testValue(actual, 'ipv4')
+            let result6 = testValue(actual, 'ipv6')
 
             let result = result4 || result6
 
@@ -438,7 +439,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeIPv4: (msg = null) => {
-            let result = /^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)(?:[\/:]([1-9]\d{1,3}|[1-6]\d{4}))?$/.test(actual)
+            let result = testValue(actual, 'ipv4')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not IPv4`,
@@ -454,7 +455,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeIPv6: (msg = null) => {
-            let result = /^(?:(?:[a-fA-F\d]{1,4}:){7}(?:[a-fA-F\d]{1,4}|:)|(?:[a-fA-F\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|:[a-fA-F\d]{1,4}|:)|(?:[a-fA-F\d]{1,4}:){5}(?::(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,2}|:)|(?:[a-fA-F\d]{1,4}:){4}(?:(?::[a-fA-F\d]{1,4}){0,1}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,3}|:)|(?:[a-fA-F\d]{1,4}:){3}(?:(?::[a-fA-F\d]{1,4}){0,2}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,4}|:)|(?:[a-fA-F\d]{1,4}:){2}(?:(?::[a-fA-F\d]{1,4}){0,3}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,5}|:)|(?:[a-fA-F\d]{1,4}:){1}(?:(?::[a-fA-F\d]{1,4}){0,4}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,6}|:)|(?::(?:(?::[a-fA-F\d]{1,4}){0,5}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-fA-F\d]{1,4}){1,7}|:)))(?:%[0-9a-zA-Z]{1,})?$/gm.test(actual)
+            let result = testValue(actual, 'ipv6')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not IPv6`,
@@ -470,7 +471,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeEmail: (msg = null) => {
-            let result = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(actual)
+            let result = testValue(actual, 'email')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not valid email address`,
@@ -486,7 +487,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeUrl: (msg = null) => {
-            let result = /^(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*$/i.test(actual)
+            let result = testValue(actual, 'url')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not valid url`,
@@ -1020,7 +1021,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeBase64: (msg = null) => {
-            let result = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/.test(actual)
+            let result = testValue(actual, 'base64')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not base64`,
@@ -1052,7 +1053,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeXml: (msg = null) => {
-            let result = /^<([a-z]+)([^<]+)*(?:>(.*)<\/\1>|\s+\/>)$/.test(actual)
+            let result = testValue(actual, 'xml')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not xml`,
@@ -1068,12 +1069,12 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeHEXColor: (msg = null) => {
-            let result = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(actual)
+            let result = testValue(actual, 'hex')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not hex color`,
                 actual,
-                expected: 'Hex Color',
+                expected: 'Valid Hex Color: #xxx or #xxxxxx',
                 result,
             }
         },
@@ -1084,7 +1085,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeRGBColor: (msg = null) => {
-            let result = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/.test(actual)
+            let result = testValue(actual, 'rgb')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not rgb color`,
@@ -1100,7 +1101,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeRGBAColor: (msg = null) => {
-            let result = /^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d?\.?\d+)\)$/.test(actual)
+            let result = testValue(actual, 'rgba')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not rgba color`,
@@ -1116,7 +1117,7 @@ export let expect = (actual) => {
          * @returns {Object} The result of the test.
          */
         toBeHSLColor: (msg = null) => {
-            let result = /^hsl\((\d{1,3}),(\d{1,3})%,(\d{1,3})%\)$/.test(actual)
+            let result = testValue(actual, 'hsl')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not hsl color`,
@@ -1132,7 +1133,7 @@ export let expect = (actual) => {
          * @returns {Object} The result of the test.
          */
         toBeHSLAColor: (msg = null) => {
-            let result = /^hsla\((\d{1,3}),(\d{1,3})%,(\d{1,3})%,(\d?\.?\d+)\)$/.test(actual)
+            let result = testValue(actual, 'hsla')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not hsla color`,
@@ -1148,7 +1149,7 @@ export let expect = (actual) => {
          * @returns {Object} The result of the test.
          */
         toBeCMYKColor: (msg = null) => {
-            let result = /^cmyk\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3})\)$/.test(actual)
+            let result = testValue(actual, 'cmyk')
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is not cmyk color`,
@@ -1164,12 +1165,12 @@ export let expect = (actual) => {
          * @returns {Object} The result of the test.
          */
         toBeColor: (msg = null) => {
-            const testHex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(actual)
-            const testRGB = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/.test(actual)
-            const testRGBA = /^rgba\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d?\.?\d+)\)$/.test(actual)
-            const testHSL = /^hsl\((\d{1,3}),(\d{1,3})%,(\d{1,3})%\)$/.test(actual)
-            const testHSLA = /^hsla\((\d{1,3}),(\d{1,3})%,(\d{1,3})%,(\d?\.?\d+)\)$/.test(actual)
-            const testCMYK = /^cmyk\((\d{1,3}),(\d{1,3}),(\d{1,3}),(\d{1,3})\)$/.test(actual)
+            const testHex = testValue(actual, 'hex')
+            const testRGB = testValue(actual, 'rgb')
+            const testRGBA = testValue(actual, 'rgba')
+            const testHSL = testValue(actual, 'hsl')
+            const testHSLA = testValue(actual, 'hsla')
+            const testCMYK = testValue(actual, 'cmyk')
 
             const result = testHex || testRGB || testRGBA || testHSL || testHSLA || testCMYK
 
