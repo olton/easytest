@@ -1,6 +1,8 @@
 import fs from "fs";
 import chalk from "chalk";
 
+const log = console.log
+
 const defaultConfig = {
     include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
     exclude: ["node_modules/**"],
@@ -17,7 +19,8 @@ export const updateConfig = (config, args) => {
         const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
         Object.assign(config, userConfig)
     } else {
-        console.log(chalk.red(`💀 Config file ${configFileName} not found!`))
+        log(chalk.gray(`🔍 Config file not found! Using default config!`))
+        log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure EasyTest`))
     }
 
     if (args.coverage) { config.coverage = true; }
