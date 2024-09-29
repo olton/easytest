@@ -8,7 +8,6 @@ import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
 import inspector from 'inspector/promises'
 import { createReport } from './coverage.js'
-import chalk from "chalk";
 import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
 
