@@ -128,7 +128,6 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeUnique` - check if array has unique values
 - [x] `toStructureEqual` - check if an object has a structure
 - [x] `toBeDeepEqual` - check if objects are deeply equal
-- [x] `toBeEqualObject` - check if two simple objects are equal, to deep compare use `toBeDeepEqual`
 - [x] `toBeInteger` - check if value is integer
 - [x] `toBeSafeInteger` - check if value is safe integer
 - [x] `toBeFloat` - check if value is float
@@ -238,7 +237,7 @@ Also, you can use argument `--config fileName` to specify a configuration file.
 ### Verbose
 In verbose mode, you will see the detailed results in the console.
 
-![img_1.png](verbose-on.png)
+![verbose-on.png](verbose-on.png)
 
 To enable `verbose` mode, set parameter **verbose** to **true** in config file or use argument `--verbose`.
 
