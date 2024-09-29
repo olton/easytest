@@ -17,7 +17,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBe: (expected, msg = null) => {
-            let result = actual === expected
+            let result = Object.is(actual, expected)
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value not equal to received`,
@@ -34,7 +34,7 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toBeNot: (expected, msg = null) => {
-            let result = actual !== expected
+            let result = Object.is(actual, expected) === false
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is equal to received`,
@@ -50,7 +50,7 @@ export let expect = (actual) => {
          * @param msg - The message to display if the assertion fails.
          * @returns The result of the test.
          */
-        toBeEqualObject: (expected, msg = null) => {
+        toBeObject: (expected, msg = null) => {
             let result = true
             let key1 = Object.keys(actual)
             let key2 = Object.keys(expected)
@@ -819,22 +819,6 @@ export let expect = (actual) => {
                 message: result ? 'Test passed' : msg ?? `Expected value is not async function`,
                 actual,
                 expected: 'Async Function',
-                result,
-            }
-        },
-
-        /**
-         * Asserts that the actual value is an object.
-         * @param msg - The message to display if the assertion fails.
-         * @returns The result of the test.
-         */
-        toBeObject: (msg = null) => {
-            let result = typeof actual === 'object'
-
-            return {
-                message: result ? 'Test passed' : msg ?? `Expected value is not object`,
-                actual,
-                expected: 'Object',
                 result,
             }
         },

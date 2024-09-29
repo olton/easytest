@@ -35,12 +35,12 @@ interface MatcherType {
     toBeNot: (expected: any, msg: string) => TestResult;
 
     /**
-     * Asserts that the actual object is deeply equal to the expected object.
+     * Asserts that the actual object is equal to the expected object.
      * @param expected - The expected object.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeEqualObject: (expected: any, msg: string) => TestResult;
+    toBeObject: (expected: any, msg: string) => TestResult;
 
     /**
      * Asserts that the actual value is deeply equal to the expected value.
@@ -366,13 +366,6 @@ interface MatcherType {
      * @returns The result of the test.
      */
     toBeAsyncFunction: (msg: string = null) => TestResult;
-
-    /**
-     * Asserts that the actual value is an object.
-     * @param msg - The message to display if the assertion fails.
-     * @returns The result of the test.
-     */
-    toBeObject: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is an array.

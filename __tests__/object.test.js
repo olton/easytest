@@ -6,12 +6,12 @@ describe(`Objects tests suite`, () => {
     it(`Object is equal to other object`, () => {
         let obj1 = {}
         let obj2 = {}
-        return expect(obj1).toBeEqualObject(obj2)
+        return expect(obj1).toBeObject(obj2)
     })
     it(`Failed test`, () => {
         let obj1 = {a: 1}
-        let obj2 = {b: 2}
-        return expect(obj1).toBeEqualObject(obj2)
+        let obj2 = {a: 2}
+        return expect(obj1).toBeObject(obj2)
     })
     it(`Deep Equal`, () => {
         let obj1 = {
