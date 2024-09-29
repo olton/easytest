@@ -1167,6 +1167,29 @@ export let expect = (actual) => {
         },
 
         /**
+         * Asserts that the actual value is not a valid color (HEX, RGB, RGBA, HSL, HSLA, or CMYK).
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        toBeNotColor: (msg = null) => {
+            const testHex = testValue(actual, 'hex')
+            const testRGB = testValue(actual, 'rgb')
+            const testRGBA = testValue(actual, 'rgba')
+            const testHSL = testValue(actual, 'hsl')
+            const testHSLA = testValue(actual, 'hsla')
+            const testCMYK = testValue(actual, 'cmyk')
+
+            const result = !(testHex || testRGB || testRGBA || testHSL || testHSLA || testCMYK)
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected value is color`,
+                actual,
+                expected: 'Color',
+                result,
+            }
+        },
+
+        /**
          * Asserts that the actual value is an HTML element.
          * @param {string|null} [msg=null] - The message to display if the assertion fails.
          * @returns {Object} The result of the test.

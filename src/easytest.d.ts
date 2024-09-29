@@ -24,7 +24,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBe: (expected: any, msg: string) => TestResult;
+    toBe: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is not equal to the expected value.
@@ -32,7 +32,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeNot: (expected: any, msg: string) => TestResult;
+    toBeNot: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual object is equal to the expected object.
@@ -40,7 +40,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeObject: (expected: any, msg: string) => TestResult;
+    toBeObject: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is deeply equal to the expected value.
@@ -48,7 +48,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeEqual: (expected: any, msg: string = undefined) => TestResult;
+    toBeEqual: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is not deeply equal to the expected value.
@@ -56,7 +56,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeNotEqual: (expected: any, msg: string) => TestResult;
+    toBeNotEqual: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value matches the expected pattern.
@@ -64,49 +64,49 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeMatch: (expected: any, msg: string) => TestResult;
+    toBeMatch: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is defined.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeDefined: (msg: string) => TestResult;
+    toBeDefined: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is undefined.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeUndefined: (msg: string) => TestResult;
+    toBeUndefined: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is null.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeNull: (msg: string) => TestResult;
+    toBeNull: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is not null.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeNotNull: (msg: string) => TestResult;
+    toBeNotNull: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is true.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeTrue: (msg: string) => TestResult;
+    toBeTrue: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is false.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeFalse: (msg: string) => TestResult;
+    toBeFalse: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value contains the expected value.
@@ -114,7 +114,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toContain: (expected: any, msg: string) => TestResult;
+    toContain: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is greater than the expected value.
@@ -122,7 +122,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeGreaterThan: (expected: any, msg: string) => TestResult;
+    toBeGreaterThan: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is greater than or equal to the expected value.
@@ -130,7 +130,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeGreaterThanOrEqual: (expected: any, msg: string) => TestResult;
+    toBeGreaterThanOrEqual: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is less than the expected value.
@@ -138,7 +138,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeLessThan: (expected: any, msg: string) => TestResult;
+    toBeLessThan: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is less than or equal to the expected value.
@@ -146,14 +146,14 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeLessThanOrEqual: (expected: any, msg: string) => TestResult;
+    toBeLessThanOrEqual: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual function throws an error.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toThrow: (msg: string) => TestResult;
+    toThrow: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual function throws an error matching the expected value.
@@ -161,7 +161,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toThrowError: (expected: any, msg: string) => TestResult;
+    toThrowError: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual array is equal to the expected array.
@@ -169,7 +169,7 @@ interface MatcherType {
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.
      */
-    toBeArrayEqual: (expected: any, msg: string) => TestResult;
+    toBeArrayEqual: (expected: any, msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is deeply equal to the expected value.
@@ -513,6 +513,13 @@ interface MatcherType {
      * @returns The result of the test.
      */
     toBeColor: (msg: string = null) => TestResult;
+
+    /**
+     * Asserts that the actual value is not a color.
+     * @param msg - The message to display if the assertion fails.
+     * @returns The result of the test.
+     */
+    toBeNotColor: (msg: string = null) => TestResult;
 
     /**
      * Asserts that the actual value is a valid HTML element.
