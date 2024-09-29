@@ -8,18 +8,12 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
     let failedTests = 0
     let totalTests = 0
 
-    log(`${chalk.bold("EasyTest Runner")}`)
-    log(`------------------------------------`)
-    log(`Copyright (c) 2024 by Serhii Pimenov <serhii@pimenov.com.ua>`)
-    log(`You can support EasyTest by PayPal to serhii@pimenov.com.ua`)
-    log(`------------------------------------`)
-
     for (const [file, jobs] of queue) {
         let testFileStatus = true
         let testFilePassed = 0
         let testFileFailed = 0
 
-        if (verbose) log(`${chalk.gray("Test spec:")} ${chalk.bold.yellow(file)}...`)
+        if (verbose) log(`📜 ${chalk.gray("Test spec:")} ${chalk.bold.yellow(file)}...`)
 
         if (jobs.describes.length) {
             if (verbose) log(`  Tests  Suites ${jobs.describes.length}:`)
@@ -27,10 +21,16 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                 if (verbose) log(`    ${chalk.blue(describe.name)} (${describe.it.length} tests):`)
 
                 for (const fn of describe.beforeAll) {
-                    await fn()
+                    try {
+                        await fn()
+                    } catch (error) {
+                        log(` The beforeAll function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+                    }
                 }
 
                 for (const it of describe.it) {
+                    let expect = {}
+
                     if (specifiedTest) {
                         if (it.name.match (specifiedTest) === null) {
                             continue
@@ -38,13 +38,39 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                     }
 
                     for (const fn of it.beforeEach) {
-                        await fn()
+                        try {
+                            await fn()
+                        } catch (error) {
+                            log(` The beforeEach function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+                        }
                     }
 
-                    const expect = await it.fn()
+                    try {
+                        expect = await it.fn()
+                    } catch (error) {
+                        expect = {
+                            result: false,
+                            message: error.message,
+                            expected: null,
+                            actual: null,
+                        }
+                        log(` The it() function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+                    }
+
+                    if (verbose) {
+                        log(`      ${expect.result ? chalk.green('✅  ' + it.name) : chalk.red('💀 ' + it.name + ' (' + expect.message + ')')}`)
+                        if (!expect.result) {
+                            log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
+                            log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
+                        }
+                    }
 
                     for (const fn of it.afterEach) {
-                        await fn()
+                        try {
+                            await fn()
+                        } catch (error) {
+                            log(` The afterEach function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+                        }
                     }
 
                     if (expect.result) {
@@ -56,18 +82,15 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                         testFileStatus = false
                     }
 
-                    if (verbose) {
-                        log(`      ${expect.result ? chalk.green('✅  ' + it.name) : chalk.red('💀 ' + it.name + ' (' + expect.message + ')')}`)
-                        if (!expect.result) {
-                            log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(JSON.stringify(expect.expected))}`)
-                            log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(JSON.stringify(expect.actual))}`)
-                        }
-                    }
                     totalTests++
                 }
 
                 for (const fn of describe.afterAll) {
-                    await fn()
+                    try {
+                        await fn()
+                    } catch (error) {
+                        log(` The afterAll function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+                    }
                 }
             }
         }
@@ -75,13 +98,25 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
         if (jobs.tests.length) {
             if (verbose) log(`  Simple tests ${jobs.tests.length}:`)
             for (const test of jobs.tests) {
+                let expect = {}
+
                 if (specifiedTest) {
                     if (test.name.match( specifiedTest ) === null) {
                         continue
                     }
                 }
 
-                const expect = await test.fn()
+                try {
+                    expect = await test.fn()
+                } catch (error) {
+                    expect = {
+                        result: false,
+                        message: error.message,
+                        expected: null,
+                        actual: null,
+                    }
+                    log(` The test function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+                }
 
                 if (expect.result) {
                     passedTests++
@@ -121,9 +156,9 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
     log(`------------------------------------`)
 
     if (failedTests > 0) {
-        log(chalk.bgRed.bold('💀 Tests chain failed!'))
+        log(chalk.bgRed.bold('Tests chain failed!'))
     } else {
-        log(chalk.bgGreen.bold('✅ Tests chain passed! Congrats!'))
+        log(chalk.bgGreen.bold('Tests chain passed! Congrats!'))
     }
 
     return failedTests > 0 ? 1 : 0

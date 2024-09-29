@@ -1,3 +1,11 @@
+beforeAll(() => {
+    console.log("    >>>>> Before throw test suite")
+})
+
+afterAll(() => {
+    console.log("    >>>>> After throw test suite")
+})
+
 describe(`Throw tests suite`, () => {
     it(`throws an error`, () => {
         return expect(() => {

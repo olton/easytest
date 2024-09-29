@@ -1,5 +1,5 @@
 import { glob } from 'glob'
-import { pathToFileURL, fileURLToPath } from 'url';
+import { pathToFileURL } from 'url';
 import fs from 'fs'
 import 'global-jsdom/register'
 import { JSDOM } from 'jsdom'
@@ -7,63 +7,32 @@ import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
 import inspector from 'inspector/promises'
-import { dirname } from 'node:path'
 import { createReport } from './coverage.js'
 import chalk from "chalk";
+import {parentFunc} from "./helpers/parent-func.js";
+import {updateConfig} from "./config.js";
 
-const beforeEachFunctions = []
-const afterEachFunctions = []
-const beforeAllFunctions = []
-const afterAllFunctions = []
+const log = console.log
+
+const beforeEachFileFunctions = []
+const afterEachFileFunctions = []
+const beforeEachSuiteFunctions = []
+const afterEachSuiteFunctions = []
+const beforeAllFileFunctions = []
+const afterAllFileFunctions = []
+const beforeAllSuiteFunctions = []
+const afterAllSuiteFunctions = []
+
 let currentDescribe = {}
 let itScope = {}
 let currentTestFile = ''
 
 let queue = new Map()
 
-const currentFile = fileURLToPath(import.meta.url)
-const __dirname = dirname(fileURLToPath(new URL('.', import.meta.url)))
-let configFileName = 'easytest.config.json'
-
-const config = {
-    include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
-    exclude: ["node_modules/**"],
-    coverage: false,
-    verbose: false,
-}
+const config = {}
 
 export const run = async (root, args) => {
-    console.log(args)
-
-    if (args.config) {
-        configFileName = args.config
-        if (fs.existsSync(configFileName)) {
-            const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
-            Object.assign(config, userConfig)
-        } else {
-            console.log(chalk.red(`💀 Config file ${configFileName} not found!`))
-        }
-    }
-
-    if (args.coverage) {
-        config.coverage = true
-    }
-
-    if (args.verbose) {
-        config.verbose = true
-    }
-
-    if (args.test) {
-        config.test = args.test
-    }
-
-    if (args.include) {
-        config.include = args.include.split(',')
-    }
-
-    if (args.exclude) {
-        config.exclude = args.exclude.split(',')
-    }
+    updateConfig(config, args)
 
     const session  = new inspector.Session()
     session.connect()
@@ -77,11 +46,18 @@ export const run = async (root, args) => {
 
     for (const file of files) {
         currentTestFile = file
+
         queue.set(file, {
             describes: [],
             tests: [],
+            beforeAll: [],
+            afterAll: [],
         })
+
         await import(pathToFileURL(fs.realpathSync(file)).href)
+
+        beforeAllFileFunctions.length = 0
+        afterAllFileFunctions.length = 0
     }
 
     const result = await runner(queue, {
@@ -114,18 +90,31 @@ export function describe (name, fn) {
         context: this,
     }
 
-    for(let fn1 of beforeAllFunctions) {
+    for(let fn1 of beforeAllFileFunctions) {
         currentDescribe.beforeAll.push(fn1.bind(this))
     }
 
     fn.apply(this)
 
-    for(let fn1 of afterAllFunctions) {
+    for(let fn1 of beforeAllSuiteFunctions) {
+        currentDescribe.beforeAll.push(fn1.bind(this))
+    }
+
+    for(let fn1 of afterAllSuiteFunctions) {
+        currentDescribe.afterAll.push(fn1.bind(this))
+    }
+
+    for(let fn1 of afterAllFileFunctions) {
         currentDescribe.afterAll.push(fn1.bind(this))
     }
 
     testObject.describes.push(currentDescribe)
     queue.set(currentTestFile, testObject)
+
+    beforeAllSuiteFunctions.length = 0
+    afterAllSuiteFunctions.length = 0
+    beforeEachSuiteFunctions.length = 0
+    afterEachSuiteFunctions.length = 0
 }
 
 export async function it (name, fn) {
@@ -138,11 +127,17 @@ export async function it (name, fn) {
         startTime: process.hrtime(),
     }
 
-    for (let fn1 of beforeEachFunctions) {
+    for (let fn1 of beforeEachFileFunctions) {
+        itScope.beforeEach.push(fn1.bind(this))
+    }
+    for (let fn1 of beforeEachSuiteFunctions) {
         itScope.beforeEach.push(fn1.bind(this))
     }
 
-    for (let fn1 of afterEachFunctions) {
+    for (let fn1 of afterEachSuiteFunctions) {
+        itScope.afterEach.push(fn1.bind(this))
+    }
+    for (let fn1 of afterEachFileFunctions) {
         itScope.afterEach.push(fn1.bind(this))
     }
 
@@ -156,26 +151,44 @@ export async function test (name, fn) {
         name,
         expects: {},
         fn: fn.bind(this),
+        beforeEach: [],
+        afterEach: [],
         startTime: process.hrtime(),
     }
 
     testObject.tests.push(itScope)
 }
 
-export let beforeEach = (fn) => {
-    beforeEachFunctions.push(fn)
+export function beforeEach (fn) {
+    if (parentFunc() === 'describe') {
+        beforeEachSuiteFunctions.push(fn)
+    } else {
+        beforeEachFileFunctions.push(fn)
+    }
 }
 
-export let afterEach = (fn) => {
-    afterEachFunctions.push(fn)
+export function afterEach (fn) {
+    if (parentFunc() === 'describe') {
+        afterEachSuiteFunctions.push(fn)
+    } else {
+        afterEachFileFunctions.push(fn)
+    }
 }
 
-export let beforeAll = (fn) => {
-    beforeAllFunctions.push(fn)
+export function beforeAll (fn) {
+    if (parentFunc() === 'describe') {
+        beforeAllSuiteFunctions.push(fn)
+    } else {
+        beforeAllFileFunctions.push(fn)
+    }
 }
 
-export let afterAll = (fn) => {
-    afterAllFunctions.push(fn)
+export function afterAll (fn) {
+    if (parentFunc() === 'describe') {
+        afterAllSuiteFunctions.push(fn)
+    } else {
+        afterAllFileFunctions.push(fn)
+    }
 }
 
 global.describe = describe
