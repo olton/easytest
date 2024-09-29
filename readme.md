@@ -265,13 +265,51 @@ To enable `coverage`, set parameter **coverage** to **true** in config file or u
 }
 ```
 
+## Include tests
+You can specify the files to include in the test run.
+
+```json
+{
+    "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"]
+}
+```
+
+or use argument `--include`.
+
+```json
+{
+    "scripts": {
+        "test": "easytest --include='**/common.test.js,**/common.spec.js'"
+    }
+}
+```
+
+## Exclude tests
+You can specify the files to exclude from the test run.
+
+```json
+{
+    "exclude": ["node_modules/**"]
+}
+```
+
+or use argument `--exclude`.
+
+```json
+{
+    "scripts": {
+        "test": "easytest --exclude='node_modules/**,dist/**'"
+    }
+}
+```
+
 ## Executing tests by name
 You can run a specific test by name using the `--test` argument.
 
 ```json
 {
     "scripts": {
-        "test": "easytest --test=\"Compare with 2\""
+        "test": "easytest --test='Compare with 2'"
     }
 }
 ```

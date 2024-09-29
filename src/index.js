@@ -33,6 +33,8 @@ const config = {
 }
 
 export const run = async (root, args) => {
+    console.log(args)
+
     if (args.config) {
         configFileName = args.config
         if (fs.existsSync(configFileName)) {
@@ -53,6 +55,14 @@ export const run = async (root, args) => {
 
     if (args.test) {
         config.test = args.test
+    }
+
+    if (args.include) {
+        config.include = args.include.split(',')
+    }
+
+    if (args.exclude) {
+        config.exclude = args.exclude.split(',')
     }
 
     const session  = new inspector.Session()
