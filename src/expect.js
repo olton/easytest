@@ -45,7 +45,41 @@ export let expect = (actual) => {
         },
 
         /**
-         * Asserts that the actual object is deeply equal to the expected object.
+         * Asserts that the actual value is strict equal (using ===) to the expected value.
+         * @param expected - The expected value.
+         * @param msg - The message to display if the assertion fails.
+         * @returns The result of the test.
+         */
+        toBeStrictEqual: (expected, msg = null) => {
+            let result = actual === expected
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected value not strict equal to received`,
+                actual,
+                expected,
+                result,
+            }
+        },
+
+        /**
+         * Asserts that the actual value isn't strict equal (using !==) to the expected value.
+         * @param expected - The expected value.
+         * @param msg - The message to display if the assertion fails.
+         * @returns The result of the test.
+         */
+        toBeNotStrictEqual: (expected, msg = null) => {
+            let result = actual !== expected
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected value strict equal to received`,
+                actual,
+                expected,
+                result,
+            }
+        },
+
+        /**
+         * Asserts that the actual object is equal to the expected object.
          * @param expected - The expected object.
          * @param msg - The message to display if the assertion fails.
          * @returns The result of the test.
@@ -74,7 +108,7 @@ export let expect = (actual) => {
         },
 
         /**
-         * Asserts that the actual value is deeply equal to the expected value.
+         * Asserts that the actual value is equal (using ==) to the expected value.
          * @param expected - The expected value.
          * @param msg - The message to display if the assertion fails.
          * @returns The result of the test.
@@ -91,7 +125,7 @@ export let expect = (actual) => {
         },
 
         /**
-         * Asserts that the actual value is not deeply equal to the expected value.
+         * Asserts that the actual value is not equal (using !=) to the expected value.
          * @param expected - The expected value.
          * @param msg - The message to display if the assertion fails.
          * @returns The result of the test.

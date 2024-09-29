@@ -95,10 +95,12 @@ Update `package.json` to run tests with `easytest` command.
 - `DOM` - create DOM object (not global)
 
 ### Matchers
-- [x] `toBe` - compare values with `===`
-- [x] `toBeNot` - compare values with `!==`
+- [x] `toBe` - compare values with `Object.is`
+- [x] `toBeNot` - compare values with `Object.is === false`
 - [x] `toBeEqual` - compare values with `==`
 - [x] `toBeNotEqual` - compare values with `!=`
+- [x] `toBeStrictEqual` - compare values with `===`
+- [x] `toBeNotStrictEqual` - compare values with `!==`
 - [x] `toBeMatch` - compare strings with regex
 - [x] `toBeDefained` - check if value is defined
 - [x] `toBeUndefined` - check if value is undefined
@@ -162,6 +164,7 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `toBeHSLAColor` - check if string is HSLA color
 - [x] `toBeSMYKColor` - check if string is a cmyk color
 - [x] `toBeColor` - check if string is color
+- [x] `toBeNotColor` - check if string isn't a color
 - [x] `toBeHtmlElement` - check if object is HTML element
 - [x] `toBeHtmlNode` - check if an object is HTML node
 - [x] `toBeHtmlTextNode` - check if an object is HTML node
