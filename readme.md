@@ -1,11 +1,18 @@
 # EasyTest
 
-Simple testing framework for JS, TS. 
-Written in pure JavaScript. 
-JavaScript and TypeScript tests. 
-There is support for asynchronous code testing and TypeScript testing out of the box.
-Global DOM object for testing out of the box.
+Simple testing framework for JS, TS, written in pure JavaScript.
 
+Core features:
+- No need to import `it`, `test`, `describe` or `ecpext` in your test file. These functions are available globally.
+- You can use both `js` and `ts` test files in the same project.
+- Asynchronous code testing.
+- TypeScript testing out of the box.
+- Global DOM object for testing HTML objects.
+- Built-in coverage tool.
+- Verbose or non verbose mode.
+- Mock functions.
+- Big set of built-in matchers.
+- Extend `expect` function with your own matchers.
 ---
 
 Support for PayPal to **serhii@pimenov.com.ua**
