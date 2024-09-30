@@ -37,13 +37,9 @@ npm install @olton/easytest -D
 ## Usage
 
 To use `EasyTest` you don't need to import `it`, `test` or `describe` in your test file.
-But you must return value from `it` or `test` function.
-
-> ### Each test must contain one `expect` function and return it.
-
-Create a test file with `*.test.js` or `*.test.ts` extension.
+Create a test file with `*.test.js` or `*.test.ts` extension (for example).
 You can use both of them in the same project.
-For support `TypeScript` you need to install `tsx` package (read below).
+
 ```javascript
 function hello() {
     return "Hello"
@@ -79,8 +75,6 @@ describe('Async function tests', async () => {
 });
 ```
 
-> **Each test must contain one `expect` function and return it.**
-
 Update `package.json` to run tests with `easytest` command.
 ```json
 {
@@ -103,94 +97,7 @@ Update `package.json` to run tests with `easytest` command.
 - `DOM` - create DOM object (not global)
 
 ### Matchers
-- [x] `toBe` - compare values with `Object.is`
-- [x] `toBeNot` - compare values with `Object.is === false`
-- [x] `toBeEqual` - compare values with `==`
-- [x] `toBeNotEqual` - compare values with `!=`
-- [x] `toBeStrictEqual` - compare values with `===`
-- [x] `toBeNotStrictEqual` - compare values with `!==`
-- [x] `toBeMatch` - compare strings with regex
-- [x] `toBeDefained` - check if value is defined
-- [x] `toBeUndefined` - check if value is undefined
-- [x] `toThrow` - check if function throws an error
-- [x] `toThrowError` - check if function throws an error with a specific message
-- [x] `toBeGreaterThan` - check if value is greater than
-- [x] `toBeGreaterThanOrEqual` - check if value is greater than
-- [x] `toBeLessThan` - check if value is less than
-- [x] `toBeLessThanOrEqual` - check if value is less than
-- [x] `toBeNull` - check if value is null
-- [x] `toBeNotNull` - check if value is not null
-- [x] `toBeTrue` - check if value is true
-- [x] `toBeFalse` - check if value is false
-- [x] `toContain` - check if an array contains value or string contains substring
-- [x] `toBeArrayEqual` - check if arrays are equal
-- [x] `toBeIP` - check if string is IPv4 address
-- [x] `toBeIPv4` - check if string is IPv4 address
-- [x] `toBeIPv6` - check if string is IPv6 address
-- [x] `toBeEmail` - check if string is email address
-- [x] `toBeUrl` - check if string is url address
-- [x] `toBeBetween` - check if value between two values
-- [x] `toBeType` - check if value is of a specific type
-- [x] `toBeInstanceOf` - check if value is instance of a specific class
-- [x] `toBeEmpty` - check if value is empty
-- [x] `toBeNotEmpty` - check if value is not empty
-- [x] `toBeSorted` - check if an array is sorted
-- [x] `toBeUnique` - check if array has unique values
-- [x] `toStructureEqual` - check if an object has a structure
-- [x] `toBeDeepEqual` - check if objects are deeply equal
-- [x] `toBeInteger` - check if value is integer
-- [x] `toBeSafeInteger` - check if value is safe integer
-- [x] `toBeFloat` - check if value is float
-- [x] `toBePositive` - check if value is positive
-- [x] `toBeNegative` - check if value is negative
-- [x] `toBeFinite` - check if value is finite
-- [x] `toBeNumber` - check if value is number
-- [x] `toBeNaN` - check if value is NaN
-- [x] `toBeString` - check if value is string
-- [x] `toBeBoolean` - check if value is boolean
-- [x] `toBeFunction` - check if value is function
-- [x] `toBeAsyncFunction` - check if value is async function
-- [x] `toBeObject` - check if value is an object
-- [x] `toBeArray` - check if value is an array
-- [x] `toBeDate` - check if value is date
-- [x] `toBeRegExp` - check if value is regular expression
-- [x] `toBeSymbol` - check if value is symbol
-- [x] `toBeBigInt` - check if value is big int
-- [x] `toBeMap` - check if value is a map
-- [x] `toBeSet` - check if value is set
-- [x] `toBeWeakMap` - check if value is a weak map
-- [x] `toBeWeakSet` - check if value is weak set
-- [x] `toBeArrayBuffer` - check if value is array buffer
-- [x] `toBePromise` - check if value is promise
-- [x] `toBeBase64` - check if string is base64
-- [x] `toBeJson` - check if string is JSON
-- [x] `toBeXml` - check if string is XML
-- [x] `toBeHEXColor` - check if string is hex color
-- [x] `toBeRGBColor` - check if string is RGB color
-- [x] `toBeRGBAColor` - check if string is RGBA color
-- [x] `toBeHSLColor` - check if string is HSL color
-- [x] `toBeHSLAColor` - check if string is HSLA color
-- [x] `toBeSMYKColor` - check if string is a cmyk color
-- [x] `toBeColor` - check if string is color
-- [x] `toBeNotColor` - check if string isn't a color
-- [x] `toBeHtmlElement` - check if object is HTML element
-- [x] `toBeHtmlNode` - check if an object is HTML node
-- [x] `toBeHtmlTextNode` - check if an object is HTML node
-- [x] `toBeHtmlCollection` - check if an object is an HTML collection
-- [x] `toBeHtmlDocument` - check if an object is an HTML document
-- [x] `toBeHtmlWindow` - check if an object is an HTML window
-- [x] `hasClass` - check if an HTML element has class
-- [x] `hasAttribute` - check if an HTML element has attribute
-- [x] `hasProperty` - check if an object has property
-- [x] `hasChildren` - check if an HTML element has children
-- [x] `hasParent` - check if an HTML element has parent
-- [x] `hasNoParent` - check if an HTML element hasn't a parent
-- [x] `toBeenCalled` - check if a function has been called
-- [x] `toBeenCalledTimes` - check how many times a function has been called
-- [x] `toBeenCalledWith` - check if a function has been called with specific arguments
-- [x] `toBeenLastCalledWith` - check if a function has been last called with specific arguments
-- [x] `hasLength` - check if an object has a length
-- [x] `toBeCloseTo` - check if a number is close to another number
+EasyTest contains a big set of built-in matchers.
 
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.
@@ -301,7 +208,7 @@ or use argument `--include`.
 }
 ```
 
-## Exclude tests
+## Exclude files
 You can specify the files to exclude from the test run.
 
 ```json
@@ -336,21 +243,23 @@ In this case only the test with the name includes `Compare with 2` will be execu
 You can extend the `expect` function with your own matchers.
 
 ```javascript
-import { extend } from '@olton/easytest';
+import {Expect} from "../src/expect.js";
 
-const toBeEvent = (msg = null) => {
-    const result = actual % 2 === 0;
-    return {
-        message: result ? "Test passed" : msg ?? "Test failed",
-        actual,
-        expected: "even",
-        result
+class MyExpect extends Expect {
+    toBeEven() {
+        let received = this.received
+        let result = received % 2 === 0
+        if (!result) {
+            this.message = `Expected ${received} to be even`
+        }
     }
-};
+}
 
-extend('toBeEven', (value) => {
-    return value % 2 === 0;
-});
+const expect = (received) => new MyExpect(received)
+
+test(`Custom expect`, () => {
+    expect(2).toBeEven()
+})
 ```
 
 ## License

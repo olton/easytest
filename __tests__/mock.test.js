@@ -1,6 +1,6 @@
 describe(`Mock tests`, () => {
     it('toHaveBeenCalled', () => {
-        const mock = mockFn()
+        const mock = mocker()
         mock()
         expect(mock).toHaveBeenCalled()
     })

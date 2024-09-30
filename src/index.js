@@ -204,4 +204,4 @@ global.afterEach = afterEach
 global.beforeEach = beforeEach
 global.beforeAll = beforeAll
 global.afterAll = afterAll
-global.mockFn = mock
+global.mocker = mock

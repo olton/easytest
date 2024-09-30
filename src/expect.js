@@ -1566,7 +1566,6 @@ export class Expect {
             throw new ExpectError(msg || `Expected element has a parent`, 'hasParent', received, 'Parent')
         }
     }
-
 }
 
 /**
