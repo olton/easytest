@@ -325,6 +325,27 @@ You can run a specific test by name using the `--test` argument.
 ```
 In this case only the test with the name includes `Compare with 2` will be executed.
 
+## Extend expect
+You can extend the `expect` function with your own matchers.
+
+```javascript
+import { extend } from '@olton/easytest';
+
+const toBeEvent = (msg = null) => {
+    const result = actual % 2 === 0;
+    return {
+        message: result ? "Test passed" : msg ?? "Test failed",
+        actual,
+        expected: "even",
+        result
+    }
+};
+
+extend('toBeEven', (value) => {
+    return value % 2 === 0;
+});
+```
+
 ## License
 EasyTest licensed under MIT license.
 
