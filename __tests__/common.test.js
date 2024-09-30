@@ -10,6 +10,10 @@ describe(`Common tests suite 1`, () => {
     it(`It1 `, () => {
         return expect(1).toBe(1)
     })
+
+    it(`It2 `, () => {
+        return expect(2).toBe(2)
+    })
 })
 
 describe(`Common tests suite 2`, () => {

@@ -11,8 +11,6 @@ import { createReport } from './coverage.js'
 import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
 
-const log = console.log
-
 const beforeEachFileFunctions = []
 const afterEachFileFunctions = []
 const beforeEachSuiteFunctions = []
@@ -23,7 +21,6 @@ const beforeAllSuiteFunctions = []
 const afterAllSuiteFunctions = []
 
 let currentDescribe = {}
-let itScope = {}
 let currentTestFile = ''
 
 let queue = new Map()
@@ -46,6 +43,11 @@ export const run = async (root, args) => {
     for (const file of files) {
         currentTestFile = file
 
+        beforeAllFileFunctions.length = 0
+        afterAllFileFunctions.length = 0
+        beforeEachFileFunctions.length = 0
+        afterEachFileFunctions.length = 0
+
         queue.set(file, {
             describes: [],
             tests: [],
@@ -54,9 +56,6 @@ export const run = async (root, args) => {
         })
 
         await import(pathToFileURL(fs.realpathSync(file)).href)
-
-        beforeAllFileFunctions.length = 0
-        afterAllFileFunctions.length = 0
     }
 
     const result = await runner(queue, {
@@ -117,45 +116,50 @@ export function describe (name, fn) {
 }
 
 export async function it (name, fn) {
-    itScope = {
+    const testScope = {
         name,
         expects: {},
         fn: fn.bind(currentDescribe.context),
         beforeEach: [],
-        afterEach: [],
-        startTime: process.hrtime(),
+        afterEach: []
     }
 
     for (let fn1 of beforeEachFileFunctions) {
-        itScope.beforeEach.push(fn1.bind(this))
+        testScope.beforeEach.push(fn1.bind(this))
     }
     for (let fn1 of beforeEachSuiteFunctions) {
-        itScope.beforeEach.push(fn1.bind(this))
+        testScope.beforeEach.push(fn1.bind(this))
     }
 
     for (let fn1 of afterEachSuiteFunctions) {
-        itScope.afterEach.push(fn1.bind(this))
+        testScope.afterEach.push(fn1.bind(this))
     }
     for (let fn1 of afterEachFileFunctions) {
-        itScope.afterEach.push(fn1.bind(this))
+        testScope.afterEach.push(fn1.bind(this))
     }
 
-    currentDescribe.it.push(itScope)
+    currentDescribe.it.push(testScope)
 }
 
 export async function test (name, fn) {
     const testObject = queue.get(currentTestFile)
 
-    itScope = {
+    const testScope = {
         name,
         expects: {},
         fn: fn.bind(this),
         beforeEach: [],
-        afterEach: [],
-        startTime: process.hrtime(),
+        afterEach: []
     }
 
-    testObject.tests.push(itScope)
+    for (let fn1 of beforeEachFileFunctions) {
+        testScope.beforeEach.push(fn1.bind(this))
+    }
+    for (let fn1 of afterEachFileFunctions) {
+        testScope.afterEach.push(fn1.bind(this))
+    }
+
+    testObject.tests.push(testScope)
 }
 
 export function beforeEach (fn) {

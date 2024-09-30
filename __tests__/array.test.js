@@ -1,7 +1,3 @@
-beforeEach(() => {
-    console.log("       >>>>> before each <<<<<")
-})
-
 describe(`Array tests suite`, () => {
     it(`Array should be empty`, () => {
         return expect([]).toBeEmpty()

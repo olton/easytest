@@ -2,6 +2,14 @@ function hello() {
     return "Hello"
 }
 
+beforeEach(() => {
+    console.log("Before each")
+})
+
+afterEach(() => {
+    console.log("After each")
+})
+
 test(`says hello`, () => {
     return expect(hello()).toBe("Hello")
 })

@@ -3,7 +3,6 @@ import {fileURLToPath} from "url";
 import fs from "node:fs";
 import chalk from "chalk";
 import {table} from "table";
-import os from "node:os";
 
 const log = console.log
 
