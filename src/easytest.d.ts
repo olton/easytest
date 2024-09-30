@@ -607,6 +607,55 @@ interface MatcherType {
      * @returns {Object} The result of the test.
      */
     hasNoParent: (msg: string = null) => TestResult;
+
+    /**
+     * Asserts the mock function was called at least once
+     * @param {string|null} [msg=null] - The message to display if the assertion fails.
+     * @returns {Object} The result of the test.
+     */
+    toBeenCalled: (msg: string = null) => TestResult;
+
+    /**
+     * Asserts the mock function was called at least once
+     * @param expected
+     * @param {string|null} [msg=null] - The message to display if the assertion fails.
+     * @returns {Object} The result of the test.
+     */
+    toBeenCalledTimes: (expected: number, msg = null) => TestResult;
+
+    /**
+     * Asserts that the mock function was called with specified arguments.
+     * @param {Array} expected - The expected arguments.
+     * @param {string|null} [msg=null] - The message to display if the assertion fails.
+     * @returns {Object} The result of the test.
+     */
+    toBeenCalledWith: (expected: any, msg = null) => TestResult;
+
+    /**
+     * Asserts that the mock function was called last with specified arguments.
+     * @param {Array} expected - The expected arguments.
+     * @param {string|null} [msg=null] - The message to display if the assertion fails.
+     * @returns {Object} The result of the test.
+     */
+    toBeenLastCalledWith: (expected: any, msg = null) => TestResult;
+
+    /**
+     * Asserts that the array-like object has the expected length.
+     * @param {number} expected - The expected length.
+     * @param {string|null} [msg=null] - The message to display if the assertion fails.
+     * @returns {Object} The result of the test.
+     */
+    hasLength: (expected: number, msg = null) => TestResult;
+
+    /**
+     * Asserts that the actual value is close to the expected value within a certain precision.
+     * @param {number} expected - The expected value to compare against.
+     * @param {number} [precision=2] - The number of decimal places to consider in the comparison.
+     * @param {string|null} [msg=null] - The message to display if the assertion fails.
+     * @returns {Object} The result of the test.
+     */
+    toBeCloseTo: (expected: number, precision = 2, msg = null) => TestResult;
+
 }
 
 /**
@@ -688,3 +737,11 @@ export declare function beforeEach(fn: () => void): void;
  * @return {void} This function does not return any value.
  */
 export declare function afterEach(fn: () => void): void;
+
+/**
+ * Mocks a function or object to simulate a specific behavior.
+ *
+ * @param {Function} fn - The function to be mocked.
+ * @return {void} This function does not return any value.
+ */
+export declare function mock(fn: () => void): void;

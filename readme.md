@@ -177,6 +177,12 @@ Update `package.json` to run tests with `easytest` command.
 - [x] `hasChildren` - check if an HTML element has children
 - [x] `hasParent` - check if an HTML element has parent
 - [x] `hasNoParent` - check if an HTML element hasn't a parent
+- [x] `toBeenCalled` - check if a function has been called
+- [x] `toBeenCalledTimes` - check how many times a function has been called
+- [x] `toBeenCalledWith` - check if a function has been called with specific arguments
+- [x] `toBeenLastCalledWith` - check if a function has been last called with specific arguments
+- [x] `hasLength` - check if an object has a length
+- [x] `toBeCloseTo` - check if a number is close to another number
 
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.

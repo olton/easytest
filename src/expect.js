@@ -3,10 +3,11 @@ import {stringify} from "./helpers/json.js";
 import {testValue} from "./helpers/test-value.js";
 
 /**
- * Provides various assertion methods to validate the actual value.
+ * Function to create an expectation object for the given actual value,
+ * providing methods to assert various conditions.
  *
- * @param {*} actual - The value to be tested.
- * @returns {Object} An object containing various assertion methods.
+ * @param actual - The actual value to assert against.
+ * @returns An object containing multiple assertion methods.
  */
 export let expect = (actual) => {
     return {
@@ -79,35 +80,6 @@ export let expect = (actual) => {
         },
 
         /**
-         * Asserts that the actual object is equal to the expected object.
-         * @param expected - The expected object.
-         * @param msg - The message to display if the assertion fails.
-         * @returns The result of the test.
-         */
-        toBeObject: (expected, msg = null) => {
-            let result = true
-            let key1 = Object.keys(actual)
-            let key2 = Object.keys(expected)
-
-            if (key1.length !== key2.length) {
-                result = false
-            } else {
-                for (let key of key1) {
-                    if (actual[key] !== expected[key]) {
-                        result = false
-                    }
-                }
-            }
-
-            return {
-                message: result ? 'Test passed' : msg ?? `Two objects are not equal`,
-                actual,
-                expected,
-                result,
-            }
-        },
-
-        /**
          * Asserts that the actual value is equal (using ==) to the expected value.
          * @param expected - The expected value.
          * @param msg - The message to display if the assertion fails.
@@ -135,6 +107,35 @@ export let expect = (actual) => {
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected value is equal to received`,
+                actual,
+                expected,
+                result,
+            }
+        },
+
+        /**
+         * Asserts that the actual object is equal to the expected object.
+         * @param expected - The expected object.
+         * @param msg - The message to display if the assertion fails.
+         * @returns The result of the test.
+         */
+        toBeObject: (expected, msg = null) => {
+            let result = true
+            let key1 = Object.keys(actual)
+            let key2 = Object.keys(expected)
+
+            if (key1.length !== key2.length) {
+                result = false
+            } else {
+                for (let key of key1) {
+                    if (actual[key] !== expected[key]) {
+                        result = false
+                    }
+                }
+            }
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Two objects are not equal`,
                 actual,
                 expected,
                 result,
@@ -261,7 +262,19 @@ export let expect = (actual) => {
          * @returns The result of the test.
          */
         toContain: (expected, msg = null) => {
-            let result = actual.includes(expected)
+            let result
+
+            if (typeof actual === 'object') {
+                result = actual.hasOwnProperty(expected)
+            } else if (Array.isArray(actual)) {
+                if (Array.isArray(expected)) {
+                    result = expected.every((v) => actual.includes(v))
+                } else {
+                    result = actual.includes(expected)
+                }
+            } else {
+                result = actual.includes(expected)
+            }
 
             return {
                 message: result ? 'Test passed' : msg ?? `Expected ${actual} contain ${expected}`,
@@ -1414,6 +1427,109 @@ export let expect = (actual) => {
                 message: result ? 'Test passed' : msg ?? `Expected value has a parent`,
                 actual,
                 expected: 'Parent',
+                result,
+            }
+        },
+
+        /**
+         * Asserts the mock function was called at least once
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        toBeenCalled: (msg = null) => {
+            let result = actual.mock.calls.length > 0
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected function is not called`,
+                actual,
+                expected: 'Called',
+                result,
+            }
+        },
+
+        /**
+         * Asserts the mock function was called at least once
+         * @param expected
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        toBeenCalledTimes: (expected, msg = null) => {
+            let result = actual.mock.calls.length === expected
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Function was called ${actual.mock.calls.length} times instead of ${expected}`,
+                actual,
+                expected: 'Called',
+                result,
+            }
+        },
+
+         /**
+         * Asserts that the mock function was called with specified arguments.
+         * @param {Array} expected - The expected arguments.
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        toBeenCalledWith: (expected, msg = null) => {
+            let result = actual.mock.calls.some(call => deepEqual(call, expected))
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected function is not called with ${expected}`,
+                actual,
+                expected,
+                result,
+            }
+        },
+
+        /**
+         * Asserts that the mock function was called last with specified arguments.
+         * @param {Array} expected - The expected arguments.
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        toBeenLastCalledWith: (expected, msg = null) => {
+            let result = deepEqual(actual.mock.calls[actual.mock.calls.length - 1], expected)
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected function is not called with ${expected}`,
+                actual,
+                expected,
+                result,
+            }
+        },
+
+        /**
+         * Asserts that the array-like object has the expected length.
+         * @param {number} expected - The expected length.
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        hasLength: (expected, msg = null) => {
+            let result = actual.length === expected
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected value has not length ${expected}`,
+                actual,
+                expected,
+                result,
+            }            
+        },
+
+
+        /**
+         * Asserts that the actual value is close to the expected value within a certain precision.
+         * @param {number} expected - The expected value to compare against.
+         * @param {number} [precision=2] - The number of decimal places to consider in the comparison.
+         * @param {string|null} [msg=null] - The message to display if the assertion fails.
+         * @returns {Object} The result of the test.
+         */
+        toBeCloseTo: (expected, precision = 2, msg = null) => {
+            let result = Math.abs(actual - expected) < Math.pow(10, -precision) / 2
+
+            return {
+                message: result ? 'Test passed' : msg ?? `Expected value is not close to ${expected}`,
+                actual,
+                expected,
                 result,
             }
         },

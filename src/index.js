@@ -10,6 +10,7 @@ import inspector from 'inspector/promises'
 import { createReport } from './coverage.js'
 import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
+import mockFn from "./mock.js"
 
 const beforeEachFileFunctions = []
 const afterEachFileFunctions = []
@@ -76,6 +77,7 @@ export const DOM = (html = ``, options = {}) => {
 }
 
 export const expect = expectFn
+export const mock = mockFn
 
 export function describe (name, fn) {
     const testObject = queue.get(currentTestFile)
