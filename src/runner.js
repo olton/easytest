@@ -3,11 +3,11 @@ import { stringify} from "./helpers/json.js";
 
 const log = console.log
 
-const logExpect = (name, {result, message, expected, actual}, duration = 0) => {
+const logExpect = (name, {result, message, expected, received}, duration = 0) => {
     log(`      ${result ? chalk.green('✅  ' + name + ` 🕑 ${chalk.whiteBright(`${duration} ms`)}`) : chalk.red('💀 ' + name + ' (' + message + ')')}`)
     if (!result) {
         log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(stringify(expected))}`)
-        log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(stringify(actual))}`)
+        log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(stringify(received))}`)
     }
 }
 
@@ -57,15 +57,15 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                     const startTestTime = process.hrtime()
 
                     try {
-                        expect = await it.fn()
+                        await it.fn()
+                        expect.result = true
                     } catch (error) {
                         expect = {
                             result: false,
                             message: error.message,
-                            expected: null,
-                            actual: null,
+                            expected: error.expected,
+                            received: error.received,
                         }
-                        log(` The it() function throw error with message: ${chalk.red('💀 ' + error.message)}`)
                     }
 
                     const [seconds, nanoseconds] = process.hrtime(startTestTime);
@@ -109,15 +109,15 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                 await setupAndTeardown(test.beforeEach, 'beforeEach')
 
                 try {
-                    expect = await test.fn()
+                    await test.fn()
+                    expect.result = true
                 } catch (error) {
                     expect = {
                         result: false,
                         message: error.message,
-                        expected: null,
-                        actual: null,
+                        expected: error.expected,
+                        received: error.received,
                     }
-                    log(` The test function throw error with message: ${chalk.red('💀 ' + error.message)}`)
                 }
 
                 if (expect.result) {

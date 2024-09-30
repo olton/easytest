@@ -1,17 +1,20 @@
-describe(`Array tests suite`, () => {
-    it(`Array should be empty`, () => {
-        return expect([]).toBeEmpty()
+describe(`Array tests`, () => {
+    it('toBeArray [] == []', () => {
+        return expect([]).toBeArray([])
     })
-    it(`Array should contain 1`, () => {
-        return expect([1]).toBeArrayEqual([1])
+    it(`toBeArraySorted [1, 2, 3]`, () => {
+        return expect([1, 2, 3]).toBeArraySorted()
     })
-    it(`Array should contain 1, 2, 3`, () => {
-        return expect([1, 2, 3]).toBeArrayEqual([1, 2, 3])
+    it(`toBeArrayNotSorted [4, 1, 2, 3]`, () => {
+        return expect([4, 1, 2, 3]).toBeArrayNotSorted()
     })
-    it(`Array [1, 2, 3] is sorted`, () => {
-        return expect([1, 2, 3]).toBeSorted()
+    it(`toBeArrayUnique [1, 2, 3]`, () => {
+        return expect([1, 2, 3]).toBeArrayUnique()
     })
-    it(`Array [1, 3, 2] is not sorted`, () => {
-        return expect([1, 3, 2]).toBeSorted()
+    it(`toBeArrayNotUnique [1, 2, 3, 3]`, () => {
+        return expect([1, 2, 3, 3]).toBeArrayNotUnique()
+    })
+    it(`hasLength 3`, () => {
+        return expect([1, 2, 3]).hasLength(3)
     })
 })

@@ -1,13 +1,8 @@
-describe(`Throw tests suite`, () => {
-    it(`throws an error`, () => {
-        return expect(() => {
-            throw new Error(`Error message`)
-        }).toThrow()
+describe(`Throw tests`, () => {
+    it('toThrow', () => {
+        expect(() => { throw new Error('error') }).toThrow()
     })
-
-    it(`error message`, () => {
-        return expect(() => {
-            throw new Error(`Error message`)
-        }).toThrowError(`Error message`)
+    it('toThrowError', () => {
+        expect(() => { throw new Error('error') }).toThrowError(/error/)
     })
 })
