@@ -86,6 +86,10 @@ export declare function afterEach(fn: () => void): void;
  */
 export declare function mocker(fn: () => void): void;
 
+export class ExpectError extends Error{
+    constructor(message: string, matcher: string, received: any, expected: any)
+}
+
 /**
  * The instance of the Expect class
  *

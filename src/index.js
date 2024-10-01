@@ -7,7 +7,7 @@ import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
 import inspector from 'inspector/promises'
-import {coverageFilter, displayReport} from './coverage.js'
+import {displayReport} from './coverage.js'
 import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
 import mockFn from "./mock.js"
@@ -87,6 +87,7 @@ export const DOM = (html = ``, options = {}) => {
     return new JSDOM(html, options)
 }
 
+export { Expect, ExpectError } from "./expect.js"
 export const expect = expectFn
 export const mock = mockFn
 
