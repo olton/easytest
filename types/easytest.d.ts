@@ -42,7 +42,7 @@ export declare function test(name: string, fn: () => void): Promise<void>;
  * @param {any} received - The actual value to be tested.
  * @return {Expect} An object containing various methods to assert different conditions on the actual value.
  */
-export declare function expect(received: any): MatcherType;
+export declare function expect(received: any): Expect;
 
 /**
  * Registers a callback function to be executed once before all tests in a suite.
