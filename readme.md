@@ -99,6 +99,110 @@ Update `package.json` to run tests with `easytest` command.
 ### Matchers
 EasyTest contains a big set of built-in matchers.
 
+- `toBe(expected, msg?: string)` - Asserts that the actual value is equal to the expected value.
+- `toBeNot(expected, msg?: string)` - Asserts that the actual value is not equal to the expected value.
+- `toBeStrictEqual(expected, msg?: string)` - Asserts that the actual value is strict equal (using ===) to the expected value.
+- `toBeNotStrictEqual(expected, msg?: string)` - Asserts that the actual value isn't strict equal (using !==) to the expected value.
+- `toBeEqual(expected, msg?: string)` - Asserts that the actual value is equal (using ==) to the expected value.
+- `toBeNotEqual(expected, msg?: string)` - Asserts that the actual value is not equal (using !=) to the expected value.
+- `toBeObject(expected, msg?: string)` - Asserts that the actual object is equal to the expected object.
+- `toBeTrue(msg?: string)` - Asserts that the actual value is true.
+- `toBeFalse(msg?: string)` - Asserts that the actual value is false.
+- `toBeBoolean(msg?: string)` - Asserts that the actual value is a boolean.
+- `toMatch(expected, msg?: string)` - Asserts that the actual value matches the expected pattern.
+- `toNotMatch(expected, msg?: string)` - Asserts that the actual value not matches the expected pattern.
+- `toBeDefined(msg?: string)` - Asserts that the actual value is defined.
+- `toBeUndefined(msg?: string)` - Asserts that the actual value is undefined.
+- `toBeNull(msg?: string)` - Asserts that the actual value is null.
+- `toBeNotNull(msg?: string)` - Asserts that the actual value is not null.
+- `toBeGreaterThan(expected, msg?: string)` - Asserts that the actual value is greater than the expected value.
+- `toBeGreaterThanOrEqual(expected, msg?: string)` - Asserts that the actual value is greater than or equal to the expected value.
+- `toBeLessThan(expected, msg?: string)` - Asserts that the actual value is less than the expected value.
+- `toBeLessThanOrEqual(expected, msg?: string)` - Asserts that the actual value is less than or equal to the expected value.
+- `toBetween(min, max, msg?: string)` - Asserts that the actual value is between the specified minimum and maximum values.
+- `toBeInteger(msg?: string)` - Asserts that the actual value is an integer.
+- `toBeNotInteger(msg?: string)` - Asserts that the actual value is an integer.
+- `toBeSafeInteger(msg?: string)` - Asserts that the actual value is a safe integer.
+- `toBeNotSafeInteger(msg?: string)` - Asserts that the actual value is a safe integer.
+- `toBeFloat(msg?: string)` - Asserts that the actual value is a float.
+- `toBePositive(msg?: string)` - Asserts that the actual value is positive.
+- `toBeNegative(msg?: string)` - Asserts that the actual value is negative.
+- `toBeFinite(msg?: string)` - Asserts that the actual value is finite.
+- `toBeNumber(msg?: string)` - Asserts that the actual value is a number and not is NaN.
+- `toBeNaN(msg?: string)` - Asserts that the actual value is NaN.
+- `toBeCloseTo(expected, precision = 2, msg?: string)` - Asserts that the actual value is close to the expected value within a certain precision.
+- `toThrow(msg?: string)` - Asserts that the actual function throws an error.
+- `toThrowError(expected, msg?: string)` - Asserts that the actual function throws an error matching the expected value.
+- `toBeHEXColor(msg?: string)` - Asserts that the actual value is a HEX color.
+- `toBeRGBColor(msg?: string)` - Asserts that the actual value is an RGB color.
+- `toBeRGBAColor(msg?: string)` - Asserts that the actual value is an RGBA color.
+- `toBeHSVColor(msg?: string)` - Asserts that the actual value is an HSL color.
+- `toBeHSLColor(msg?: string)` - Asserts that the actual value is an HSL color.
+- `toBeHSLAColor(msg?: string)` - Asserts that the actual value is an HSLA color.
+- `toBeCMYKColor(msg?: string)` - Asserts that the actual value is a CMYK color.
+- `toBeColor(msg?: string)` - Asserts that the actual value is a valid color (HEX, RGB, RGBA, HSV, HSL, HSLA, or CMYK).
+- `toBeNotColor(msg?: string)` - Asserts that the actual value is not a valid color (HEX, RGB, RGBA, HSV, HSL, HSLA, or CMYK).
+- `toHaveBeenCalled(msg?: string)` - Asserts the mock function was called at least once
+- `toHaveBeenCalledTimes(expected, msg?: string)` - Asserts the mock function was called at least once
+- `toHaveBeenCalledWith(expected, msg?: string)` - Asserts that the mock function was called with specified arguments.
+- `toHaveBeenLastCalledWith(expected, msg?: string)` - Asserts that the mock function was called last with specified arguments.
+- `toContain(expected, msg?: string)` - Asserts that the actual value contains the expected value.
+- `toNotContain(expected, msg?: string)` - Asserts that the actual value not contains the expected value.
+- `toBeDeepEqual(expected, msg?: string)` - Asserts that the actual value is deeply equal to the expected value.
+- `toBeDeepEqualSafe(expected, msg?: string)` - Asserts that the actual value is deeply equal to the expected value using a safe comparison.
+- `toBeObjectStructureEqual(expected, msg?: string)` - Asserts that the actual structure is equal to the expected structure.
+- `toBeArrayEqual(expected, msg?: string)` - Asserts that the actual array is equal to the expected array.
+- `toBeArray(msg?: string)` - Asserts that the actual value is an array.
+- `toBeArraySorted(msg?: string)` - Asserts that the actual value is sorted.
+- `toBeArrayNotSorted(msg?: string)` - Asserts that the actual value is not sorted.
+- `toBeArrayUnique(msg?: string)` - Asserts that values in the array are unique.
+- `toBeArrayNotUnique(msg?: string)` - Asserts that values in the array are not unique.
+- `toBeIP(msg?: string)` - Asserts that the actual value is a valid IP address.
+- `toBeNotIP(msg?: string)` - Asserts that the actual value isn't a valid IP address.
+- `toBeIPv4(msg?: string)` - Asserts that the actual value is a valid IPv4 address.
+- `toBeIPv6(msg?: string)` - Asserts that the actual value is a valid IPv6 address.
+- `toBeEmail(msg?: string)` - Asserts that the actual value is a valid email address.
+- `toBeUrl(msg?: string)` - Asserts that the actual value is a valid URL.
+- `toBeEmpty(msg?: string)` - Asserts that the actual value is empty.
+- `toBeNotEmpty(msg?: string)` - Asserts that the actual value is not empty.
+- `hasLength(expected, msg?: string)` - Asserts that the array-like object has the expected length.
+- `toBeBase64(msg?: string)` - Asserts that the actual value is a Base64 encoded string.
+- `toBeJson(msg?: string)` - Asserts that the actual value is a JSON string.
+- `toBeXml(msg?: string)` - Asserts that the actual value is an XML string.
+- `hasProperty(expected, msg?: string)` - Asserts that the actual value has the specified property.
+- `hasNoProperty(expected, msg?: string)` - Asserts that the actual value has not the specified property.
+- `toBeType(type, msg?: string)` - Asserts that the actual value is of the specified type.
+- `toBeInstanceOf(type, msg?: string)` - Asserts that the actual value is an instance of the specified type.
+- `toBeString(msg?: string)` - Asserts that the actual value is a string.
+- `toBeFunction(msg?: string)` - Asserts that the actual value is a function.
+- `toBeAsyncFunction(msg?: string)` - Asserts that the actual value is an async function.
+- `toBeDate(msg?: string)` - Asserts that the actual value is a date.
+- `toBeDateObject(msg?: string)` - Asserts that the actual value is a date.
+- `toBeRegExp(msg?: string)` - Asserts that the actual value is a regular expression.
+- `toBeSymbol(msg?: string)` - Asserts that the actual value is a symbol.
+- `toBeBigInt(msg?: string)` - Asserts that the actual value is a BigInt.
+- `toBeMap(msg?: string)` - Asserts that the actual value is a Map.
+- `toBeSet(msg?: string)` - Asserts that the actual value is a Set.
+- `toBeWeakMap(msg?: string)` - Asserts that the actual value is a WeakMap.
+- `toBeWeakSet(msg?: string)` - Asserts that the actual value is a WeakSet.
+- `toBeArrayBuffer(msg?: string)` - Asserts that the actual value is an ArrayBuffer.
+- `toBePromise(msg?: string)` - Asserts that the actual value is a Promise.
+- `toBeHtmlElement(msg?: string)` - Asserts that the actual value is an HTML element.
+- `toBeNode(msg?: string)` - Asserts that the actual value is an HTML node.
+- `toBeDocument(msg?: string)` - Asserts that the actual value is an HTML document.
+- `toBeHtmlCollection(msg?: string)` - Asserts that the actual value is an HTML collection.
+- `toBeWindow(msg?: string)` - Asserts that the actual value is a Window object.
+- `toBeTextNode(msg?: string)` - Asserts that the actual value is a Text node.
+- `hasClass(expected, msg?: string)` - Asserts that the HTML element has the specified class.
+- `hasNoClass(expected, msg?: string)` - Asserts that the HTML element has the specified class.
+- `hasAttribute(expected, msg?: string)` - Asserts that the HTML element has the specified attribute.
+- `hasNoAttribute(expected, msg?: string)` - Asserts that the HTML element has the specified attribute.
+- `hasChildren(msg?: string)` - Asserts that the HTML element has children.
+- `hasNoChildren(msg?: string)` - Asserts that the HTML element has children.
+- `hasParent(msg?: string)` - Asserts that the HTML element has a parent.
+- `hasNoParent(msg?: string)` - Asserts that the HTML element has no parent.
+
+
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.
 ```bash
