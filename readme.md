@@ -14,6 +14,8 @@ Core features:
 - Big set of built-in matchers.
 - Extend `expect` function with your own matchers.
 - Compatible with `codecov` report viewer.
+- A lot of expects in one test case.
+- Setup and Teardown functions (`beforeEach`, `afterEach`, `beforeAll`, `afterAll`).
 ---
 
 Support for PayPal to **serhii@pimenov.com.ua**
