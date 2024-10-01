@@ -93,7 +93,7 @@ Update `package.json` to run tests with `easytest` command.
 - `beforeAll` - run before all test cases
 - `afterAll` - run after all test cases
 - `test` - create simple test
-- `mock` - create mock function
+- `mocker` - create mock function
 - `DOM` - create DOM object (not global)
 
 ### Matchers
