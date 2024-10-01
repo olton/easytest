@@ -258,7 +258,11 @@ Also, you can use argument `--config fileName` to specify a configuration file.
   "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
   "exclude": ["node_modules/**"],
   "coverage": false,
-  "verbose": false
+  "verbose": false,
+  "report": {
+    "type": "lcov",
+    "dir": "coverage"
+  }
 }
 ```
 
