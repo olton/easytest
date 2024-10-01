@@ -13,15 +13,18 @@ Core features:
 - Mock functions.
 - Big set of built-in matchers.
 - Extend `expect` function with your own matchers.
+- Compatible with `codecov` report viewer.
 ---
 
 Support for PayPal to **serhii@pimenov.com.ua**
 
 ---
 
-[![NPM Version](https://img.shields.io/npm/v/@olton/easytest)](https://www.npmjs.com/package/@olton/easytest)
+[![NPM Version](https://img.shields.io/npm/v/@olton/easytest?color=green)](https://www.npmjs.com/package/@olton/easytest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=7852a9)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/olton/easytest/branch/master/graph/badge.svg?token=7HT3E91GUA)](https://codecov.io/gh/olton/easytest)
+![NPM Downloads](https://img.shields.io/npm/dw/%40olton%2Feasytest)
+
 
 ---
 

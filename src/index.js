@@ -31,13 +31,18 @@ const config = {}
 export const run = async (root, args) => {
     updateConfig(config, args)
 
-    const session  = new inspector.Session()
-    session.connect()
-    await session.post('Profiler.enable')
-    await session.post('Profiler.startPreciseCoverage', {
-        callCount: true,
-        detailed: true
-    })
+    let session
+
+    if (config.coverage) {
+        session  = new inspector.Session()
+        session.connect()
+
+        await session.post('Profiler.enable')
+        await session.post('Profiler.startPreciseCoverage', {
+            callCount: true,
+            detailed: true
+        })
+    }
 
     let files = await glob(config.include, { ignore: config.exclude })
 
@@ -64,10 +69,10 @@ export const run = async (root, args) => {
         test: config.test,
     })
 
-    const coverage = await session.post('Profiler.takePreciseCoverage')
-    await session.post('Profiler.stopPreciseCoverage')
-
     if (config.coverage) {
+        const coverage = await session.post('Profiler.takePreciseCoverage')
+        await session.post('Profiler.stopPreciseCoverage')
+
         displayReport(coverage, root)
         if (config.report.type === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js')
