@@ -19,7 +19,7 @@ export function coverageFilter (coverage, root) {
     })
 }
 
-const generateReport = (filename, sourceCode, functions) => {
+export const generateReport = (filename, sourceCode, functions) => {
     const uncoveredLines = []
 
     for (const cov of functions) {
@@ -38,8 +38,8 @@ const generateReport = (filename, sourceCode, functions) => {
 
     const _baseName = basename(filename)
     const _fileName = chalk.gray(filename.replace(_baseName, ''))
-    const _coveredLinesPercent = Math.round(coveredLines * 100 / totalLines)
-    const complete = _coveredLinesPercent === 100
+    const _coveredLinesPercent = (coveredLines * 100 / totalLines).toFixed(2)
+    const complete = ""+_coveredLinesPercent === "100.00"
 
     return [
         _fileName,
@@ -47,10 +47,11 @@ const generateReport = (filename, sourceCode, functions) => {
         (complete ? chalk.green(_coveredLinesPercent) : chalk.red(_coveredLinesPercent)),
         totalLines,
         coveredLines,
+        uncoveredLines
     ]
 }
 
-export function createReport (coverage, root) {
+export function displayReport (coverage, root) {
     const data = []
 
     let totalLines = 0

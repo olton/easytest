@@ -8,6 +8,10 @@ const defaultConfig = {
     exclude: ["node_modules/**"],
     coverage: false,
     verbose: false,
+    report: {
+        type: "lcov",
+        dir: "coverage",
+    },
 }
 
 export const updateConfig = (config, args) => {

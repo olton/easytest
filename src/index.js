@@ -7,7 +7,7 @@ import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
 import inspector from 'inspector/promises'
-import { createReport } from './coverage.js'
+import {coverageFilter, displayReport} from './coverage.js'
 import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
 import mockFn from "./mock.js"
@@ -67,7 +67,13 @@ export const run = async (root, args) => {
     const coverage = await session.post('Profiler.takePreciseCoverage')
     await session.post('Profiler.stopPreciseCoverage')
 
-    if (config.coverage) createReport(coverage, root)
+    if (config.coverage) {
+        displayReport(coverage, root)
+        if (config.report.type === 'lcov') {
+            const createReport = await import('./reporters/lcov/index.js')
+            createReport.default(coverage, config, root)
+        }
+    }
 
     exit(result)
 }
