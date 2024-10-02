@@ -794,6 +794,7 @@ export class Expect {
 
     /**
      * Asserts that the actual value is deeply equal to the expected value.
+     * With this method you can compare objects with circular references.
      * @param expected - The expected value.
      * @param msg - The message to display if the assertion fails.
      * @returns The result of the test.

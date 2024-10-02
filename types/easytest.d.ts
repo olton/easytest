@@ -5,7 +5,7 @@
  * @param {Object} [options={}] - Additional options for configuring the DOM element.
  * @return {void} This function does not return a value.
  */
-export declare function DOM(html: string = '', options= {}): void;
+declare function DOM(html: string = '', options= {}): void;
 
 /**
  * Declares a test suite with a given name and test function.
@@ -14,7 +14,7 @@ export declare function DOM(html: string = '', options= {}): void;
  * @param fn - The function containing the test cases to execute within the suite.
  * @return void
  */
-export declare function describe(name: string, fn: () => void): void;
+declare function describe(name: string, fn: () => void): void;
 
 /**
  * Defines a test case with a given name and function.
@@ -23,7 +23,7 @@ export declare function describe(name: string, fn: () => void): void;
  * @param {Function} fn - The function containing the test logic.
  * @return {Promise<void>} A promise that resolves when the test case has been executed.
  */
-export declare function it(name: string, fn: () => void): Promise<void>;
+declare function it(name: string, fn: () => void): Promise<void>;
 
 /**
  * Executes a single test function with a given name.
@@ -32,7 +32,7 @@ export declare function it(name: string, fn: () => void): Promise<void>;
  * @param {Function} fn - The test function to be executed.
  * @return {void} This function does not return a value.
  */
-export declare function test(name: string, fn: () => void): Promise<void>;
+declare function test(name: string, fn: () => void): Promise<void>;
 
 /**
  * Creates an expectation for a given value.
@@ -42,7 +42,7 @@ export declare function test(name: string, fn: () => void): Promise<void>;
  * @param {any} received - The actual value to be tested.
  * @return {Expect} An object containing various methods to assert different conditions on the actual value.
  */
-export declare function expect(received: any): Expect;
+declare function expect(received: any): Expect;
 
 /**
  * Registers a callback function to be executed once before all tests in a suite.
@@ -50,7 +50,7 @@ export declare function expect(received: any): Expect;
  * @param fn - The callback function to be executed before all tests.
  * @return void
  */
-export declare function beforeAll(fn: () => void): void;
+declare function beforeAll(fn: () => void): void;
 
 /**
  * Registers a function to be called after all tests have completed in a suite.
@@ -58,7 +58,7 @@ export declare function beforeAll(fn: () => void): void;
  * @param {Function} fn - The function to be executed after all tests.
  * @return {void}
  */
-export declare function afterAll(fn: () => void): void;
+declare function afterAll(fn: () => void): void;
 
 /**
  * Registers a function to be called before each test case.
@@ -67,7 +67,7 @@ export declare function afterAll(fn: () => void): void;
  * @param fn - The function to execute before each test case.
  * @return void
  */
-export declare function beforeEach(fn: () => void): void;
+declare function beforeEach(fn: () => void): void;
 
 /**
  * Registers a function to be executed after each test case.
@@ -76,7 +76,7 @@ export declare function beforeEach(fn: () => void): void;
  * @param {Function} fn - The function to be executed after each test case.
  * @return {void} This function does not return any value.
  */
-export declare function afterEach(fn: () => void): void;
+declare function afterEach(fn: () => void): void;
 
 /**
  * Mocks a function or object to simulate a specific behavior.
@@ -84,9 +84,9 @@ export declare function afterEach(fn: () => void): void;
  * @param {Function} fn - The function to be mocked.
  * @return {void} This function does not return any value.
  */
-export declare function mocker(fn: () => void): void;
+declare function mocker(fn: () => void): void;
 
-export class ExpectError extends Error{
+declare class ExpectError extends Error{
     constructor(message: string, matcher: string, received: any, expected: any)
 }
 
@@ -95,7 +95,7 @@ export class ExpectError extends Error{
  *
  * @param {any} received - The actual value to be tested.
  */
-export class Expect {
+declare class Expect {
     /**
      * Creates a new instance of the Expect class with the provided value.
      *
