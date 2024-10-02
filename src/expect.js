@@ -1463,7 +1463,7 @@ export class Expect {
         let result = received.classList && received.classList.contains(expected)
 
         if (!result) {
-            throw new ExpectError(msg || `Expected HTMLElement has not class ${expected}`, 'hasClass', received, expected)
+            throw new ExpectError(msg || `Expected HTMLElement has not class ${expected}`, 'hasClass', received.className, expected)
         }
     }
 

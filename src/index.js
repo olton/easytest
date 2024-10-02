@@ -1,7 +1,7 @@
 import { glob } from 'glob'
 import { pathToFileURL } from 'url';
 import fs from 'fs'
-import 'global-jsdom/register'
+import globalJSDom from 'global-jsdom'
 import { JSDOM } from 'jsdom'
 import {runner} from "./runner.js";
 import { exit } from 'node:process';
@@ -27,6 +27,42 @@ let currentTestFile = ''
 let queue = new Map()
 
 const config = {}
+
+globalJSDom(``, {
+    runScripts: "dangerously",
+    resources: "usable",
+    url: "http://localhost",
+    pretendToBeVisual: true,
+})
+
+window.matchMedia = window.matchMedia || function() { return { matches: false, addListener: function() {}, removeListener: function() {}};}
+window.onerror = msg => {
+    throw new Error(msg);
+}
+
+export const DOM = (html = ``, options = {}) => {
+    const dom = new JSDOM(html, options)
+    dom.window.matchMedia = dom.window.matchMedia || function() {
+        return {
+            matches: false,
+            addListener: function() {},
+            removeListener: function() {}
+        };
+    };
+    dom.window.requestAnimationFrame = window.requestAnimationFrame || function(callback) {
+        setTimeout(callback, 0);
+    }
+    dom.window.onerror = function (msg) {
+        throw new Error(msg)
+    }
+    return dom
+}
+
+export { Expect, ExpectError } from "./expect.js"
+export const expect = expectFn
+export const mock = mockFn
+export { JSDOM } from 'jsdom'
+export const globalDom = globalJSDom
 
 export const run = async (root, args) => {
     updateConfig(config, args)
@@ -82,14 +118,6 @@ export const run = async (root, args) => {
 
     exit(result)
 }
-
-export const DOM = (html = ``, options = {}) => {
-    return new JSDOM(html, options)
-}
-
-export { Expect, ExpectError } from "./expect.js"
-export const expect = expectFn
-export const mock = mockFn
 
 export function describe (name, fn) {
     const testObject = queue.get(currentTestFile)

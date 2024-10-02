@@ -5,8 +5,23 @@
  * @param {Object} [options={}] - Additional options for configuring the DOM element.
  * @return {void} This function does not return a value.
  */
-declare function DOM(html: string = '', options= {}): void;
+export declare function DOM(html: string = '', options= {}): any;
+export declare function globalDom(): any;
+export declare class JSDOM {
+    constructor(html: string, options: any);
+    get window(): any;
+    get virtualConsole(): any;
+    get cookieJar(): any;
 
+    serialize(): string;
+    nodeLocation(node: any): any;
+    getInternalVMContext(): any;
+    reconfigure(settings: any): any;
+
+    static fragment(html: string): any;
+    static fromFile(path: string, options: any): any;
+    static fromURL(url: string, options: any): any;
+}
 /**
  * Declares a test suite with a given name and test function.
  *
@@ -14,7 +29,7 @@ declare function DOM(html: string = '', options= {}): void;
  * @param fn - The function containing the test cases to execute within the suite.
  * @return void
  */
-declare function describe(name: string, fn: () => void): void;
+export declare function describe(name: string, fn: () => void): void;
 
 /**
  * Defines a test case with a given name and function.
@@ -23,7 +38,7 @@ declare function describe(name: string, fn: () => void): void;
  * @param {Function} fn - The function containing the test logic.
  * @return {Promise<void>} A promise that resolves when the test case has been executed.
  */
-declare function it(name: string, fn: () => void): Promise<void>;
+export declare function it(name: string, fn: () => void): Promise<void>;
 
 /**
  * Executes a single test function with a given name.
@@ -32,7 +47,7 @@ declare function it(name: string, fn: () => void): Promise<void>;
  * @param {Function} fn - The test function to be executed.
  * @return {void} This function does not return a value.
  */
-declare function test(name: string, fn: () => void): Promise<void>;
+export declare function test(name: string, fn: () => void): Promise<void>;
 
 /**
  * Creates an expectation for a given value.
@@ -42,7 +57,7 @@ declare function test(name: string, fn: () => void): Promise<void>;
  * @param {any} received - The actual value to be tested.
  * @return {Expect} An object containing various methods to assert different conditions on the actual value.
  */
-declare function expect(received: any): Expect;
+export declare function expect(received: any): Expect;
 
 /**
  * Registers a callback function to be executed once before all tests in a suite.
@@ -50,7 +65,7 @@ declare function expect(received: any): Expect;
  * @param fn - The callback function to be executed before all tests.
  * @return void
  */
-declare function beforeAll(fn: () => void): void;
+export declare function beforeAll(fn: () => void): void;
 
 /**
  * Registers a function to be called after all tests have completed in a suite.
@@ -58,7 +73,7 @@ declare function beforeAll(fn: () => void): void;
  * @param {Function} fn - The function to be executed after all tests.
  * @return {void}
  */
-declare function afterAll(fn: () => void): void;
+export declare function afterAll(fn: () => void): void;
 
 /**
  * Registers a function to be called before each test case.
@@ -67,7 +82,7 @@ declare function afterAll(fn: () => void): void;
  * @param fn - The function to execute before each test case.
  * @return void
  */
-declare function beforeEach(fn: () => void): void;
+export declare function beforeEach(fn: () => void): void;
 
 /**
  * Registers a function to be executed after each test case.
@@ -76,7 +91,7 @@ declare function beforeEach(fn: () => void): void;
  * @param {Function} fn - The function to be executed after each test case.
  * @return {void} This function does not return any value.
  */
-declare function afterEach(fn: () => void): void;
+export declare function afterEach(fn: () => void): void;
 
 /**
  * Mocks a function or object to simulate a specific behavior.
@@ -84,9 +99,9 @@ declare function afterEach(fn: () => void): void;
  * @param {Function} fn - The function to be mocked.
  * @return {void} This function does not return any value.
  */
-declare function mocker(fn: () => void): void;
+export declare function mocker(fn: () => void): void;
 
-declare class ExpectError extends Error{
+export declare class ExpectError extends Error{
     constructor(message: string, matcher: string, received: any, expected: any)
 }
 
@@ -95,7 +110,7 @@ declare class ExpectError extends Error{
  *
  * @param {any} received - The actual value to be tested.
  */
-declare class Expect {
+export declare class Expect {
     /**
      * Creates a new instance of the Expect class with the provided value.
      *
