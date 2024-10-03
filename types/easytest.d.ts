@@ -1,3 +1,8 @@
+/**
+ * Return a promise that resolves after the specified time.
+ * @param ms
+ */
+export declare function delay(ms: number): Promise<void>;
 
 /**
  * Interface for interacting with the Document Object Model (DOM).

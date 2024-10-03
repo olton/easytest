@@ -43,6 +43,8 @@ export const DOM = {
 
 setupDom()
 
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 export const run = async (root, args) => {
     updateConfig(config, args)
 
@@ -224,3 +226,4 @@ global.beforeEach = beforeEach
 global.beforeAll = beforeAll
 global.afterAll = afterAll
 global.mocker = mock
+global.delay = delay
