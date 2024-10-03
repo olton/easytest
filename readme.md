@@ -376,25 +376,73 @@ test(`Custom expect`, () => {
 })
 ```
 
+## DOM Environment
+EasyTest has a global DOM object for testing HTML objects (we use JSDOM to create DOM environment).
+Also, you can setup your own DOM object.
+
+```javascript
+import {DOM} from "@olton/easytest";
+
+beforeAll(() => {
+    DOM.setup({
+        runScripts: "dangerously",
+        resources: "usable",
+        url: "http://localhost",
+        pretendToBeVisual: true,
+    })
+})
+
+afterAll(() => {
+    DOM.clean()
+})
+```
+
+### DOM object methods
+
+- DOM.setup
+- DOM.clean
+- DOM.flash
+- DOM.eval
+- DOM.css: {fromFile, fromString, fromUrl}
+- DOM.js: {fromFile, fromString, fromUrl}
+- DOM.html: {fromFile, fromString, fromUrl, flash}
+
+```javascript
+import {beforeAll, describe, it, expect, DOM} from "@olton/easytest";
+
+beforeAll(() => {
+    DOM.flash()
+    DOM.js.fromFile('./lib/metro.js')
+})
+
+beforeEach(() => {
+    DOM.html.fromString(`
+        <div id="my-block"></div>
+    `)
+})
+
+```
+
+
 ### Example UI Testing
 You can use `EasyTest` to test UI components. In this example, I test the Metro UI accordion component.
 ```javascript
-import fs from "fs";
-import {beforeAll, describe, it, expect} from "@olton/easytest";
+import {beforeAll, beforeEach, describe, it, expect, DOM} from "@olton/easytest";
 
 beforeAll(() => {
-    window.METRO_DISABLE_BANNER = true;
-    window.METRO_DISABLE_LIB_INFO = true;
-    document.body.innerHTML = `
-    <div id="accordion">
-        <div class="frame">
-            <div class="heading">Heading</div>
-            <div class="content">Content</div>
-        </div>
-    </div>
-`
+    DOM.flash()
+    DOM.js.fromFile('./lib/metro.js')
+})
 
-    window.eval(fs.readFileSync('./lib/metro.js', 'utf8'))
+beforeEach(() => {
+    DOM.html.fromString(`
+        <div id="accordion">
+            <div class="frame">
+                <div class="heading">Heading</div>
+                <div class="content">Content</div>
+            </div>
+        </div>
+    `)
 })
 
 describe(`Accordion tests`, () => {

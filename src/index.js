@@ -1,8 +1,7 @@
 import { glob } from 'glob'
 import { pathToFileURL } from 'url';
 import fs from 'fs'
-import globalJSDom from 'global-jsdom'
-import { JSDOM } from 'jsdom'
+import {setup as setupDom, clean, flash, evalJS, js, css, html} from './dom.js'
 import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
@@ -28,41 +27,21 @@ let queue = new Map()
 
 const config = {}
 
-globalJSDom(``, {
-    runScripts: "dangerously",
-    resources: "usable",
-    url: "http://localhost",
-    pretendToBeVisual: true,
-})
-
-window.matchMedia = window.matchMedia || function() { return { matches: false, addListener: function() {}, removeListener: function() {}};}
-window.onerror = msg => {
-    throw new Error(msg);
-}
-
-export const DOM = (html = ``, options = {}) => {
-    const dom = new JSDOM(html, options)
-    dom.window.matchMedia = dom.window.matchMedia || function() {
-        return {
-            matches: false,
-            addListener: function() {},
-            removeListener: function() {}
-        };
-    };
-    dom.window.requestAnimationFrame = window.requestAnimationFrame || function(callback) {
-        setTimeout(callback, 0);
-    }
-    dom.window.onerror = function (msg) {
-        throw new Error(msg)
-    }
-    return dom
-}
-
 export { Expect, ExpectError } from "./expect.js"
 export const expect = expectFn
 export const mock = mockFn
-export { JSDOM } from 'jsdom'
-export const globalDom = globalJSDom
+
+export const DOM = {
+    setup: setupDom,
+    clean,
+    flash,
+    eval: evalJS,
+    js,
+    css,
+    html,
+}
+
+setupDom()
 
 export const run = async (root, args) => {
     updateConfig(config, args)

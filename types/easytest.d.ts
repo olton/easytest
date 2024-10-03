@@ -1,27 +1,58 @@
+
 /**
- * Creates a new DOM element based on the provided HTML string and options.
- *
- * @param {string} [html=''] - The HTML string to be used for creating the DOM element.
- * @param {Object} [options={}] - Additional options for configuring the DOM element.
- * @return {void} This function does not return a value.
+ * Interface for interacting with the Document Object Model (DOM).
  */
-export declare function DOM(html: string = '', options= {}): any;
-export declare function globalDom(): any;
-export declare class JSDOM {
-    constructor(html: string, options: any);
-    get window(): any;
-    get virtualConsole(): any;
-    get cookieJar(): any;
+export declare class DOM {
+    /**
+     * Setup DOM environment with the provided HTML content and options.
+     * @param html
+     * @param options
+     */
+    static setup(html?: string, options?: Object): void
 
-    serialize(): string;
-    nodeLocation(node: any): any;
-    getInternalVMContext(): any;
-    reconfigure(settings: any): any;
+    /**
+     * Remove DOM environment.
+     */
+    static clean: () => void
 
-    static fragment(html: string): any;
-    static fromFile(path: string, options: any): any;
-    static fromURL(url: string, options: any): any;
+    /**
+     * Flash the document HTML inner.
+     */
+    static flash: (html?: string) => void
+
+    /**
+    * Evaluate script in the DOM environment.
+    */
+    static eval: (js) => void
+
+    /**
+     * Load CSS into document.
+     */
+    static css: {
+        fromString: (css: string) => void,
+        fromFile: (path: string) => void,
+        fromUrl: (url: string) => void,
+    }
+
+    /**
+     * Load JS into document.
+     */
+    static js: {
+        fromString: (js: string) => void,
+        fromFile: (path: string) => void,
+        fromUrl: (url: string) => void,
+    }
+
+    /**
+     * Set document HTML.
+     */
+    static html: {
+        fromString: (html: string) => void,
+        fromFile: (path: string) => void,
+        fromUrl: (url: string) => void,
+    }
 }
+
 /**
  * Declares a test suite with a given name and test function.
  *
