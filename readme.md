@@ -1,6 +1,12 @@
 # EasyTest
 
-Simple testing framework for JS, TS, written in pure JavaScript.
+Simple testing framework for JavaScript and TypeScript, written in pure JavaScript.
+
+---
+
+> ## https://easy.org.ua/
+
+---
 
 Core features:
 - No need to import `it`, `test`, `describe` or `ecpext` in your test file. These functions are available globally.

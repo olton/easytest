@@ -1,4 +1,4 @@
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\expect.js
 LF:1583
 LH:1007
@@ -1802,7 +1802,7 @@ DA:1581,1
 DA:1582,1
 DA:1583,1
 end_of_record
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\helpers\check-array-sorted.js
 LF:1
 LH:1
@@ -1812,7 +1812,7 @@ FN:34,
 FNDA:5,
 DA:1,1
 end_of_record
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\helpers\objects.js
 LF:58
 LH:46
@@ -1877,7 +1877,7 @@ DA:56,1
 DA:57,1
 DA:58,1
 end_of_record
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\helpers\test-value.js
 LF:30
 LH:30
@@ -1914,7 +1914,7 @@ DA:28,1
 DA:29,1
 DA:30,1
 end_of_record
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\index.js
 LF:229
 LH:190
@@ -2164,7 +2164,7 @@ DA:227,1
 DA:228,1
 DA:229,1
 end_of_record
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\mock.js
 LF:14
 LH:14
@@ -2189,7 +2189,7 @@ DA:12,1
 DA:13,1
 DA:14,1
 end_of_record
-TN:C:\Projects\EasyTest
+TN:C:\Projects\EasyTest\easytest.app
 SF:\src\runner.js
 LF:169
 LH:111
