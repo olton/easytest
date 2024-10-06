@@ -363,7 +363,7 @@ In this case only the test with the name includes `Compare with 2` will be execu
 You can extend the `expect` function with your own matchers.
 
 ```javascript
-import {Expect} from "../src/expect.js";
+import {Expect} from "@olton/easytest";
 
 class MyExpect extends Expect {
     toBeEven() {

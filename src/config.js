@@ -8,6 +8,7 @@ const defaultConfig = {
     exclude: ["node_modules/**"],
     coverage: false,
     verbose: false,
+    dom: false,
     report: {
         type: "lcov",
         dir: "coverage",
@@ -27,6 +28,7 @@ export const updateConfig = (config, args) => {
         log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure EasyTest`))
     }
 
+    if (args.dom) { config.dom = true; }
     if (args.coverage) { config.coverage = true; }
     if (args.verbose) { config.verbose = true; }
     if (args.test) { config.test = args.test; }

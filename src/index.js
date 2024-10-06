@@ -41,12 +41,14 @@ export const DOM = {
     html,
 }
 
-setupDom()
-
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const run = async (root, args) => {
     updateConfig(config, args)
+
+    if (config.dom) {
+        setupDom()
+    }
 
     let session
 
@@ -227,3 +229,4 @@ global.beforeAll = beforeAll
 global.afterAll = afterAll
 global.mocker = mock
 global.delay = delay
+global.DOM = DOM

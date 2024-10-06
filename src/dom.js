@@ -1,187 +1,6 @@
 import JSDOM from 'jsdom';
 import {existsSync, readFileSync} from 'fs';
 
-const DOM_KEYS = [
-    'DOMException',
-    'NamedNodeMap',
-    'Attr',
-    'Node',
-    'Element',
-    'DocumentFragment',
-    'HTMLDocument',
-    'Document',
-    'CharacterData',
-    'Comment',
-    'DocumentType',
-    'DOMImplementation',
-    'ProcessingInstruction',
-    'Image',
-    'Text',
-    'Event',
-    'CustomEvent',
-    'MessageEvent',
-    'ErrorEvent',
-    'HashChangeEvent',
-    'PopStateEvent',
-    'UIEvent',
-    'MouseEvent',
-    'KeyboardEvent',
-    'TouchEvent',
-    'ProgressEvent',
-    'EventTarget',
-    'Location',
-    'History',
-    'HTMLElement',
-    'HTMLAnchorElement',
-    'HTMLAppletElement',
-    'HTMLAreaElement',
-    'HTMLAudioElement',
-    'HTMLBaseElement',
-    'HTMLBodyElement',
-    'HTMLBRElement',
-    'HTMLButtonElement',
-    'HTMLCanvasElement',
-    'HTMLDataElement',
-    'HTMLDataListElement',
-    'HTMLDialogElement',
-    'HTMLDirectoryElement',
-    'HTMLDivElement',
-    'HTMLDListElement',
-    'HTMLEmbedElement',
-    'HTMLFieldSetElement',
-    'HTMLFontElement',
-    'HTMLFormElement',
-    'HTMLFrameElement',
-    'HTMLFrameSetElement',
-    'HTMLHeadingElement',
-    'HTMLHeadElement',
-    'HTMLHRElement',
-    'HTMLHtmlElement',
-    'HTMLIFrameElement',
-    'HTMLImageElement',
-    'HTMLInputElement',
-    'HTMLLabelElement',
-    'HTMLLegendElement',
-    'HTMLLIElement',
-    'HTMLLinkElement',
-    'HTMLMapElement',
-    'HTMLMediaElement',
-    'HTMLMenuElement',
-    'HTMLMetaElement',
-    'HTMLMeterElement',
-    'HTMLModElement',
-    'HTMLObjectElement',
-    'HTMLOListElement',
-    'HTMLOptGroupElement',
-    'HTMLOptionElement',
-    'HTMLOutputElement',
-    'HTMLParagraphElement',
-    'HTMLParamElement',
-    'HTMLPreElement',
-    'HTMLProgressElement',
-    'HTMLQuoteElement',
-    'HTMLScriptElement',
-    'HTMLSelectElement',
-    'HTMLSourceElement',
-    'HTMLSpanElement',
-    'HTMLStyleElement',
-    'HTMLTableCaptionElement',
-    'HTMLTableCellElement',
-    'HTMLTableColElement',
-    'HTMLTableDataCellElement',
-    'HTMLTableElement',
-    'HTMLTableHeaderCellElement',
-    'HTMLTimeElement',
-    'HTMLTitleElement',
-    'HTMLTableRowElement',
-    'HTMLTableSectionElement',
-    'HTMLTemplateElement',
-    'HTMLTextAreaElement',
-    'HTMLTrackElement',
-    'HTMLUListElement',
-    'HTMLUnknownElement',
-    'HTMLVideoElement',
-    'StyleSheet',
-    'MediaList',
-    'CSSStyleSheet',
-    'CSSRule',
-    'CSSStyleRule',
-    'CSSMediaRule',
-    'CSSImportRule',
-    'CSSStyleDeclaration',
-    'StyleSheetList',
-    'XPathException',
-    'XPathExpression',
-    'XPathResult',
-    'XPathEvaluator',
-    'HTMLCollection',
-    'NodeFilter',
-    'NodeIterator',
-    'NodeList',
-    'Blob',
-    'File',
-    'FileList',
-    'FormData',
-    'XMLHttpRequest',
-    'XMLHttpRequestEventTarget',
-    'XMLHttpRequestUpload',
-    'DOMTokenList',
-    'URL'
-]
-
-const OTHER_KEYS = [
-    'addEventListener',
-    'alert',
-    'atob',
-    'blur',
-    'btoa',
-    'close',
-    'confirm',
-    'createPopup',
-    'dispatchEvent',
-    'document',
-    'focus',
-    'frames',
-    'getComputedStyle',
-    'history',
-    'innerHeight',
-    'innerWidth',
-    'length',
-    'location',
-    'moveBy',
-    'moveTo',
-    'name',
-    'open',
-    'outerHeight',
-    'outerWidth',
-    'pageXOffset',
-    'pageYOffset',
-    'parent',
-    'postMessage',
-    'print',
-    'prompt',
-    'removeEventListener',
-    'resizeBy',
-    'resizeTo',
-    'screen',
-    'screenLeft',
-    'screenTop',
-    'screenX',
-    'screenY',
-    'scroll',
-    'scrollBy',
-    'scrollLeft',
-    'scrollTo',
-    'scrollTop',
-    'scrollX',
-    'scrollY',
-    'self',
-    'stop',
-    'toString',
-    'top',
-    'window'
-]
-
 const defaultHtml = `
     <!doctype html>
     <html lang="en">
@@ -200,17 +19,22 @@ const defaultDomOptions = {
     pretendToBeVisual: true,
 }
 
+const DOM_KEYS = []
+
 export function setup(html = defaultHtml, options = {}) {
     const jsdom = new JSDOM.JSDOM(html, {...defaultDomOptions, ...options})
 
     const {window} = jsdom
     const {document} = window
 
-    const keys = DOM_KEYS.concat(OTHER_KEYS)
-
-    keys.forEach(function (key) {
-        global[key] = window[key]
-    })
+    for(const key of Object.getOwnPropertyNames(window)) {
+        try {
+            if (typeof global[key] === 'undefined') {
+                global[key] = window[key]
+                DOM_KEYS.push(key)
+            }
+        } catch {}
+    }
 
     global.window = window
     global.document = document
@@ -231,9 +55,7 @@ export function setup(html = defaultHtml, options = {}) {
 }
 
 export function clean() {
-    const keys = DOM_KEYS.concat(OTHER_KEYS)
-
-    keys.forEach(function (key) {
+    DOM_KEYS.forEach(function (key) {
         delete global[key]
     })
 
