@@ -1,5 +1,10 @@
+beforeEach(() => {
+    DOM.flash()
+})
+
 describe(`DOM tests`, () => {
     it(`Create div`, () => {
-        expect(1).toBe(1)
+        const div = document.createElement('div')
+        expect(div).toBeHtmlElement()
     })
 })

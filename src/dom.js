@@ -22,6 +22,10 @@ const defaultDomOptions = {
 const DOM_KEYS = []
 
 export function setup(html = defaultHtml, options = {}) {
+    if (global.$jsdom) {
+        clean()
+    }
+
     const jsdom = new JSDOM.JSDOM(html, {...defaultDomOptions, ...options})
 
     const {window} = jsdom

@@ -109,110 +109,22 @@ Update `package.json` to run tests with `easytest` command.
 - `DOM` - create DOM object (not global)
 
 ### Matchers
-EasyTest contains a big set of built-in matchers.
+EasyTest contains a big set of built-in matchers:
 
-- `toBe(expected, msg?: string)` - Asserts that the actual value is equal to the expected value.
-- `toBeNot(expected, msg?: string)` - Asserts that the actual value is not equal to the expected value.
-- `toBeStrictEqual(expected, msg?: string)` - Asserts that the actual value is strict equal (using ===) to the expected value.
-- `toBeNotStrictEqual(expected, msg?: string)` - Asserts that the actual value isn't strict equal (using !==) to the expected value.
-- `toBeEqual(expected, msg?: string)` - Asserts that the actual value is equal (using ==) to the expected value.
-- `toBeNotEqual(expected, msg?: string)` - Asserts that the actual value is not equal (using !=) to the expected value.
-- `toBeObject(expected, msg?: string)` - Asserts that the actual object is equal to the expected object.
-- `toBeTrue(msg?: string)` - Asserts that the actual value is true.
-- `toBeFalse(msg?: string)` - Asserts that the actual value is false.
-- `toBeBoolean(msg?: string)` - Asserts that the actual value is a boolean.
-- `toMatch(expected, msg?: string)` - Asserts that the actual value matches the expected pattern.
-- `toNotMatch(expected, msg?: string)` - Asserts that the actual value not matches the expected pattern.
-- `toBeDefined(msg?: string)` - Asserts that the actual value is defined.
-- `toBeUndefined(msg?: string)` - Asserts that the actual value is undefined.
-- `toBeNull(msg?: string)` - Asserts that the actual value is null.
-- `toBeNotNull(msg?: string)` - Asserts that the actual value is not null.
-- `toBeGreaterThan(expected, msg?: string)` - Asserts that the actual value is greater than the expected value.
-- `toBeGreaterThanOrEqual(expected, msg?: string)` - Asserts that the actual value is greater than or equal to the expected value.
-- `toBeLessThan(expected, msg?: string)` - Asserts that the actual value is less than the expected value.
-- `toBeLessThanOrEqual(expected, msg?: string)` - Asserts that the actual value is less than or equal to the expected value.
-- `toBetween(min, max, msg?: string)` - Asserts that the actual value is between the specified minimum and maximum values.
-- `toBeInteger(msg?: string)` - Asserts that the actual value is an integer.
-- `toBeNotInteger(msg?: string)` - Asserts that the actual value is an integer.
-- `toBeSafeInteger(msg?: string)` - Asserts that the actual value is a safe integer.
-- `toBeNotSafeInteger(msg?: string)` - Asserts that the actual value is a safe integer.
-- `toBeFloat(msg?: string)` - Asserts that the actual value is a float.
-- `toBePositive(msg?: string)` - Asserts that the actual value is positive.
-- `toBeNegative(msg?: string)` - Asserts that the actual value is negative.
-- `toBeFinite(msg?: string)` - Asserts that the actual value is finite.
-- `toBeNumber(msg?: string)` - Asserts that the actual value is a number and not is NaN.
-- `toBeNaN(msg?: string)` - Asserts that the actual value is NaN.
-- `toBeCloseTo(expected, precision = 2, msg?: string)` - Asserts that the actual value is close to the expected value within a certain precision.
-- `toThrow(msg?: string)` - Asserts that the actual function throws an error.
-- `toThrowError(expected, msg?: string)` - Asserts that the actual function throws an error matching the expected value.
-- `toBeHEXColor(msg?: string)` - Asserts that the actual value is a HEX color.
-- `toBeRGBColor(msg?: string)` - Asserts that the actual value is an RGB color.
-- `toBeRGBAColor(msg?: string)` - Asserts that the actual value is an RGBA color.
-- `toBeHSVColor(msg?: string)` - Asserts that the actual value is an HSL color.
-- `toBeHSLColor(msg?: string)` - Asserts that the actual value is an HSL color.
-- `toBeHSLAColor(msg?: string)` - Asserts that the actual value is an HSLA color.
-- `toBeCMYKColor(msg?: string)` - Asserts that the actual value is a CMYK color.
-- `toBeColor(msg?: string)` - Asserts that the actual value is a valid color (HEX, RGB, RGBA, HSV, HSL, HSLA, or CMYK).
-- `toBeNotColor(msg?: string)` - Asserts that the actual value is not a valid color (HEX, RGB, RGBA, HSV, HSL, HSLA, or CMYK).
-- `toHaveBeenCalled(msg?: string)` - Asserts the mock function was called at least once
-- `toHaveBeenCalledTimes(expected, msg?: string)` - Asserts the mock function was called at least once
-- `toHaveBeenCalledWith(expected, msg?: string)` - Asserts that the mock function was called with specified arguments.
-- `toHaveBeenLastCalledWith(expected, msg?: string)` - Asserts that the mock function was called last with specified arguments.
-- `toContain(expected, msg?: string)` - Asserts that the actual value contains the expected value.
-- `toNotContain(expected, msg?: string)` - Asserts that the actual value not contains the expected value.
-- `toBeDeepEqual(expected, msg?: string)` - Asserts that the actual value is deeply equal to the expected value.
-- `toBeDeepEqualSafe(expected, msg?: string)` - Asserts that the actual value is deeply equal to the expected value using a safe comparison.
-- `toBeObjectStructureEqual(expected, msg?: string)` - Asserts that the actual structure is equal to the expected structure.
-- `toBeArrayEqual(expected, msg?: string)` - Asserts that the actual array is equal to the expected array.
-- `toBeArray(msg?: string)` - Asserts that the actual value is an array.
-- `toBeArraySorted(msg?: string)` - Asserts that the actual value is sorted.
-- `toBeArrayNotSorted(msg?: string)` - Asserts that the actual value is not sorted.
-- `toBeArrayUnique(msg?: string)` - Asserts that values in the array are unique.
-- `toBeArrayNotUnique(msg?: string)` - Asserts that values in the array are not unique.
-- `toBeIP(msg?: string)` - Asserts that the actual value is a valid IP address.
-- `toBeNotIP(msg?: string)` - Asserts that the actual value isn't a valid IP address.
-- `toBeIPv4(msg?: string)` - Asserts that the actual value is a valid IPv4 address.
-- `toBeIPv6(msg?: string)` - Asserts that the actual value is a valid IPv6 address.
-- `toBeEmail(msg?: string)` - Asserts that the actual value is a valid email address.
-- `toBeUrl(msg?: string)` - Asserts that the actual value is a valid URL.
-- `toBeEmpty(msg?: string)` - Asserts that the actual value is empty.
-- `toBeNotEmpty(msg?: string)` - Asserts that the actual value is not empty.
-- `hasLength(expected, msg?: string)` - Asserts that the array-like object has the expected length.
-- `toBeBase64(msg?: string)` - Asserts that the actual value is a Base64 encoded string.
-- `toBeJson(msg?: string)` - Asserts that the actual value is a JSON string.
-- `toBeXml(msg?: string)` - Asserts that the actual value is an XML string.
-- `hasProperty(expected, msg?: string)` - Asserts that the actual value has the specified property.
-- `hasNoProperty(expected, msg?: string)` - Asserts that the actual value has not the specified property.
-- `toBeType(type, msg?: string)` - Asserts that the actual value is of the specified type.
-- `toBeInstanceOf(type, msg?: string)` - Asserts that the actual value is an instance of the specified type.
-- `toBeString(msg?: string)` - Asserts that the actual value is a string.
-- `toBeFunction(msg?: string)` - Asserts that the actual value is a function.
-- `toBeAsyncFunction(msg?: string)` - Asserts that the actual value is an async function.
-- `toBeDate(msg?: string)` - Asserts that the actual value is a date.
-- `toBeDateObject(msg?: string)` - Asserts that the actual value is a date.
-- `toBeRegExp(msg?: string)` - Asserts that the actual value is a regular expression.
-- `toBeSymbol(msg?: string)` - Asserts that the actual value is a symbol.
-- `toBeBigInt(msg?: string)` - Asserts that the actual value is a BigInt.
-- `toBeMap(msg?: string)` - Asserts that the actual value is a Map.
-- `toBeSet(msg?: string)` - Asserts that the actual value is a Set.
-- `toBeWeakMap(msg?: string)` - Asserts that the actual value is a WeakMap.
-- `toBeWeakSet(msg?: string)` - Asserts that the actual value is a WeakSet.
-- `toBeArrayBuffer(msg?: string)` - Asserts that the actual value is an ArrayBuffer.
-- `toBePromise(msg?: string)` - Asserts that the actual value is a Promise.
-- `toBeHtmlElement(msg?: string)` - Asserts that the actual value is an HTML element.
-- `toBeNode(msg?: string)` - Asserts that the actual value is an HTML node.
-- `toBeDocument(msg?: string)` - Asserts that the actual value is an HTML document.
-- `toBeHtmlCollection(msg?: string)` - Asserts that the actual value is an HTML collection.
-- `toBeWindow(msg?: string)` - Asserts that the actual value is a Window object.
-- `toBeTextNode(msg?: string)` - Asserts that the actual value is a Text node.
-- `hasClass(expected, msg?: string)` - Asserts that the HTML element has the specified class.
-- `hasNoClass(expected, msg?: string)` - Asserts that the HTML element has the specified class.
-- `hasAttribute(expected, msg?: string)` - Asserts that the HTML element has the specified attribute.
-- `hasNoAttribute(expected, msg?: string)` - Asserts that the HTML element has the specified attribute.
-- `hasChildren(msg?: string)` - Asserts that the HTML element has children.
-- `hasNoChildren(msg?: string)` - Asserts that the HTML element has children.
-- `hasParent(msg?: string)` - Asserts that the HTML element has a parent.
-- `hasNoParent(msg?: string)` - Asserts that the HTML element has no parent.
+- A simple comparison
+- A strong comparison
+- Type checking
+- Number checking
+- String checking
+- Array checking
+- Object checking
+- Color checking
+- IP, Email, Url checking
+- JSON, XML checking
+- Date, RegExp, Symbol checking
+- Function checking
+- HTML element checking
+- and more...
 
 
 ### TypeScript
@@ -235,35 +147,19 @@ Run scripts that set and use environment variables across platforms.
 npm install --save-dev cross-env
 ```
 
-### Environment variables to support TypeScript
-
-**powershell**
-```powershell
-$env:NODE_OPTIONS="--import tsx"
-```
-
-**linux**, **macos**
-```bash
-export NODE_OPTIONS="--import tsx"
-```
-
-**cmd**
-```cmd
-set NODE_OPTIONS="--import tsx"
-```
-
 ## Configuration
-To configure `EasyTest` you need to create a `easytest.config.json` file in the root of your project.
-Also, you can use argument `--config fileName` to specify a configuration file.
+To configure `EasyTest` you need to create a `easytest.json` file in the root of your project.
+Also, you can use argument `--config=fileName` to specify a configuration file.
 
 ```json
 {
     "scripts": {
-        "test": "easytest --config myconfig.json"
+        "test": "easytest --config=myconfig.json"
     }
 }
 ```
 
+EasyTest designed as a config-free testing framework. But you can configure it to your needs.
 **The default values are:**
 ```json
 {
@@ -271,6 +167,8 @@ Also, you can use argument `--config fileName` to specify a configuration file.
   "exclude": ["node_modules/**"],
   "coverage": false,
   "verbose": false,
+  "dom": false,
+  "test": "*",  
   "report": {
     "type": "lcov",
     "dir": "coverage"
@@ -278,86 +176,35 @@ Also, you can use argument `--config fileName` to specify a configuration file.
 }
 ```
 
-### Verbose
-In verbose mode, you will see the detailed results in the console.
+You can use cli arguments to configure EasyTest:
 
-![verbose-on.png](verbose-on.png)
+- `--config=file_name.json` - path to the configuration file.
+- `--coverage` - enable coverage tool.
+- `--verbose` - enable verbose mode.
+- `--include=**/*.spec.{t,j}s` - include files for testing.
+- `--exclude=node_modules/**` - exclude files from testing.
+- `--test=test_name` - execute only tests whose name contains value.
+- `--dom` - enable global DOM.
 
-To enable `verbose` mode, set parameter **verbose** to **true** in config file or use argument `--verbose`.
+```json
+{
+  "scripts": {
+    "test": "easytest --coverage --verbose --include=**/core.spec.{t,j}s"
+  }
+}
+```
+
+## DOM Environment
+EasyTest has a global DOM object for testing HTML objects (we use `JSDOM` to create DOM environment).
+To enable global DOM, you need to use parameter `--dom` in the command line, or set `dom` to `true` in the configuration file.
 
 ```json
 {
     "scripts": {
-        "test": "easytest --verbose"
+        "test": "easytest --dom"
     }
 }
 ```
-
-## Coverage
-
-EasyTest has a built-in coverage tool.
-
-![Coverage](coverage.png)
-
-To enable `coverage`, set parameter **coverage** to **true** in config file or use argument `--coverage`.
-
-```json
-{
-    "scripts": {
-        "test": "easytest --coverage"
-    }
-}
-```
-
-## Include tests
-You can specify the files to include in the test run.
-
-```json
-{
-    "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"]
-}
-```
-
-or use argument `--include`.
-
-```json
-{
-    "scripts": {
-        "test": "easytest --include='**/common.test.js,**/common.spec.js'"
-    }
-}
-```
-
-## Exclude files
-You can specify the files to exclude from the test run.
-
-```json
-{
-    "exclude": ["node_modules/**"]
-}
-```
-
-or use argument `--exclude`.
-
-```json
-{
-    "scripts": {
-        "test": "easytest --exclude='node_modules/**,dist/**'"
-    }
-}
-```
-
-## Executing tests by name
-You can run a specific test by name using the `--test` argument.
-
-```json
-{
-    "scripts": {
-        "test": "easytest --test='Compare with 2'"
-    }
-}
-```
-In this case only the test with the name includes `Compare with 2` will be executed.
 
 ## Extend expect
 You can extend the `expect` function with your own matchers.
@@ -379,83 +226,6 @@ const expect = (received) => new MyExpect(received)
 
 test(`Custom expect`, () => {
     expect(2).toBeEven()
-})
-```
-
-## DOM Environment
-EasyTest has a global DOM object for testing HTML objects (we use JSDOM to create DOM environment).
-Also, you can setup your own DOM object.
-
-```javascript
-import {DOM} from "@olton/easytest";
-
-beforeAll(() => {
-    DOM.setup({
-        runScripts: "dangerously",
-        resources: "usable",
-        url: "http://localhost",
-        pretendToBeVisual: true,
-    })
-})
-
-afterAll(() => {
-    DOM.clean()
-})
-```
-
-### DOM object methods
-
-- DOM.setup
-- DOM.clean
-- DOM.flash
-- DOM.eval
-- DOM.css: {fromFile, fromString, fromUrl}
-- DOM.js: {fromFile, fromString, fromUrl}
-- DOM.html: {fromFile, fromString, fromUrl, flash}
-
-```javascript
-import {beforeAll, describe, it, expect, DOM} from "@olton/easytest";
-
-beforeAll(() => {
-    DOM.flash()
-    DOM.js.fromFile('./lib/metro.js')
-})
-
-beforeEach(() => {
-    DOM.html.fromString(`
-        <div id="my-block"></div>
-    `)
-})
-
-```
-
-
-### Example UI Testing
-You can use `EasyTest` to test UI components. In this example, I test the Metro UI accordion component.
-```javascript
-import {beforeAll, beforeEach, describe, it, expect, DOM} from "@olton/easytest";
-
-beforeAll(() => {
-    DOM.flash()
-    DOM.js.fromFile('./lib/metro.js')
-})
-
-beforeEach(() => {
-    DOM.html.fromString(`
-        <div id="accordion">
-            <div class="frame">
-                <div class="heading">Heading</div>
-                <div class="content">Content</div>
-            </div>
-        </div>
-    `)
-})
-
-describe(`Accordion tests`, () => {
-    it(`Create accordion`, async () => {
-        const accordion = window.Metro.makePlugin("#accordion", 'accordion')[0]
-        expect(accordion).hasClass('accordion')
-    })
 })
 ```
 
