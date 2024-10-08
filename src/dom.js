@@ -21,9 +21,9 @@ const defaultDomOptions = {
 
 const DOM_KEYS = []
 
-export function setup(html = defaultHtml, options = {}) {
-    if (global.$jsdom) {
-        clean()
+export async function setup(html = defaultHtml, options = {}) {
+    if (global['$jsdom']) {
+        await clean()
     }
 
     const jsdom = new JSDOM.JSDOM(html, {...defaultDomOptions, ...options})
@@ -58,14 +58,14 @@ export function setup(html = defaultHtml, options = {}) {
     }
 }
 
-export function clean() {
+export async function clean() {
     DOM_KEYS.forEach(function (key) {
         delete global[key]
     })
 
-    delete global.window
-    delete global.document
-    delete global.$jsdom
+    delete global['window']
+    delete global['document']
+    delete global['$jsdom']
 }
 
 export const css = {

@@ -1,7 +1,15 @@
 import { glob } from 'glob'
 import { pathToFileURL } from 'url';
 import fs from 'fs'
-import {setup as setupDom, clean, flash, evalJS, js, css, html} from './dom.js'
+import {
+    setup as setupDom,
+    clean,
+    flash,
+    evalJS,
+    js,
+    css,
+    html,
+} from './dom.js'
 import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
@@ -10,6 +18,7 @@ import {displayReport} from './coverage.js'
 import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
 import mockFn from "./mock.js"
+import {Browser} from "./browser.js"
 
 const beforeEachFileFunctions = []
 const afterEachFileFunctions = []
@@ -30,6 +39,7 @@ const config = {}
 export { Expect, ExpectError } from "./expect.js"
 export const expect = expectFn
 export const mock = mockFn
+export let browser = Browser
 
 export const DOM = {
     setup: setupDom,
@@ -47,7 +57,7 @@ export const run = async (root, args) => {
     updateConfig(config, args)
 
     if (config.dom) {
-        setupDom()
+        await setupDom()
     }
 
     let session
@@ -230,3 +240,4 @@ global.afterAll = afterAll
 global.mocker = mock
 global.delay = delay
 global.DOM = DOM
+global.browser = Browser

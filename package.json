@@ -8,7 +8,7 @@
   "types": "types/easytest.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js --coverage --verbose --include='__tests__/*.test.js' --dom"
+    "test": "tsx cli/easytest.js --coverage --verbose --include='__tests__/visit.test.js'"
   },
   "keywords": [
     "havascript",
@@ -32,6 +32,7 @@
     "chalk": "^5.3.0",
     "glob": "^11.0.0",
     "jsdom": "^25.0.1",
+    "puppeteer": "^23.5.1",
     "table": "^6.8.2",
     "yargs": "^17.7.2"
   },
