@@ -39,7 +39,7 @@ const config = {}
 export { Expect, ExpectError } from "./expect.js"
 export const expect = expectFn
 export const mock = mockFn
-export let browser = Browser
+export const B = Browser
 
 export const DOM = {
     setup: setupDom,
@@ -52,6 +52,7 @@ export const DOM = {
 }
 
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+export const getFileUrl = (file) => pathToFileURL(fs.realpathSync(file)).href
 
 export const run = async (root, args) => {
     updateConfig(config, args)
@@ -240,4 +241,4 @@ global.afterAll = afterAll
 global.mocker = mock
 global.delay = delay
 global.DOM = DOM
-global.browser = Browser
+global.B = B

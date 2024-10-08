@@ -1,30 +1,52 @@
-import puppeteer from 'puppeteer';
+import puppeteer, {KnownDevices} from 'puppeteer';
 
-const defaultPageOptions = {
-    viewport: {
-        width: 1920,
-        height: 1080
-    },
+const defaultBrowserOptions = {
+    headless: "shell",
+    args: [
+        '--no-sandbox',
+    ],
+    log: false,
 }
 
 export class Browser {
     static browser = null;
     static page = null;
+    static error = null;
+    static options = null
 
-    static async create(){
-        this.browser = await puppeteer.launch({headless: 'shell'});
+    static async create(options = defaultBrowserOptions){
+        this.options = {...defaultBrowserOptions, ...options}
+        this.browser = await puppeteer.launch(this.options);
         this.page = await this.browser.newPage();
+        this.page.on('error', msg => {
+            this.error = msg
+            if (this.options.log) console.log(`[ERROR] - ${msg}`)
+        })
+        this.page.on('pageerror', msg => {
+            this.error = msg
+            if (this.options.log) console.log(`[PAGE-ERROR] - ${msg}`)
+        })
+        this.page.on('console', msg => {
+            for (let i = 0; i < msg.args.length; ++i) {
+                if (this.options.log) console.log(`${i}: ${msg.args[i]}`)
+            }
+        })
+        this.page.on('requestfailed', request => {
+            this.error = request.failure().errorText
+            if (this.options.log) console.log('Request failed: ', request.failure().errorText);
+        })
+        this.page.on('response', response => {
+            if (this.options.log) console.log('Response status: ', response.status());
+        });
     }
 
-    static async close(){
+    static async bye(){
         await this.browser.close();
     }
 
-    static async visit(url, options = defaultPageOptions){
-        await this.page.goto(url);
-        if (options.viewport) {
-            await this.page.setViewport({...options.viewport});
-        }
+    static async visit(url, options){
+        this.error = null
+        await this.page.goto(url, options);
     }
 
     static async $$(selector){
@@ -36,9 +58,10 @@ export class Browser {
     }
 
     static document = {
-        title: async () => {
-            return await this.page.title();
-        },
+        title: async () => await this.page.title(),
+        url: async () => await this.page.url(),
+        html: async () => await this.page.content(),
+        cookies: async (...urls) => await this.page.cookies(...urls),
     }
 
     static window = async (v) => {
@@ -53,4 +76,10 @@ export class Browser {
     static screenshot = async (path) => {
         await this.page.screenshot({path})
     }
+
+    static emulate = async (device) => {
+        await this.page.emulate(device)
+    }
+
+    static devices = KnownDevices
 }

@@ -3,7 +3,28 @@
  * @param ms
  */
 export declare function delay(ms: number): Promise<void>;
+export declare function getFileUrl(path: string): string;
 
+export declare class B {
+    static browser: any;
+    static page: any;
+    static error: string | null;
+    static options: any;
+    static create: (options?: any) => Promise<void>;
+    static bye: () => Promise<void>;
+    static visit: (url: string) => Promise<void>;
+    static $: (selector: string) => Promise<any>;
+    static $$: (selector: string) => Promise<any>;
+    static click: (selector: string) => Promise<void>;
+    static window: (propName: string) => Promise<any>;
+    static screenshot: (path: string) => Promise<void>;
+    static document: {
+        title: () => Promise<string>;
+        url: () => Promise<string>;
+        html: () => Promise<string>;
+        cookies: (urls: []) => Promise<any>;
+    };
+}
 /**
  * Interface for interacting with the Document Object Model (DOM).
  */
