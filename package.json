@@ -8,7 +8,7 @@
   "types": "types/easytest.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js --coverage --verbose --include='__tests__/visit.test.js'"
+    "test": "tsx cli/easytest.js --coverage --verbose --include='__tests__/*.test.js'"
   },
   "keywords": [
     "havascript",

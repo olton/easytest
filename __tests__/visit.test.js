@@ -1,29 +1,29 @@
-import { browser } from '../src/index.js'
+import { B } from '../src/index.js'
 
 const url = 'http://example.com/'
 
 beforeAll(async () => {
-    await browser.create()
+    await B.create()
 })
 
 afterAll(async () => {
-    await browser.close()
+    await B.bye()
 })
 
 describe(`Browser tests`, () => {
     it(`Visit example.com`, async () => {
-        await browser.visit(url)
-        const title = await browser.document.title()
+        await B.visit(url)
+        const title = await B.document.title()
         expect(title).toContain('Example Domain', 'Title test failed')
     })
     it(`Visit metroui.org.ua`, async () => {
-        await browser.visit(`https://metroui.org.ua`)
-        const metro = await browser.window('Metro')
+        await B.visit(`https://metroui.org.ua`)
+        const metro = await B.window('Metro')
         expect(metro).toBeDefined('Metro is undefined')
     })
     it(`Visit metroui.org.ua`, async () => {
-        await browser.visit(`https://metroui.org.ua`)
-        const window = await browser.window('location')
+        await B.visit(`https://metroui.org.ua`)
+        const window = await B.window('location')
         expect(window).toBeDefined('Window is undefined')
     })
 })
