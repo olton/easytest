@@ -81,21 +81,11 @@ export class Browser {
     }
 
     /**
-     * Get all elements by selector, If no element matches the selector, the return value resolves to [].
-     * @param selector
-     * @returns {Promise<*>}
-     */
-    static async $$(selector){
-        return await this.currentPage.$$(selector);
-    }
-
-    /**
-     * Get an element by selector, If no element matches the selector, the return value resolves to null.
-     * @param selector
+     * Get all elements by selector, If no element matches the selector, the return value resolves to [].     * @param selector
      * @returns {Promise<*>}
      */
     static async $(selector){
-        return await this.currentPage.$(selector);
+        return await this.currentPage.$$(selector);
     }
 
     /**

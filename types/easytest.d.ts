@@ -3,19 +3,27 @@
  * @param ms
  */
 export declare function delay(ms: number): Promise<void>;
+
+/**
+ * Return a file url (file://...) from the provided path.
+ * @param path
+ */
 export declare function getFileUrl(path: string): string;
 
+/**
+ * Interface for interacting with the browser.
+ */
 export declare class B {
     static browser: any;
-    static page: any;
+    static currentPage: any;
     static error: string | null;
     static options: any;
     static create: (options?: any) => Promise<void>;
     static bye: () => Promise<void>;
     static visit: (url: string) => Promise<void>;
     static $: (selector: string) => Promise<any>;
-    static $$: (selector: string) => Promise<any>;
     static click: (selector: string) => Promise<void>;
+    static tap: (selector: string) => Promise<void>;
     static window: (propName: string) => Promise<any>;
     static screenshot: (path: string) => Promise<void>;
     static document: {
@@ -24,7 +32,19 @@ export declare class B {
         html: () => Promise<string>;
         cookies: (urls: []) => Promise<any>;
     };
+    static devices: any[];
+    static emulate: (device: string) => Promise<void>;
+    static addCss: (options: object) => Promise<void>;
+    static addJs: (options: object) => Promise<void>;
+    static addFunction: (name, fn) => Promise<void>;
+    static pages: () => Promise<[]>;
+    static pageCount: () => number;
+    static page: (index: number) => Promise<any>;
+    static newPage: () => Promise<any>;
+    static setPage: (page) => Promise<any>;
+    static closePage: (page, runBeforeOnLoad) => Promise<any>;
 }
+
 /**
  * Interface for interacting with the Document Object Model (DOM).
  */
