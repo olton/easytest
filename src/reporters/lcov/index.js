@@ -47,6 +47,10 @@ const createReport = (coverage) => {
         data.push('end_of_record')
     })
 
+    if (data.length === 0) {
+        return
+    }
+
     fs.writeFileSync(`${dir}/lcov.info`, data.join('\n'))
 }
 

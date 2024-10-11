@@ -4,6 +4,7 @@ import {fileURLToPath} from "url";
 import fs from "node:fs";
 import chalk from "chalk";
 import {table} from "table";
+import {merge} from "./helpers/merge.js";
 
 const log = console.log
 
@@ -31,6 +32,7 @@ const browserDefaults = {
     log: false,
     coverage: {
         filter: '',
+        reportFileName: 'lcov-browser.info',
         ...coverageDefaults,
     }
 }
@@ -53,8 +55,8 @@ export class Browser {
      * @param options
      * @returns {Promise<void>}
      */
-    static async create(options = browserDefaults){
-        this.options = {...browserDefaults, ...options}
+    static async create(options){
+        this.options = merge({}, browserDefaults, options)
         this.browser = await puppeteer.launch(this.options);
         this.currentPage = await this.browser.newPage();
         this.addEvents()
@@ -418,6 +420,59 @@ export class Browser {
         log(`Total coverage: ${totalProgress < 50 ? chalk.red.bold(totalProgress) : totalProgress < 80 ? chalk.yellow.bold(totalProgress) : chalk.green.bold(totalProgress) } %`)
         log(`------------------------------------`)
         log(table(data, tableConfig))
+
+        this.writeReport(coverageFiltered)
     }
 
+    static writeReport = (coverage) => {
+        const {root, report} = global.config
+        const dir = `${report.dir}`
+        const data = []
+
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir)
+        }
+
+        let totalLines = 0
+        let coveredLines = 0
+
+        coverage.map(({url, functions}) => {
+            const fileName = fileURLToPath(url)
+            const sourceCode = fs.readFileSync(fileName, 'utf-8')
+
+            const [_path, _name, _percent, _total, _covered, _uncovered] = generateReport(fileName.replace(root, ''), sourceCode, functions)
+
+            totalLines += _total
+            coveredLines += _covered
+
+            data.push(`TN:${root}`)
+            data.push(`SF:${fileName.replace(root, '')}`)
+            data.push(`LF:${_total}`)
+            data.push(`LH:${_covered}`)
+
+            for(let fn of functions) {
+                if (fn.functionName.startsWith('<')) {
+                    continue
+                }
+                data.push(`FN:${fn.ranges[0].startOffset},${fn.functionName}`)
+                data.push(`FNDA:${fn.ranges[0].count},${fn.functionName}`)
+            }
+
+            for(let lineNumber = 1; lineNumber <= _total; lineNumber++) {
+                if (_uncovered.includes(lineNumber)) {
+                    data.push(`DA:${lineNumber},0`)
+                } else {
+                    data.push(`DA:${lineNumber},1`)
+                }
+            }
+
+            data.push('end_of_record')
+        })
+
+        fs.writeFileSync(`${dir}/${this.options.coverage.reportFileName}`, data.join('\n'))
+    }
+
+    static waitFor = async (selector, options) => {
+        return await this.currentPage.waitForSelector(selector, options)
+    }
 }
