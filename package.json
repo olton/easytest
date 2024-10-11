@@ -5,10 +5,10 @@
   "bin": {
     "easytest": "cli/easytest.js"
   },
-  "types": "types/easytest.d.ts",
+  "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js --coverage --verbose --include='__tests__/*.test.js'"
+    "test": "tsx cli/easytest.js --dom --coverage --verbose --include='__tests__/*.test.js'"
   },
   "keywords": [
     "havascript",
@@ -37,6 +37,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
   }
 }

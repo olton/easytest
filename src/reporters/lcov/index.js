@@ -2,8 +2,9 @@ import fs from 'fs'
 import {fileURLToPath} from "url";
 import {coverageFilter, generateReport} from "../../coverage.js";
 
-const createReport = (coverage, config, root) => {
-    const dir = `${config.report.dir}`
+const createReport = (coverage) => {
+    const {root, report} = global.config
+    const dir = `${report.dir}`
     const data = []
 
     if (!fs.existsSync(dir)) {
@@ -13,7 +14,7 @@ const createReport = (coverage, config, root) => {
     let totalLines = 0
     let coveredLines = 0
 
-    coverageFilter(coverage, root).map(({url, functions}) => {
+    coverageFilter(coverage).map(({url, functions}) => {
         const fileName = fileURLToPath(url)
         const sourceCode = fs.readFileSync(fileName, 'utf-8')
 

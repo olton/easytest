@@ -1,6 +1,20 @@
 import puppeteer, {KnownDevices} from 'puppeteer';
+import {generateReport} from "./coverage.js";
+import {fileURLToPath} from "url";
+import fs from "node:fs";
+import chalk from "chalk";
+import {table} from "table";
 
-const defaultBrowserOptions = {
+const log = console.log
+
+const coverageDefaults = {
+    includeRawScriptCoverage: true,
+    reportAnonymousScripts: true,
+    resetOnNavigation: true,
+    useBlockCoverage: true,
+}
+
+const browserDefaults = {
     headless: "shell",
     args: [
         '--no-sandbox',
@@ -15,24 +29,50 @@ const defaultBrowserOptions = {
     onExit: undefined,
     pipe: false,
     log: false,
+    coverage: {
+        filter: '',
+        ...coverageDefaults,
+    }
 }
 
+const typeDefaults = {
+    delay: 0
+}
+
+export class Device {}
+
 export class Browser {
-    static browser = null;
-    static currentPage = null;
-    static error = null;
+    static browser = null
+    static currentPage = null
+    static error = null
     static options = null
+    static coverage = null
 
     /**
      * Create a browser
      * @param options
      * @returns {Promise<void>}
      */
-    static async create(options = defaultBrowserOptions){
-        this.options = {...defaultBrowserOptions, ...options}
+    static async create(options = browserDefaults){
+        this.options = {...browserDefaults, ...options}
         this.browser = await puppeteer.launch(this.options);
         this.currentPage = await this.browser.newPage();
         this.addEvents()
+        if (global.config.coverage) {
+            await this.startCoverage(this.options.coverage)
+        }
+    }
+
+    /**
+     * Close the browser
+     * @returns {Promise<void>}
+     */
+    static async bye(){
+        if (global.config.coverage) {
+            this.coverage = await this.stopCoverage()
+            this.displayCoverageReport(this.coverage)
+        }
+        await this.browser.close();
     }
 
     /**
@@ -59,14 +99,6 @@ export class Browser {
         this.currentPage.on('response', response => {
             if (this.options.log) console.log('Response status: ', response.status());
         });
-    }
-
-    /**
-     * Close the browser
-     * @returns {Promise<void>}
-     */
-    static async bye(){
-        await this.browser.close();
     }
 
     /**
@@ -125,6 +157,17 @@ export class Browser {
      */
     static tap = async (selector) => {
         return await this.currentPage.tap(selector)
+    }
+
+    /**
+     * Sends a keydown, keypress/input, and keyup event for each character in the text to element, specified by selector.
+     * @param selector
+     * @param text
+     * @param options
+     * @returns {Promise<*>}
+     */
+    static type = async (selector, text, options) => {
+        return await this.currentPage.type(selector, text, {...typeDefaults, ...options})
     }
 
     /**
@@ -225,16 +268,156 @@ export class Browser {
     }
 
     /**
-     * Close the page
-     * @param p - Page object, one of the pages returned by pages() or null to close the current page
+     * Set active page by index
+     * @param index
+     * @returns {Promise<void>}
+     */
+    static setPageByIndex = async (index) => {
+        this.currentPage = await this.page(index)
+        this.addEvents()
+    }
+
+    /**
+     * Close the current page
      * @param runBeforeOnLoad
      * @returns {Promise<void>}
      */
-    static closePage = async (p = null, runBeforeOnLoad = false) => {
-        if (!p) {
-            await this.currentPage.close({runBeforeOnLoad})
+    static close = async (runBeforeOnLoad = false) => {
+        await this.currentPage.close({runBeforeOnLoad})
+    }
+
+    static closePage = async (page, runBeforeOnLoad = false) => {
+        let pageToCLose
+
+        if (typeof page === 'number') {
+            pageToCLose = await this.page(page)
         } else {
+            if (page === null || page === undefined) {
+                pageToCLose = this.currentPage
+            } else {
+                pageToCLose = page
+            }
+        }
+
+        await pageToCLose.close({runBeforeOnLoad})
+    }
+
+    /**
+     * Close all pages
+     * @param runBeforeOnLoad
+     * @returns {Promise<void>}
+     */
+    static closeAllPages = async (runBeforeOnLoad = false) => {
+        const pages = await this.pages()
+        for (let p of pages) {
             await p.close({runBeforeOnLoad})
         }
     }
+
+    /**
+     * Execute JavaScript code on current page
+     * @param js
+     * @param args
+     * @returns {Promise<*>}
+     */
+    static exec = async (js, ...args) => {
+        return await this.currentPage.evaluate(js, ...args)
+    }
+
+    /**
+     * Start collecting test coverage statistics
+     * @returns {Promise<void>}
+     */
+    static startCoverage = async (options) => {
+        return await this.currentPage.coverage.startJSCoverage({...coverageDefaults, ...options})
+    }
+
+    /**
+     * Stop collecting test coverage statistics
+     * @returns {Promise<{totalBytes: number, usedBytes: number, percentUsed: number, coverage: *}>}
+     */
+    static stopCoverage = async () => {
+        return await this.currentPage.coverage.stopJSCoverage()
+    }
+
+    static displayCoverageReport = (coverage) => {
+        const cov = {
+            result: []
+        }
+        for (const entry of coverage) {
+            cov.result.push(entry.rawScriptCoverage)
+        }
+
+        const coverageFiltered = cov.result.filter((r) => {
+            return r.url.includes(this.options.coverage.filter)
+        })
+
+        const {root} = global.config
+        const data = []
+
+        let totalLines = 0
+        let coveredLines = 0
+        let totalFiles = 0
+
+        data.push(["#", "File Path", "File Name", "Lines", "Covered", '%'])
+
+        coverageFiltered.map(({url, functions}) => {
+            const fileName = fileURLToPath(url)
+            const sourceCode = fs.readFileSync(fileName, 'utf-8')
+
+            const [_path, _name, _percent, _total, _covered] = generateReport(fileName.replace(root, ''), sourceCode, functions)
+
+            totalLines += _total
+            coveredLines += _covered
+            totalFiles++
+
+            data.push([totalFiles, _path, _name, _total, _covered, _percent + ' %'])
+        })
+
+        const tableConfig = {
+            columns: [
+                {alignment: 'left'},
+                {alignment: 'left'},
+                {alignment: 'left'},
+                {alignment: 'right'},
+                {alignment: 'right'},
+                {alignment: 'right', width: 10},
+            ],
+            border: {
+                topBody: `─`,
+                topJoin: `┬`,
+                topLeft: `┌`,
+                topRight: `┐`,
+
+                bottomBody: `─`,
+                bottomJoin: `┴`,
+                bottomLeft: `└`,
+                bottomRight: `┘`,
+
+                bodyLeft: `│`,
+                bodyRight: `│`,
+                bodyJoin: `│`,
+
+                joinBody: `─`,
+                joinLeft: `├`,
+                joinRight: `┤`,
+                joinJoin: `┼`
+            },
+            drawHorizontalLine: (lineIndex, rowCount) => {
+                return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount;
+            }
+        };
+
+        log(`\nCoverage report for:`)
+        log(chalk.yellow.bold(root))
+        log(`------------------------------------`)
+        log(`Files:          ${chalk.magenta.bold(totalFiles)}`)
+        log(`Lines of code:  ${chalk.blue.bold(totalLines)}`)
+        log(`Covered Lines:  ${chalk.green.bold(coveredLines)}`)
+        let totalProgress = Math.round(coveredLines * 100 / totalLines)
+        log(`Total coverage: ${totalProgress < 50 ? chalk.red.bold(totalProgress) : totalProgress < 80 ? chalk.yellow.bold(totalProgress) : chalk.green.bold(totalProgress) } %`)
+        log(`------------------------------------`)
+        log(table(data, tableConfig))
+    }
+
 }

@@ -1,10 +1,11 @@
 import chalk from 'chalk'
 import { stringify} from "./helpers/json.js";
+import matchInArray from "./helpers/match-in-array.js";
 
 const log = console.log
 
 const logExpect = (name, {result, message, expected, received}, duration = 0) => {
-    log(`      ${result ? chalk.green('✅  ' + name + ` 🕑 ${chalk.whiteBright(`${duration} ms`)}`) : chalk.red('💀 ' + name + ' (' + message + ')')}`)
+    log(`      ${result ? chalk.green('[√] ' + name + ` 🕑 ${chalk.whiteBright(`${duration} ms`)}`) : chalk.red('💀 ' + name + ' (' + message + ')')}`)
     if (!result) {
         log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(stringify(expected))}`)
         log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(stringify(received))}`)
@@ -21,7 +22,8 @@ const setupAndTeardown = async (funcs, type) => {
     }
 }
 
-export const runner = async (queue, {verbose = false, test: specifiedTest} = {}) => {
+export const runner = async (queue) => {
+    const {verbose, test: spec, skip} = global.config
     const startTime = process.hrtime()
     let passedTests = 0
     let failedTests = 0
@@ -42,22 +44,27 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
 
                 await setupAndTeardown(describe.beforeAll, 'beforeAll')
 
-                for (const it of describe.it) {
+                for (const test of describe.it) {
                     let expect = {}
 
-                    if (specifiedTest) {
-                        if (it.name.match (specifiedTest) === null) {
+                    if (spec && spec.length) {
+                        if (matchInArray (test.name, spec) === false) {
+                            continue
+                        }
+                    }
+                    if (skip && skip.length) {
+                        if (matchInArray(test.name, skip) === true) {
                             continue
                         }
                     }
 
-                    await setupAndTeardown(it.beforeEach, 'beforeEach')
+                    await setupAndTeardown(test.beforeEach, 'beforeEach')
 
                     // Execute test function
                     const startTestTime = process.hrtime()
 
                     try {
-                        await it.fn()
+                        await test.fn()
                         expect.result = true
                     } catch (error) {
                         expect = {
@@ -72,10 +79,10 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                     const testDuration = (seconds * 1e9 + nanoseconds) / 1e6;
 
                     if (verbose) {
-                        logExpect(it.name, expect, testDuration)
+                        logExpect(test.name, expect, testDuration)
                     }
 
-                    await setupAndTeardown(it.afterEach, 'afterEach')
+                    await setupAndTeardown(test.afterEach, 'afterEach')
 
                     if (expect.result) {
                         passedTests++
@@ -100,8 +107,13 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
                 // console.log(test)
                 let expect = {}
 
-                if (specifiedTest) {
-                    if (test.name.match( specifiedTest ) === null) {
+                if (spec && spec.length) {
+                    if (matchInArray(test.name, spec ) === false) {
+                        continue
+                    }
+                }
+                if (skip && skip.length) {
+                    if (matchInArray(test.name, skip ) === true) {
                         continue
                     }
                 }
@@ -143,7 +155,7 @@ export const runner = async (queue, {verbose = false, test: specifiedTest} = {})
         const fileDuration = (seconds * 1e9 + nanoseconds) / 1e6;
 
         if (!verbose) {
-            const fileStatus = testFileStatus ? chalk.green('✅  ') : chalk.red('💀 ')
+            const fileStatus = testFileStatus ? chalk.green('[√] ') : chalk.red('💀 ')
             const testsStatus = `[${chalk.green.bold(testFilePassed)} of ${chalk.red.cyanBright(testFilePassed+testFileFailed)}]`
             const fileName = testFileStatus ? chalk.green(file) : chalk.red(file)
             log(`${fileStatus} ${fileName}... ${testsStatus} 🕑 ${chalk.whiteBright(`${fileDuration} ms`)}`)

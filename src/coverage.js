@@ -6,7 +6,8 @@ import {table} from "table";
 
 const log = console.log
 
-export function coverageFilter (coverage, root) {
+export function coverageFilter (coverage) {
+    const {root} = global.config
     return coverage.result.filter(({url}) => {
         const finalUrl = url.replace('file://', '')
         return isAbsolute(finalUrl)
@@ -51,7 +52,8 @@ export const generateReport = (filename, sourceCode, functions) => {
     ]
 }
 
-export function displayReport (coverage, root) {
+export function displayReport (coverage) {
+    const {root} = global.config
     const data = []
 
     let totalLines = 0
@@ -60,7 +62,7 @@ export function displayReport (coverage, root) {
 
     data.push(["#", "File Path", "File Name", "Lines", "Covered", '%'])
 
-    coverageFilter(coverage, root).map(({url, functions}) => {
+    coverageFilter(coverage).map(({url, functions}) => {
         const fileName = fileURLToPath(url)
         const sourceCode = fs.readFileSync(fileName, 'utf-8')
 
@@ -73,7 +75,11 @@ export function displayReport (coverage, root) {
         data.push([totalFiles, _path, _name, _total, _covered, _percent + ' %'])
     })
 
-    const config = {
+    if (data.length === 1) {
+        return
+    }
+
+    const tableConfig = {
         columns: [
             {alignment: 'left'},
             {alignment: 'left'},
@@ -116,5 +122,5 @@ export function displayReport (coverage, root) {
     let totalProgress = Math.round(coveredLines * 100 / totalLines)
     log(`Total coverage: ${totalProgress < 50 ? chalk.red.bold(totalProgress) : totalProgress < 80 ? chalk.yellow.bold(totalProgress) : chalk.green.bold(totalProgress) } %`)
     log(`------------------------------------`)
-    log(table(data, config))
+    log(table(data, tableConfig))
 }

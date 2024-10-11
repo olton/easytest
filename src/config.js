@@ -3,9 +3,11 @@ import chalk from "chalk";
 
 const log = console.log
 
-const defaultConfig = {
+export const defaultConfig = {
     include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
     exclude: ["node_modules/**"],
+    skip: "",
+    test: "",
     coverage: false,
     verbose: false,
     dom: false,
@@ -31,7 +33,8 @@ export const updateConfig = (config, args) => {
     if (args.dom) { config.dom = true; }
     if (args.coverage) { config.coverage = true; }
     if (args.verbose) { config.verbose = true; }
-    if (args.test) { config.test = args.test; }
+    if (args.test) { config.test = args.test.split(','); }
     if (args.include) { config.include = args.include.split(','); }
     if (args.exclude) { config.exclude = args.exclude.split(','); }
+    if (args.skip) { config.skip = args.skip.split(','); }
 }

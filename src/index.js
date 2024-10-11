@@ -34,7 +34,7 @@ let currentTestFile = ''
 
 let queue = new Map()
 
-const config = {}
+globalThis.config = {}
 
 export { Expect, ExpectError } from "./expect.js"
 export const expect = expectFn
@@ -54,8 +54,12 @@ export const DOM = {
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const getFileUrl = (file) => pathToFileURL(fs.realpathSync(file)).href
 
+export { coverageFilter, generateReport, displayReport } from './coverage.js'
+
 export const run = async (root, args) => {
     updateConfig(config, args)
+
+    config.root = root
 
     if (config.dom) {
         await setupDom()
@@ -94,19 +98,17 @@ export const run = async (root, args) => {
         await import(pathToFileURL(fs.realpathSync(file)).href)
     }
 
-    const result = await runner(queue, {
-        verbose: config.verbose,
-        test: config.test,
-    })
+    const result = await runner(queue)
 
     if (config.coverage) {
         const coverage = await session.post('Profiler.takePreciseCoverage')
         await session.post('Profiler.stopPreciseCoverage')
 
-        displayReport(coverage, root)
+        displayReport(coverage)
+
         if (config.report.type === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js')
-            createReport.default(coverage, config, root)
+            createReport.default(coverage)
         }
     }
 
