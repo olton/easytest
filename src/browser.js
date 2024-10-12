@@ -1,10 +1,8 @@
 import puppeteer, {KnownDevices} from 'puppeteer';
-import {generateReport} from "./coverage.js";
-import {fileURLToPath} from "url";
-import fs from "node:fs";
-import chalk from "chalk";
-import {table} from "table";
+import {displayReport} from "./coverage.js";
 import {merge} from "./helpers/merge.js";
+import createReport from "./reporters/lcov/index.js";
+import matchInArray from "./helpers/match-in-array.js";
 
 const log = console.log
 
@@ -41,6 +39,13 @@ const typeDefaults = {
     delay: 0
 }
 
+const waitForSelectorDefaults = {
+    hidden: false,
+    signal: null,
+    timeout: 30_000,
+    visible: false,
+}
+
 export class Device {}
 
 export class Browser {
@@ -71,8 +76,7 @@ export class Browser {
      */
     static async bye(){
         if (global.config.coverage) {
-            this.coverage = await this.stopCoverage()
-            this.displayCoverageReport(this.coverage)
+            await this.stopCoverage()
         }
         await this.browser.close();
     }
@@ -327,6 +331,16 @@ export class Browser {
     }
 
     /**
+     * Wait for selector on page
+     * @param selector
+     * @param options
+     * @returns {Promise<*>}
+     */
+    static waitFor = async (selector, options) => {
+        return await this.currentPage.waitForSelector(selector, {...waitForSelectorDefaults, ...options})
+    }
+
+    /**
      * Start collecting test coverage statistics
      * @returns {Promise<void>}
      */
@@ -339,140 +353,26 @@ export class Browser {
      * @returns {Promise<{totalBytes: number, usedBytes: number, percentUsed: number, coverage: *}>}
      */
     static stopCoverage = async () => {
-        return await this.currentPage.coverage.stopJSCoverage()
-    }
+        this.coverage = await this.currentPage.coverage.stopJSCoverage()
 
-    static displayCoverageReport = (coverage) => {
-        const cov = {
-            result: []
-        }
-        for (const entry of coverage) {
+        const cov = { result: [] }
+        for (const entry of this.coverage) {
             cov.result.push(entry.rawScriptCoverage)
         }
 
-        const coverageFiltered = cov.result.filter((r) => {
-            return r.url.includes(this.options.coverage.filter)
-        })
+        const coverageFiltered = this.filterCoverage(cov)
 
-        const {root} = global.config
-        const data = []
+        displayReport(coverageFiltered)
 
-        let totalLines = 0
-        let coveredLines = 0
-        let totalFiles = 0
+        const fileName = this.options.coverage.reportFileName || global.config.report.fileName
 
-        data.push(["#", "File Path", "File Name", "Lines", "Covered", '%'])
-
-        coverageFiltered.map(({url, functions}) => {
-            const fileName = fileURLToPath(url)
-            const sourceCode = fs.readFileSync(fileName, 'utf-8')
-
-            const [_path, _name, _percent, _total, _covered] = generateReport(fileName.replace(root, ''), sourceCode, functions)
-
-            totalLines += _total
-            coveredLines += _covered
-            totalFiles++
-
-            data.push([totalFiles, _path, _name, _total, _covered, _percent + ' %'])
-        })
-
-        const tableConfig = {
-            columns: [
-                {alignment: 'left'},
-                {alignment: 'left'},
-                {alignment: 'left'},
-                {alignment: 'right'},
-                {alignment: 'right'},
-                {alignment: 'right', width: 10},
-            ],
-            border: {
-                topBody: `─`,
-                topJoin: `┬`,
-                topLeft: `┌`,
-                topRight: `┐`,
-
-                bottomBody: `─`,
-                bottomJoin: `┴`,
-                bottomLeft: `└`,
-                bottomRight: `┘`,
-
-                bodyLeft: `│`,
-                bodyRight: `│`,
-                bodyJoin: `│`,
-
-                joinBody: `─`,
-                joinLeft: `├`,
-                joinRight: `┤`,
-                joinJoin: `┼`
-            },
-            drawHorizontalLine: (lineIndex, rowCount) => {
-                return lineIndex === 0 || lineIndex === 1 || lineIndex === rowCount;
-            }
-        };
-
-        log(`\nCoverage report for:`)
-        log(chalk.yellow.bold(root))
-        log(`------------------------------------`)
-        log(`Files:          ${chalk.magenta.bold(totalFiles)}`)
-        log(`Lines of code:  ${chalk.blue.bold(totalLines)}`)
-        log(`Covered Lines:  ${chalk.green.bold(coveredLines)}`)
-        let totalProgress = Math.round(coveredLines * 100 / totalLines)
-        log(`Total coverage: ${totalProgress < 50 ? chalk.red.bold(totalProgress) : totalProgress < 80 ? chalk.yellow.bold(totalProgress) : chalk.green.bold(totalProgress) } %`)
-        log(`------------------------------------`)
-        log(table(data, tableConfig))
-
-        this.writeReport(coverageFiltered)
+        createReport(fileName, coverageFiltered)
     }
 
-    static writeReport = (coverage) => {
-        const {root, report} = global.config
-        const dir = `${report.dir}`
-        const data = []
-
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir)
-        }
-
-        let totalLines = 0
-        let coveredLines = 0
-
-        coverage.map(({url, functions}) => {
-            const fileName = fileURLToPath(url)
-            const sourceCode = fs.readFileSync(fileName, 'utf-8')
-
-            const [_path, _name, _percent, _total, _covered, _uncovered] = generateReport(fileName.replace(root, ''), sourceCode, functions)
-
-            totalLines += _total
-            coveredLines += _covered
-
-            data.push(`TN:${root}`)
-            data.push(`SF:${fileName.replace(root, '')}`)
-            data.push(`LF:${_total}`)
-            data.push(`LH:${_covered}`)
-
-            for(let fn of functions) {
-                if (fn.functionName.startsWith('<')) {
-                    continue
-                }
-                data.push(`FN:${fn.ranges[0].startOffset},${fn.functionName}`)
-                data.push(`FNDA:${fn.ranges[0].count},${fn.functionName}`)
-            }
-
-            for(let lineNumber = 1; lineNumber <= _total; lineNumber++) {
-                if (_uncovered.includes(lineNumber)) {
-                    data.push(`DA:${lineNumber},0`)
-                } else {
-                    data.push(`DA:${lineNumber},1`)
-                }
-            }
-
-            data.push('end_of_record')
+    static filterCoverage = (coverage) => {
+        const filter = this.options.coverage.filter.split(',')
+        return coverage.result.filter((r) => {
+            return matchInArray(r.url, filter)
         })
-
-        fs.writeFileSync(`${dir}/${this.options.coverage.reportFileName}`, data.join('\n'))
-    }
-
-    static waitFor = async (selector, options) => {
-        return await this.currentPage.waitForSelector(selector, options)
     }
 }

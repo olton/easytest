@@ -62,7 +62,7 @@ export function displayReport (coverage) {
 
     data.push(["#", "File Path", "File Name", "Lines", "Covered", '%'])
 
-    coverageFilter(coverage).map(({url, functions}) => {
+    coverage.map(({url, functions}) => {
         const fileName = fileURLToPath(url)
         const sourceCode = fs.readFileSync(fileName, 'utf-8')
 

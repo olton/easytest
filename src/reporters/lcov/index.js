@@ -2,7 +2,7 @@ import fs from 'fs'
 import {fileURLToPath} from "url";
 import {coverageFilter, generateReport} from "../../coverage.js";
 
-const createReport = (coverage) => {
+const createReport = (fileName, coverage) => {
     const {root, report} = global.config
     const dir = `${report.dir}`
     const data = []
@@ -14,7 +14,7 @@ const createReport = (coverage) => {
     let totalLines = 0
     let coveredLines = 0
 
-    coverageFilter(coverage).map(({url, functions}) => {
+    coverage.map(({url, functions}) => {
         const fileName = fileURLToPath(url)
         const sourceCode = fs.readFileSync(fileName, 'utf-8')
 
@@ -51,7 +51,7 @@ const createReport = (coverage) => {
         return
     }
 
-    fs.writeFileSync(`${dir}/lcov.info`, data.join('\n'))
+    fs.writeFileSync(`${dir}/${fileName}`, data.join('\n'))
 }
 
 export default createReport

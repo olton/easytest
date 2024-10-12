@@ -8,12 +8,13 @@ export const defaultConfig = {
     exclude: ["node_modules/**"],
     skip: "",
     test: "",
-    coverage: false,
     verbose: false,
     dom: false,
+    coverage: false,
     report: {
         type: "lcov",
         dir: "coverage",
+        fileName: "lcov.info"
     },
 }
 
