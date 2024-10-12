@@ -4,7 +4,7 @@ Simple testing framework for JavaScript and TypeScript, written in pure JavaScri
 
 ---
 
-> ## https://easy.org.ua/
+Documentation: https://easy.org.ua/
 
 ---
 

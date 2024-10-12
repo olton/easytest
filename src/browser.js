@@ -4,8 +4,6 @@ import {merge} from "./helpers/merge.js";
 import createReport from "./reporters/lcov/index.js";
 import matchInArray from "./helpers/match-in-array.js";
 
-const log = console.log
-
 const coverageDefaults = {
     includeRawScriptCoverage: true,
     reportAnonymousScripts: true,
@@ -370,7 +368,10 @@ export class Browser {
     }
 
     static filterCoverage = (coverage) => {
-        const filter = this.options.coverage.filter.split(',')
+        const filter = typeof this.options.coverage.filter === 'string'
+            ? this.options.coverage.filter.split(',')
+            : this.options.coverage.filter
+
         return coverage.result.filter((r) => {
             return matchInArray(r.url, filter)
         })
