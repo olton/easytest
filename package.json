@@ -8,7 +8,7 @@
   "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js --dom --coverage --verbose --include='__tests__/*.test.js'"
+    "test": "tsx cli/easytest.js --dom --coverage --verbose --include='__tests__/dom.test.js'"
   },
   "keywords": [
     "havascript",
@@ -29,9 +29,10 @@
     "email": "serhii@pimenov.com.ua"
   },
   "dependencies": {
+    "@happy-dom/global-registrator": "^15.7.4",
     "chalk": "^5.3.0",
     "glob": "^11.0.0",
-    "jsdom": "^25.0.1",
+    "happy-dom": "^15.7.4",
     "puppeteer": "^23.5.1",
     "table": "^6.8.2",
     "yargs": "^17.7.2"

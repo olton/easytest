@@ -1,4 +1,4 @@
-import {isAbsolute, basename, normalize} from "node:path";
+import {basename, isAbsolute, normalize} from "node:path";
 import {fileURLToPath} from "url";
 import fs from "node:fs";
 import chalk from "chalk";
@@ -9,12 +9,12 @@ const log = console.log
 export function coverageFilter (coverage) {
     const {root} = global.config
     return coverage.result.filter(({url}) => {
-        const finalUrl = url.replace('file://', '')
+        const finalUrl = url.replace('file:///', '')
         return isAbsolute(finalUrl)
             && !finalUrl.includes('node_modules')
             && !finalUrl.includes('.test.js')
             && !finalUrl.includes('.test.ts')
-            && normalize(finalUrl).includes(normalize(root))
+            && normalize(finalUrl).replaceAll("%20", " ").includes(normalize(root).replaceAll("%20", " "))
     }).sort((a, b) => {
         return a.url.localeCompare(b.url)
     })

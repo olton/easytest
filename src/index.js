@@ -1,15 +1,6 @@
 import { glob } from 'glob'
 import { pathToFileURL } from 'url';
 import fs from 'fs'
-import {
-    setup as setupDom,
-    clean,
-    flash,
-    evalJS,
-    js,
-    css,
-    html,
-} from './dom.js'
 import {runner} from "./runner.js";
 import { exit } from 'node:process';
 import { expect as expectFn } from './expect.js';
@@ -41,20 +32,19 @@ export const expect = expectFn
 export const mock = mockFn
 export const B = Browser
 
-export const DOM = {
-    setup: setupDom,
-    clean,
-    flash,
-    eval: evalJS,
-    js,
-    css,
-    html,
-}
-
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const getFileUrl = (file) => pathToFileURL(fs.realpathSync(file)).href
 
 export { coverageFilter, generateReport, displayReport } from './coverage.js'
+
+import { setup as setupDom, bye as byeDom, js, css, html } from "./dom.js"
+export const DOM = {
+    setup: setupDom,
+    bye: byeDom,
+    js,
+    css,
+    html,
+}
 
 export const run = async (root, args) => {
     updateConfig(config, args)
@@ -95,7 +85,8 @@ export const run = async (root, args) => {
             afterAll: [],
         })
 
-        await import(pathToFileURL(fs.realpathSync(file)).href)
+        const fileUrl = pathToFileURL(fs.realpathSync(file)).href
+        await import(fileUrl)
     }
 
     const result = await runner(queue)

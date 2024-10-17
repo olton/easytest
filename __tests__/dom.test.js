@@ -1,7 +1,3 @@
-beforeEach(() => {
-    DOM.flash()
-})
-
 describe(`DOM tests`, () => {
     it(`Create div`, () => {
         const div = document.createElement('div')
