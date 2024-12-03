@@ -1,6 +1,6 @@
 {
   "name": "@olton/easytest",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "main": "src/index.js",
   "bin": {
     "easytest": "cli/easytest.js"
@@ -8,10 +8,10 @@
   "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js --dom --coverage --verbose --include='__tests__/dom.test.js'"
+    "test": "tsx cli/easytest.js --dom --coverage --verbose --include='__tests__/*.test.js'"
   },
   "keywords": [
-    "havascript",
+    "javascript",
     "typescript",
     "test",
     "framework",
@@ -29,16 +29,16 @@
     "email": "serhii@pimenov.com.ua"
   },
   "dependencies": {
-    "@happy-dom/global-registrator": "^15.7.4",
+    "@happy-dom/global-registrator": "^15.11.7",
     "chalk": "^5.3.0",
     "glob": "^11.0.0",
-    "happy-dom": "^15.7.4",
-    "puppeteer": "^23.5.1",
-    "table": "^6.8.2",
+    "happy-dom": "^15.11.7",
+    "puppeteer": "^23.10.0",
+    "table": "^6.9.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "tsx": "^4.19.1",
-    "typescript": "^5.6.3"
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }
