@@ -12,7 +12,7 @@ export const defaultConfig = {
     verbose: false,
     dom: false,
     coverage: false,
-    skipPassed: true,
+    skipPassed: false,
     reportType: "lcov",
     reportDir: "coverage",
     reportFile: "lcov.info",
@@ -20,7 +20,6 @@ export const defaultConfig = {
 
 export const updateConfig = (args) => {
     global.config = merge({}, defaultConfig, global.config)
-    // Object.assign(config, defaultConfig)
 
     const configFileName = args.config ?? "easytest.json"
 

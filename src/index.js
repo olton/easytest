@@ -11,6 +11,7 @@ import {parentFunc} from "./helpers/parent-func.js";
 import {updateConfig} from "./config.js";
 import mockFn from "./mock.js"
 import {Browser} from "./browser.js"
+import {setup as setupDom, bye as byeDom, js, css, html} from "./dom.js"
 
 const beforeEachFileFunctions = []
 const afterEachFileFunctions = []
@@ -38,10 +39,6 @@ export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 export const getFileUrl = (file) => pathToFileURL(realpathSync(file)).href
 
 export {coverageFilter, generateReport, displayReport} from './coverage.js'
-
-import {setup as setupDom, bye as byeDom, js, css, html} from "./dom.js"
-import {getFileHash} from "./helpers/hasher.js";
-import chalk from "chalk";
 
 export const DOM = {
     setup: setupDom,
