@@ -1,6 +1,8 @@
 import chalk from 'chalk'
 import { stringify} from "./helpers/json.js";
 import matchInArray from "./helpers/match-in-array.js";
+import {getFileHash} from "./helpers/hasher.js";
+import {realpathSync} from "fs";
 
 const log = console.log
 
@@ -30,6 +32,12 @@ export const runner = async (queue) => {
     let totalTests = 0
 
     for (const [file, jobs] of queue) {
+        const fileHash = await getFileHash(realpathSync(file))
+        if (config.skipPassed && global.passed[fileHash]) {
+            console.log(chalk.gray(`[-] ${file}`))
+            continue
+        }
+
         let startFileTime = process.hrtime()
         let testFileStatus = true
         let testFilePassed = 0
@@ -160,6 +168,14 @@ export const runner = async (queue) => {
             const fileName = testFileStatus ? chalk.green(file) : chalk.red(file)
             log(`${fileStatus} ${fileName}... ${testsStatus} 🕑 ${chalk.whiteBright(`${fileDuration} ms`)}`)
         }
+        
+        if (testFileStatus) {
+            global.passed[await getFileHash(file)] = {
+                file,
+                tests: testFilePassed,
+                duration: fileDuration,
+            }
+        }
     }
 
     const [seconds, nanoseconds] = process.hrtime(startTime);
@@ -177,5 +193,5 @@ export const runner = async (queue) => {
         log(chalk.bgGreen.bold('Tests chain passed! Congrats!'))
     }
 
-    return failedTests > 0 ? 1 : 0
+    return failedTests
 }

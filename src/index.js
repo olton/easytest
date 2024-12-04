@@ -1,9 +1,10 @@
-import { glob } from 'glob'
-import { pathToFileURL } from 'url';
-import fs from 'fs'
+import {glob} from 'glob'
+import {pathToFileURL} from 'url';
+import {realpathSync, existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs'
+import {join} from 'path'
 import {runner} from "./runner.js";
-import { exit } from 'node:process';
-import { expect as expectFn } from './expect.js';
+import {exit} from 'node:process';
+import {expect as expectFn} from './expect.js';
 import inspector from 'inspector/promises'
 import {coverageFilter, displayReport} from './coverage.js'
 import {parentFunc} from "./helpers/parent-func.js";
@@ -25,19 +26,23 @@ let currentTestFile = ''
 
 let queue = new Map()
 
-globalThis.config = {}
+global.config = {}
+global.passed = {};
 
-export { Expect, ExpectError } from "./expect.js"
+export {Expect, ExpectError} from "./expect.js"
 export const expect = expectFn
 export const mock = mockFn
 export const B = Browser
 
 export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-export const getFileUrl = (file) => pathToFileURL(fs.realpathSync(file)).href
+export const getFileUrl = (file) => pathToFileURL(realpathSync(file)).href
 
-export { coverageFilter, generateReport, displayReport } from './coverage.js'
+export {coverageFilter, generateReport, displayReport} from './coverage.js'
 
-import { setup as setupDom, bye as byeDom, js, css, html } from "./dom.js"
+import {setup as setupDom, bye as byeDom, js, css, html} from "./dom.js"
+import {getFileHash} from "./helpers/hasher.js";
+import chalk from "chalk";
+
 export const DOM = {
     setup: setupDom,
     bye: byeDom,
@@ -47,7 +52,19 @@ export const DOM = {
 }
 
 export const run = async (root, args) => {
-    updateConfig(config, args)
+    const easyTestDir = join(process.cwd(), '.easytest');
+    if (!existsSync(easyTestDir)) {
+        mkdirSync(easyTestDir);
+    }
+    const easyTestPassed = join(easyTestDir, 'objects.json');
+    if (existsSync(easyTestPassed)) {
+        const passed = JSON.parse(readFileSync(easyTestPassed, 'utf-8'));
+        for (const [key, value] of Object.entries(passed)) {
+            global.passed[key] = value;
+        }
+    }
+
+    updateConfig(args)
 
     config.root = root
 
@@ -58,7 +75,7 @@ export const run = async (root, args) => {
     let session
 
     if (config.coverage) {
-        session  = new inspector.Session()
+        session = new inspector.Session()
         session.connect()
 
         await session.post('Profiler.enable')
@@ -68,7 +85,7 @@ export const run = async (root, args) => {
         })
     }
 
-    let files = await glob(config.include, { ignore: config.exclude })
+    let files = await glob(config.include, {ignore: config.exclude})
 
     for (const file of files) {
         currentTestFile = file
@@ -85,7 +102,7 @@ export const run = async (root, args) => {
             afterAll: [],
         })
 
-        const fileUrl = pathToFileURL(fs.realpathSync(file)).href
+        const fileUrl = pathToFileURL(realpathSync(file)).href
         await import(fileUrl)
     }
 
@@ -99,16 +116,18 @@ export const run = async (root, args) => {
 
         displayReport(filteredCoverage)
 
-        if (config.report.type === 'lcov') {
+        if (config.reportType === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js')
-            createReport.default(config.report.fileName, filteredCoverage)
+            createReport.default(config.reportFile, filteredCoverage)
         }
     }
 
-    exit(result)
+    writeFileSync(easyTestPassed, JSON.stringify(global.passed, null, 2));
+    
+    exit(result > 0 ? 1 : 0)
 }
 
-export function describe (name, fn) {
+export function describe(name, fn) {
     const testObject = queue.get(currentTestFile)
 
     currentDescribe = {
@@ -119,21 +138,21 @@ export function describe (name, fn) {
         context: this,
     }
 
-    for(let fn1 of beforeAllFileFunctions) {
+    for (let fn1 of beforeAllFileFunctions) {
         currentDescribe.beforeAll.push(fn1.bind(this))
     }
 
     fn.apply(this)
 
-    for(let fn1 of beforeAllSuiteFunctions) {
+    for (let fn1 of beforeAllSuiteFunctions) {
         currentDescribe.beforeAll.push(fn1.bind(this))
     }
 
-    for(let fn1 of afterAllSuiteFunctions) {
+    for (let fn1 of afterAllSuiteFunctions) {
         currentDescribe.afterAll.push(fn1.bind(this))
     }
 
-    for(let fn1 of afterAllFileFunctions) {
+    for (let fn1 of afterAllFileFunctions) {
         currentDescribe.afterAll.push(fn1.bind(this))
     }
 
@@ -146,7 +165,7 @@ export function describe (name, fn) {
     afterEachSuiteFunctions.length = 0
 }
 
-export async function it (name, fn) {
+export async function it(name, fn) {
     const testScope = {
         name,
         expects: {},
@@ -172,7 +191,7 @@ export async function it (name, fn) {
     currentDescribe.it.push(testScope)
 }
 
-export async function test (name, fn) {
+export async function test(name, fn) {
     const testObject = queue.get(currentTestFile)
 
     const testScope = {
@@ -193,7 +212,7 @@ export async function test (name, fn) {
     testObject.tests.push(testScope)
 }
 
-export function beforeEach (fn) {
+export function beforeEach(fn) {
     if (parentFunc() === 'describe') {
         beforeEachSuiteFunctions.push(fn)
     } else {
@@ -201,7 +220,7 @@ export function beforeEach (fn) {
     }
 }
 
-export function afterEach (fn) {
+export function afterEach(fn) {
     if (parentFunc() === 'describe') {
         afterEachSuiteFunctions.push(fn)
     } else {
@@ -209,7 +228,7 @@ export function afterEach (fn) {
     }
 }
 
-export function beforeAll (fn) {
+export function beforeAll(fn) {
     if (parentFunc() === 'describe') {
         beforeAllSuiteFunctions.push(fn)
     } else {
@@ -217,7 +236,7 @@ export function beforeAll (fn) {
     }
 }
 
-export function afterAll (fn) {
+export function afterAll(fn) {
     if (parentFunc() === 'describe') {
         afterAllSuiteFunctions.push(fn)
     } else {
@@ -233,7 +252,8 @@ global.afterEach = afterEach
 global.beforeEach = beforeEach
 global.beforeAll = beforeAll
 global.afterAll = afterAll
-global.mocker = mock
+global.mock = mock
 global.delay = delay
+global.getFileUrl = getFileUrl
 global.DOM = DOM
 global.B = B

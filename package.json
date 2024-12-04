@@ -8,7 +8,8 @@
   "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "tsx cli/easytest.js --dom --coverage --verbose --include='__tests__/*.test.js'"
+    "pub": "npm publish --access public",
+    "test": "tsx cli/easytest.js --dom --coverage --verbose"
   },
   "keywords": [
     "javascript",

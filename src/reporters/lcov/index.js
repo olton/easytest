@@ -1,10 +1,10 @@
 import fs from 'fs'
 import {fileURLToPath} from "url";
-import {coverageFilter, generateReport} from "../../coverage.js";
+import {generateReport} from "../../coverage.js";
 
 const createReport = (fileName, coverage) => {
-    const {root, report} = global.config
-    const dir = `${report.dir}`
+    const {root, reportDir} = global.config
+    const dir = `${reportDir}`
     const data = []
 
     if (!fs.existsSync(dir)) {
