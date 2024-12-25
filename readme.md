@@ -105,7 +105,7 @@ Update `package.json` to run tests with `easytest` command.
 - `beforeAll` - run before all test cases
 - `afterAll` - run after all test cases
 - `test` - create simple test
-- `mocker` - create mock function
+- `mock` - create mock function
 - `DOM` - create DOM object (not global)
 
 ### Matchers
@@ -161,18 +161,19 @@ Also, you can use argument `--config=fileName` to specify a configuration file.
 
 EasyTest designed as a config-free testing framework. But you can configure it to your needs.
 **The default values are:**
-```json
-{
-  "include": ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
-  "exclude": ["node_modules/**"],
-  "coverage": false,
-  "verbose": false,
-  "dom": false,
-  "test": "*",  
-  "report": {
-    "type": "lcov",
-    "dir": "coverage"
-  }
+```javascript
+export const defaultConfig = {
+    include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
+    exclude: ["node_modules/**"],
+    skip: "",
+    test: "",
+    verbose: false,
+    dom: false,
+    coverage: false,
+    skipPassed: false,
+    reportType: "lcov",
+    reportDir: "coverage",
+    reportFile: "lcov.info",
 }
 ```
 
@@ -185,6 +186,8 @@ You can use cli arguments to configure EasyTest:
 - `--exclude=node_modules/**` - exclude files from testing.
 - `--test=test_name` - execute only tests whose name contains value.
 - `--dom` - enable global DOM.
+- `--skip=skip_name` - skip tests whose name contains value.
+- `--skip-passed` - skip passed tests.
 
 ```json
 {
@@ -239,4 +242,4 @@ Use issue tracker to report bugs or request new features.
 
 ---
 ### Copyright
-© 2024 Serhii Pimenov. All rights reserved.
+© 2024-2025 [Serhii Pimenov](mainto:serhii@pimenov.com.ua). All rights reserved.
