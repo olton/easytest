@@ -748,7 +748,7 @@ export class Expect {
         let received = this.received
         let result
 
-        if (typeof received === 'object') {
+        if (typeof received === 'object' && !Array.isArray(received)) {
             result = received.hasOwnProperty(expected)
         } else if (Array.isArray(received)) {
             if (Array.isArray(expected)) {
@@ -775,7 +775,7 @@ export class Expect {
         let received = this.received
         let result
 
-        if (typeof received === 'object') {
+        if (typeof received === 'object' && !Array.isArray(received)) {
             result = !received.hasOwnProperty(expected)
         } else if (Array.isArray(received)) {
             if (Array.isArray(expected)) {

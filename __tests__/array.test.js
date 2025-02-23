@@ -17,4 +17,7 @@ describe(`Array tests`, () => {
     it(`hasLength 3`, () => {
         return expect([1, 2, 3]).hasLength(3)
     })
+    it(`contain 2`, () => {
+        return expect([1, 2, 3]).toContain(2)
+    })
 })
