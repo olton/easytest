@@ -41,6 +41,9 @@ describe(`Number tests`, () => {
     it(`toBeNumber 1 is number`, () => {
         expect(1).toBeNumber()
     })
+    it(`toBeNumber "1" is not a number`, () => {
+        expect("1").toBeNumber()
+    })
     it(`toBeNaN '~1' is NaN`, () => {
         expect('~1').toBeNaN()
     })

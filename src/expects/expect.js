@@ -186,10 +186,15 @@ export class Expect {
      */
     toMatch(expected, msg = null) {
         let received = this.received
+        
+        if (typeof received !== 'string') {
+            throw new ExpectError(msg || `Expected value is not a string`, 'toMatch', received, 'string')
+        }
+        
         let result = received.match(expected)
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value not match received`, 'toBeMatch', received, expected)
+            throw new ExpectError(msg || `Expected value not match received`, 'toMatch', received, expected)
         }
     }
 
@@ -201,6 +206,11 @@ export class Expect {
      */
     toNotMatch(expected, msg = null) {
         let received = this.received
+        
+        if (typeof received !== 'string') {
+            throw new ExpectError(msg || `Expected value is not a string`, 'toNotMatch', received, 'string')
+        }
+        
         let result = !received.match(expected)
 
         if (!result) {
@@ -403,7 +413,7 @@ export class Expect {
      */
     toBeFloat(msg = null) {
         let received = this.received
-        let result = Number(received) === received && received % 1 !== 0
+        let result = typeof received === 'number' && !Number.isInteger(received) && !isNaN(received)
 
         if (!result) {
             throw new ExpectError(msg || `Expected value not float`, 'toBeFloat', received, 'Float')
@@ -417,7 +427,7 @@ export class Expect {
      */
     toBePositive(msg = null) {
         let received = this.received
-        let result = received > 0
+        let result = typeof received === 'number' && received > 0
 
         if (!result) {
             throw new ExpectError(msg || `Expected value not positive`, 'toBePositive', received, 'Positive')
@@ -431,7 +441,7 @@ export class Expect {
      */
     toBeNegative(msg = null) {
         let received = this.received
-        let result = received < 0
+        let result = typeof received === 'number' && received < 0
 
         if (!result) {
             throw new ExpectError(msg || `Expected value not negative`, 'toBeNegative', received, 'Negative')
@@ -445,7 +455,7 @@ export class Expect {
      */
     toBeFinite(msg = null) {
         let received = this.received
-        let result = Number.isFinite(received)
+        let result = typeof received === 'number' && Number.isFinite(received)
 
         if (!result) {
             throw new ExpectError(msg || `Expected value not finite`, 'toBeFinite', received, 'Finite')
@@ -458,8 +468,8 @@ export class Expect {
      * @returns The result of the test.
      */
     toBeNumber(msg = null) {
-        let received = this.received
-        let result = typeof received === 'number' || !isNaN(received)
+        let received = Number(this.received)
+        let result = typeof received === 'number' && !isNaN(received)
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not number`, 'toBeNumber', received, 'Number')
@@ -473,7 +483,7 @@ export class Expect {
      */
     toBeNaN(msg = null) {
         let received = this.received
-        let result = isNaN(received)
+        let result = isNaN(Number(received))
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not NaN`, 'toBeNaN', received, 'NaN')
@@ -1056,7 +1066,7 @@ export class Expect {
      */
     hasLength(expected, msg = null) {
         let received = this.received
-        let result = received.length === expected
+        let result = "length" in received && received.length === expected
 
         if (!result) {
             throw new ExpectError(msg || `Expected value has not length ${expected}`, 'hasLength', received.length, expected)
@@ -1375,7 +1385,7 @@ export class Expect {
      */
     toBeHtmlElement(msg = null) {
         let received = this.received
-        let result = received instanceof HTMLElement
+        let result = typeof HTMLElement !== "undefined" && received instanceof HTMLElement
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not a HTMLElement`, 'toBeHtmlElement', received, 'HTMLElement')
@@ -1389,7 +1399,7 @@ export class Expect {
      */
     toBeNode(msg = null) {
         let received = this.received
-        let result = received instanceof Node
+        let result = typeof Node !== "undefined" && received instanceof Node
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not a Node`, 'toBeHtmlNode', received, 'Node')
@@ -1403,7 +1413,7 @@ export class Expect {
      */
     toBeDocument(msg = null) {
         let received = this.received
-        let result = received instanceof Document
+        let result = typeof document !== "undefined" && received instanceof document
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not a Document`, 'toBeDocument', received, 'Document')
@@ -1417,7 +1427,7 @@ export class Expect {
      */
     toBeHtmlCollection(msg = null) {
         let received = this.received
-        let result = received instanceof HTMLCollection
+        let result = typeof HTMLCollection !== "undefined" && received instanceof HTMLCollection
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not a HTMLCollection`, 'toBeHtmlCollection', received, 'HTMLCollection')
@@ -1431,7 +1441,7 @@ export class Expect {
      */
     toBeWindow(msg = null) {
         let received = this.received
-        let result = received instanceof Window
+        let result = typeof window !== "undefined" && received instanceof window
 
         if (!result) {
             throw new ExpectError(msg || `Expected value is not a Window object`, 'toBeWindow', received, 'Window')
