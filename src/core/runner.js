@@ -31,6 +31,8 @@ export const runner = async (queue) => {
     let failedTests = 0
     let totalTests = 0
 
+    global.testResults = {}
+    
     for (const [file, jobs] of queue) {
         const fileHash = await getFileHash(realpathSync(file))
         if (config.skipPassed && global.passed[fileHash]) {
@@ -45,6 +47,12 @@ export const runner = async (queue) => {
 
         if (verbose) log(`📜 ${chalk.gray("Test file:")} ${chalk.bold.yellow(file)}...`)
 
+        global.testResults[file] = {
+            describes: [],
+            tests: [],
+            duration: 0,
+        }
+        
         if (jobs.describes.length) {
             if (verbose) log(`  Tests  Suites ${jobs.describes.length}:`)
             for (const describe of jobs.describes) {
@@ -52,6 +60,14 @@ export const runner = async (queue) => {
 
                 await setupAndTeardown(describe.beforeAll, 'beforeAll')
 
+                const describes = {
+                    name: describe.name,
+                    tests: [],
+                    duration: 0,
+                }
+                
+                global.testResults[file]["describes"].push(describes)
+                
                 for (const test of describe.it) {
                     let expect = {}
 
@@ -82,6 +98,12 @@ export const runner = async (queue) => {
                             received: error.received,
                         }
                     }
+
+                    describes.tests.push({
+                        name: test.name,
+                        result: expect.result,
+                        message: expect.message || "OK",
+                    })
 
                     const [seconds, nanoseconds] = process.hrtime(startTestTime);
                     const testDuration = (seconds * 1e9 + nanoseconds) / 1e6;
@@ -140,6 +162,12 @@ export const runner = async (queue) => {
                     }
                 }
 
+                global.testResults[file]["tests"].push({
+                    test: test.fn.name,
+                    result: expect.result,
+                    message: expect.message || "OK",
+                })
+
                 if (expect.result) {
                     passedTests++
                     testFilePassed++
@@ -158,7 +186,7 @@ export const runner = async (queue) => {
                 totalTests++
             }
         }
-
+        
         const [seconds, nanoseconds] = process.hrtime(startFileTime);
         const fileDuration = (seconds * 1e9 + nanoseconds) / 1e6;
 

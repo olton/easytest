@@ -1,6 +1,6 @@
 describe(`Array tests`, () => {
     it('toBeArray [] == []', () => {
-        return expect([]).toBeArray([])
+        return expect([]).toBeArray()
     })
     it(`toBeArraySorted [1, 2, 3]`, () => {
         return expect([1, 2, 3]).toBeArraySorted()

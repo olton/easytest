@@ -1,6 +1,6 @@
 {
   "name": "@olton/easytest",
-  "version": "0.41.2",
+  "version": "0.42.0",
   "main": "src/old/index.js",
   "bin": {
     "easytest": "cli/easytest.js"
@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "tsx cli/easytest.js --dom --verbose --include='__tests__/*.test.js'"
+    "test": "tsx cli/easytest.js --dom --verbose --coverage --report-type=html --include='__tests__/*.test.js'"
   },
   "keywords": [
     "javascript",

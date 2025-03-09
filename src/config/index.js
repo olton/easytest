@@ -15,7 +15,7 @@ export const defaultConfig = {
     skipPassed: false,
     reportType: "lcov",
     reportDir: "coverage",
-    reportFile: "lcov.info",
+    reportFile: "",
     parallel: false,
     maxWorkers: 4,
 }
@@ -46,4 +46,9 @@ export const updateConfig = (args) => {
     if (args.reportFile) { config.reportDir = args.reportFile; }
     if (args.parallel) { config.parallel = args.parallel; }
     if (args.maxWorkers) { config.maxWorkers = args.maxWorkers; }
+
+    if (config.reportType && !['lcov', 'html'].includes(config.reportType)) {
+        console.warn(`Unknown type of report: ${config.reportType}. LCOV will be used.`);
+        config.reportType = 'lcov';
+    }
 }

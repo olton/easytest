@@ -74,9 +74,9 @@ export class Browser {
      */
     static async bye(){
         if (global.config.coverage) {
-            await this.stopCoverage()
+            await Browser.stopCoverage()
         }
-        await this.browser.close();
+        await Browser.browser.close();
     }
 
     /**
@@ -353,18 +353,18 @@ export class Browser {
     static stopCoverage = async () => {
         this.coverage = await this.currentPage.coverage.stopJSCoverage()
 
-        const cov = { result: [] }
-        for (const entry of this.coverage) {
-            cov.result.push(entry.rawScriptCoverage)
-        }
-
-        const coverageFiltered = this.filterCoverage(cov)
-
-        displayReport(coverageFiltered)
-
-        const fileName = this.options.coverage.reportFileName || global.config.report.fileName
-
-        createReport(fileName, coverageFiltered)
+        // const cov = { result: [] }
+        // for (const entry of this.coverage) {
+        //     cov.result.push(entry.rawScriptCoverage)
+        // }
+        //
+        // const coverageFiltered = this.filterCoverage(cov)
+        //
+        // displayReport(coverageFiltered)
+        //
+        // const fileName = this.options.coverage.reportFileName || global.config.report.fileName
+        //
+        // createReport(fileName, coverageFiltered)
     }
 
     static filterCoverage = (coverage) => {

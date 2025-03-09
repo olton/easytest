@@ -39,17 +39,14 @@ export const run = async (root, args) => {
     }
 
     // Инициализация сессии для измерения покрытия кода
-    let session;
-    if (config.coverage) {
-        session = new inspector.Session();
-        session.connect();
+    const session = new inspector.Session();
+    session.connect();
 
-        await session.post('Profiler.enable');
-        await session.post('Profiler.startPreciseCoverage', {
-            callCount: true,
-            detailed: true
-        });
-    }
+    await session.post('Profiler.enable');
+    await session.post('Profiler.startPreciseCoverage', {
+        callCount: true,
+        detailed: true
+    });
 
     // Регистрация глобальных функций и объектов
     registerGlobals();
@@ -77,17 +74,21 @@ export const run = async (root, args) => {
         result = await runner(testQueue.getQueue());
     }
 
+    const coverage = await session.post('Profiler.takePreciseCoverage');
+    await session.post('Profiler.stopPreciseCoverage');
+
     // Обработка покрытия кода, если включено
     if (config.coverage) {
-        const coverage = await session.post('Profiler.takePreciseCoverage');
-        await session.post('Profiler.stopPreciseCoverage');
 
         const filteredCoverage = coverageFilter(coverage);
         displayReport(filteredCoverage);
-
+        
         if (config.reportType === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js');
-            createReport.default(config.reportFile, filteredCoverage);
+            createReport.default(config.reportFile || 'easy-report.lcov', filteredCoverage);
+        } else if (config.reportType === 'html') {
+            const createReport = await import('./reporters/html/index.js');
+            createReport.default(config.reportFile || 'easy-report.html', global.testResults,  filteredCoverage);
         }
     }
 

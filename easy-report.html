@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyTest Report</title>
+  <style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+header .timestamp {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.summary {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.summary-label {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.success {
+  color: #28a745;
+}
+
+.failure {
+  color: #dc3545;
+}
+
+.metric {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.test-files {
+  margin-bottom: 20px;
+}
+
+.file-block {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.file-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file-name {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.file-status {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.file-status.passed {
+  background-color: #d4edda;
+  color: #28a745;
+}
+
+.file-status.failed {
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.file-meta {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.test-suite {
+  margin-bottom: 15px;
+  padding-left: 15px;
+  border-left: 3px solid #ddd;
+}
+
+.suite-name {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.test-case {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+}
+
+.test-case.passed {
+  background-color: #d4edda;
+}
+
+.test-case.failed {
+  background-color: #f8d7da;
+}
+
+.test-name {
+  font-size: 14px;
+}
+
+.error-details {
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-top: 5px;
+  border-left: 3px solid #dc3545;
+  font-family: monospace;
+  white-space: pre-wrap;
+  font-size: 12px;
+}
+
+.coverage-section {
+  margin-top: 30px;
+}
+
+.coverage-header {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.coverage-file {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+}
+
+.coverage-details {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.coverage-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.coverage-label {
+  font-size: 12px;
+  color: #666;
+}
+
+.coverage-value {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin-top: 5px;
+  overflow: hidden;
+  width: 100%!important;
+  flex-shrink: 0;
+}
+
+.progress-value {
+  height: 100%;
+  background-color: #28a745;
+}
+
+.progress-value.low {
+  background-color: #dc3545;
+}
+
+.progress-value.medium {
+  background-color: #ffc107;
+}
+
+footer {
+  margin-top: 30px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.charts {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.chart {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 15px;
+}
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>EasyTest Report</h1>
+      <div class="timestamp">Generated on 10.03.2025, 01:11:56</div>
+    </header>
+
+    <section class="summary">
+      <h2>Summary</h2>
+      <div class="summary-row">
+        <span class="summary-label">Total Tests:</span>
+        <span class="metric">71</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Passed:</span>
+        <span class="metric success">71</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Failed:</span>
+        <span class="metric failure">0</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Duration:</span>
+        <span class="metric">10 ms</span>
+      </div>
+    </section>
+
+    <div class="charts">
+      <div class="chart">
+        <h3>Test Results</h3>
+        <canvas id="testResultsChart"></canvas>
+      </div>
+      
+      <div class="chart">
+        <h3>Code Coverage</h3>
+        <canvas id="coverageChart"></canvas>
+      </div>
+      
+    </div>
+
+    <section class="test-files">
+      <h2>Test Files</h2>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\visit.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 3</span> | 
+            <span>Passed: 3</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Browser tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">Visit example.com</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">Visit metroui.org.ua</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">Visit metroui.org.ua</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\undefined.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 2</span> | 
+            <span>Passed: 2</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Defined and Undefined tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeDefined</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotDefined</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\tobe.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 6</span> | 
+            <span>Passed: 6</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">toBe tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBe</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNot</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeStrictEqual</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotStrictEqual</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeEqual</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotEqual</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\throw.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 2</span> | 
+            <span>Passed: 2</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Throw tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toThrow</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toThrowError</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\simple.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 1</span> | 
+            <span>Passed: 1</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">File-level tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">undefined</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\object.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 2</span> | 
+            <span>Passed: 2</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Objects tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeObject {} == {}</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeObject {a: 1} == {a: 1}</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\number.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 16</span> | 
+            <span>Passed: 16</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Number tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeGreaterThan 2 > 1</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeGreaterThanOrEqual 2 >= 1</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeLessThan 1 < 2</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeLessThanOrEqual 2 <= 2</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBetween 2 between 1 and 3</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeInteger 1 is integer</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotInteger 1.0 is not integer</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeSafeInteger 1 is integer</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotSafeInteger 1.0 is not integer</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeFloat 1.01 is float</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBePositive 1 is positive</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNegative -1 is negative</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeFinite 1 is finite</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNumber 1 is number</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNaN '~1' is NaN</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeCloseTo 0.3 + 0.6 = 0.9</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\null.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 2</span> | 
+            <span>Passed: 2</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Null tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNull</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotNull</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\mock.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 4</span> | 
+            <span>Passed: 4</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Mock tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toHaveBeenCalled</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toHaveBeenCalledTimes = 2</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toHaveBeenCalledWith = 2</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toHaveBeenLastCalledWith = 3</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\match.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 4</span> | 
+            <span>Passed: 4</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Match tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toMatch 123 and 23</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toNotMatch 123 and 24</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeIP 0.0.0.0</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotIP 0.0.0.300</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\extend.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 1</span> | 
+            <span>Passed: 1</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">File-level tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">undefined</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\dom.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 1</span> | 
+            <span>Passed: 1</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">DOM tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">Create div</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\delay.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 1</span> | 
+            <span>Passed: 1</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">File-level tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">undefined</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\contain.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 6</span> | 
+            <span>Passed: 6</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Contain tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">[1, 2, 3] contain 1</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">[1, 2, 3] not contain 4</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">123 contain 23</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">123 not contain 24</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">{a: 1} contain prop a</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">{a: 1} not contain prop b</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\color.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 10</span> | 
+            <span>Passed: 10</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Color tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeHEXColor #000000</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeHEXColor #000</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeRGBColor rgb(0, 0, 0)</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeRGBAColor rgba(0, 0, 0, 0.5)</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeHSVColor hsv(0, 0, 0)</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeHSLColor hsl(0, 0, 0)</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeHSLAColor hsla(0, 0, 0, 0.5)</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeCMYKColor cmyk(0, 0, 0, 0)</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeColor #000000</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeNotColor #000000</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\boolean.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 3</span> | 
+            <span>Passed: 3</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Boolean tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">should true</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">should false</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeBoolean</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+        <div class="file-block">
+          <div class="file-header">
+            <div class="file-name">__tests__\array.test.js</div>
+            <div class="file-status passed">Passed</div>
+          </div>
+          <div class="file-meta">
+            <span>Duration: 0 ms</span> | 
+            <span>Tests: 7</span> | 
+            <span>Passed: 7</span> | 
+            <span>Failed: 0</span>
+          </div>
+          
+            <div class="test-suite">
+              <div class="suite-name">Array tests</div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeArray [] == []</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeArraySorted [1, 2, 3]</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeArrayNotSorted [4, 1, 2, 3]</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeArrayUnique [1, 2, 3]</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">toBeArrayNotUnique [1, 2, 3, 3]</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">hasLength 3</div>
+                  
+                </div>
+              
+                <div class="test-case passed">
+                  <div class="test-name">contain 2</div>
+                  
+                </div>
+              
+            </div>
+          
+        </div>
+      
+    </section>
+
+    
+      <section class="coverage-section">
+        <h2 class="coverage-header">Code Coverage</h2>
+        
+            <div class="coverage-file">
+              <div class="file-name">browser.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">96.31%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">365/379</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 96.31%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">api.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">71.43%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">60/84</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value medium" style="width: 71.43%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">hooks.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">90.48%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">57/63</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 90.48%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">mock.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">14/14</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">queue.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">48/48</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">registry.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">38/38</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">runner.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">68.14%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">154/226</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value medium" style="width: 68.14%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">expect.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">64.43%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">1020/1583</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value medium" style="width: 64.43%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">check-array-sorted.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">1/1</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">delay.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">16/16</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">hasher.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">21/21</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">is-object.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">1/1</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">merge.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">19/19</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">objects.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">79.31%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">46/58</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value medium" style="width: 79.31%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">parent-func.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">8/8</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">test-value.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">100.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">30/30</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 100%"></div>
+                  </div>
+              </div>
+            </div>
+          
+            <div class="coverage-file">
+              <div class="file-name">index.js</div>
+              <div class="coverage-details">
+                  <div class="coverage-item">
+                    <span class="coverage-label">Coverage</span>
+                    <span class="coverage-value">92.00%</span>
+                  </div>
+                  <div class="coverage-item">
+                    <span class="coverage-label">Lines</span>
+                    <span class="coverage-value">92/100</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-value " style="width: 92%"></div>
+                  </div>
+              </div>
+            </div>
+          
+      </section>
+    
+
+    <footer>
+        Generated by EasyTest | 2025-03-09T23:11:56.168Z
+        <div>
+            EasyTest created by <a href="https://pimenov.com.ua">Serhii Pimenov</a>
+        </div>
+    </footer>
+  </div>
+
+  <script>
+    // Настройка графика тестовых результатов
+    const testResultsCtx = document.getElementById('testResultsChart').getContext('2d');
+    new Chart(testResultsCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Passed', 'Failed'],
+        datasets: [{
+          data: [71, 0],
+          backgroundColor: ['#28a745', '#dc3545'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    
+    // Настройка графика покрытия кода
+    const coverageCtx = document.getElementById('coverageChart').getContext('2d');
+    new Chart(coverageCtx, {
+      type: 'bar',
+      data: {
+        labels: ['browser.js', 'api.js', 'hooks.js', 'mock.js', 'queue.js', 'registry.js', 'runner.js', 'expect.js', 'check-array-sorted.js', 'delay.js', 'hasher.js', 'is-object.js', 'merge.js', 'objects.js', 'parent-func.js', 'test-value.js', 'index.js'],
+        datasets: [{
+          label: 'Line Coverage (%)',
+          data: [96.31, 71.43, 90.48, 100.00, 100.00, 100.00, 68.14, 64.43, 100.00, 100.00, 100.00, 100.00, 100.00, 79.31, 100.00, 100.00, 92.00],
+          backgroundColor: '#4caf50',
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        aspectRatio: 1,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+    
+  </script>
+</body>
+</html>

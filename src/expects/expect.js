@@ -874,7 +874,7 @@ export class Expect {
         let result = Array.isArray(received)
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not array`, 'toBeArray', received, 'Array')
+            throw new ExpectError(msg || `Expected value is not an array`, 'toBeArray', received, 'Array')
         }
     }
 
