@@ -30,16 +30,14 @@ async function runTest() {
     // Инициализация сессии для измерения покрытия кода
     let session;
     let coverage = null;
-    if (config.coverage) {
-        session = new inspector.Session();
-        session.connect();
+    session = new inspector.Session();
+    session.connect();
 
-        await session.post('Profiler.enable');
-        await session.post('Profiler.startPreciseCoverage', {
-            callCount: true,
-            detailed: true
-        });
-    }
+    await session.post('Profiler.enable');
+    await session.post('Profiler.startPreciseCoverage', {
+        callCount: true,
+        detailed: true
+    });
 
     // Подготавливаем очередь для тестируемого файла
     testQueue.setCurrentFile(file);
@@ -56,12 +54,10 @@ async function runTest() {
     // Запускаем тесты для этого файла
     const result = await runner(fileQueue);
 
-    // Собираем информацию о покрытии кода, если включено
-    if (config.coverage && session) {
-        const coverageData = await session.post('Profiler.takePreciseCoverage');
-        await session.post('Profiler.stopPreciseCoverage');
-        coverage = coverageFilter(coverageData);
-    }
+    // Собираем информацию о покрытии кода
+    const coverageData = await session.post('Profiler.takePreciseCoverage');
+    await session.post('Profiler.stopPreciseCoverage');
+    coverage = coverageFilter(coverageData);
 
     // Очищаем DOM, если он был инициализирован
     if (config.dom) {
