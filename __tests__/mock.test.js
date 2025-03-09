@@ -1,3 +1,5 @@
+import { useCompose } from "@olton/hooks";
+
 describe(`Mock tests`, () => {
     it('toHaveBeenCalled', () => {
         const mockFn = mock()
@@ -21,4 +23,15 @@ describe(`Mock tests`, () => {
         mockFn(3)
         expect(mockFn).toHaveBeenLastCalledWith([3])
     })
+    it('useCompose - should compose functions correctly', () => {
+        const funcA = mock((x) => x + 1);
+        const funcB = mock((x) => x * 2);
+
+        const result = useCompose(funcA, funcB)
+
+        // Перевіряємо обчислення
+        expect(result(3)).toBe(7); // (3 * 2) + 1 = 7
+        expect(funcA).toHaveBeenCalledWith([6]);
+        expect(funcB).toHaveBeenCalledWith([3]);
+    });
 })

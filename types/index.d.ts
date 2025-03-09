@@ -348,9 +348,9 @@ export declare function afterEach(fn: () => void): void;
  * Mocks a function or object to simulate a specific behavior.
  *
  * @param {Function} fn - The function to be mocked.
- * @return {void} This function does not return any value.
+ * @return {function} 
  */
-export declare function mocker(fn: () => void): void;
+export declare function mock(fn: () => {}): any;
 
 export declare class ExpectError extends Error{
     constructor(message: string, matcher: string, received: any, expected: any)
