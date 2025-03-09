@@ -1,8 +1,8 @@
 import puppeteer, {KnownDevices} from 'puppeteer';
-import {displayReport} from "./coverage.js";
-import {merge} from "./helpers/merge.js";
-import createReport from "./reporters/lcov/index.js";
-import matchInArray from "./helpers/match-in-array.js";
+import {displayReport} from "../core/coverage.js";
+import {merge} from "../helpers/merge.js";
+import createReport from "../reporters/lcov/index.js";
+import matchInArray from "../helpers/match-in-array.js";
 
 const coverageDefaults = {
     includeRawScriptCoverage: true,

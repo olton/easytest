@@ -1,6 +1,6 @@
 import fs from 'fs'
 import {fileURLToPath} from "url";
-import {generateReport} from "../../coverage.js";
+import {generateReport} from "../../core/coverage.js";
 
 const createReport = (fileName, coverage) => {
     const {root, reportDir} = global.config

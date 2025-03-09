@@ -1,7 +1,7 @@
 import chalk from 'chalk'
-import { stringify} from "./helpers/json.js";
-import matchInArray from "./helpers/match-in-array.js";
-import {getFileHash} from "./helpers/hasher.js";
+import { stringify} from "../helpers/json.js";
+import matchInArray from "../helpers/match-in-array.js";
+import {getFileHash} from "../helpers/hasher.js";
 import {realpathSync} from "fs";
 
 const log = console.log

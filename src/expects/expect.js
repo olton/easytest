@@ -1,7 +1,7 @@
-import {compareStructure, deepEqual} from "./helpers/objects.js";
-import {stringify} from "./helpers/json.js";
-import {testValue} from "./helpers/test-value.js";
-import checkArraySorted from "./helpers/check-array-sorted.js";
+import {compareStructure, deepEqual} from "../helpers/objects.js";
+import {stringify} from "../helpers/json.js";
+import {testValue} from "../helpers/test-value.js";
+import checkArraySorted from "../helpers/check-array-sorted.js";
 
 export class ExpectError extends Error {
     constructor(message, matcher, received, expected) {

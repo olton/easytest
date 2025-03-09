@@ -1,6 +1,6 @@
 import { BrowserErrorCaptureEnum } from "happy-dom"
 import { GlobalRegistrator } from "@happy-dom/global-registrator"
-import {merge} from "./helpers/merge.js";
+import {merge} from "../helpers/merge.js";
 import { readFileSync, existsSync } from "fs"
 
 const navigationDefaults = {
@@ -128,6 +128,36 @@ const css = {
     }
 }
 
+// Пример расширения DOM-модуля (src/dom/helpers.js)
+function waitForElement(selector, timeout = 5000) {
+    return new Promise((resolve, reject) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            resolve(element);
+            return;
+        }
+
+        const observer = new MutationObserver(() => {
+            const element = document.querySelector(selector);
+            if (element) {
+                observer.disconnect();
+                resolve(element);
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        setTimeout(() => {
+            observer.disconnect();
+            reject(new Error(`Элемент ${selector} не найден в течение ${timeout}мс`));
+        }, timeout);
+    });
+}
+
+
 export {
     setup,
     bye,
@@ -137,4 +167,5 @@ export {
     $,
     $$,
     flush,
+    waitForElement,
 }

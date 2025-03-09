@@ -1,6 +1,6 @@
 import fs from "fs";
 import chalk from "chalk";
-import { merge } from "./helpers/merge.js"
+import { merge } from "../helpers/merge.js"
 
 const log = console.log
 
@@ -16,6 +16,8 @@ export const defaultConfig = {
     reportType: "lcov",
     reportDir: "coverage",
     reportFile: "lcov.info",
+    parallel: false,
+    maxWorkers: 4,
 }
 
 export const updateConfig = (args) => {
@@ -42,4 +44,6 @@ export const updateConfig = (args) => {
     if (args.reportType) { config.reportType = args.reportType; }
     if (args.reportDir) { config.reportDir = args.reportDir; }
     if (args.reportFile) { config.reportDir = args.reportFile; }
+    if (args.parallel) { config.parallel = args.parallel; }
+    if (args.maxWorkers) { config.maxWorkers = args.maxWorkers; }
 }
