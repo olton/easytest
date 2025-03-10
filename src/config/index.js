@@ -49,7 +49,7 @@ export const updateConfig = (args) => {
     if (args.maxWorkers) { config.maxWorkers = args.maxWorkers; }
     if (args.watch) { config.watch = args.watch; }
 
-    if (config.reportType && !['lcov', 'html'].includes(config.reportType)) {
+    if (config.reportType && !['lcov', 'html', 'junit'].includes(config.reportType)) {
         console.warn(`Unknown type of report: ${config.reportType}. LCOV will be used.`);
         config.reportType = 'lcov';
     }

@@ -7,7 +7,7 @@ import {realpathSync} from "fs";
 const log = console.log
 
 const logExpect = (name, {result, message, expected, received}, duration = 0) => {
-    log(`      ${result ? chalk.green('[√] ' + name + ` 🕑 ${chalk.whiteBright(`${duration} ms`)}`) : chalk.red('💀 ' + name + ' (' + message + ')')}`)
+    log(`      ${result ? chalk.green('🟢 ' + name + ` 🕑 ${chalk.whiteBright(`${duration} ms`)}`) : chalk.red('🔴 ' + name + ' (' + message + ')')}`)
     if (!result) {
         log(`        ${chalk.magentaBright('Expected:')} ${chalk.magentaBright.bold(stringify(expected))}`)
         log(`        ${chalk.cyanBright('Received:')} ${chalk.cyanBright.bold(stringify(received))}`)
@@ -19,7 +19,7 @@ const setupAndTeardown = async (funcs, type) => {
         try {
             await fn()
         } catch (error) {
-            log(` The ${type} function throw error with message: ${chalk.red('💀 ' + error.message)}`)
+            log(` The ${type} function throw error with message: ${chalk.red('🔴 ' + error.message)}`)
         }
     }
 }
@@ -166,7 +166,7 @@ export const runner = async (queue, options) => {
                 }
 
                 global.testResults[file]["tests"].push({
-                    test: test.fn.name,
+                    name: test.fn.name,
                     result: expect.result,
                     message: expect.message || "OK",
                 })

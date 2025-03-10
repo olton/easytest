@@ -8,6 +8,7 @@ import {parallel} from "./core/parallel-runner.js";
 import {testQueue} from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
 import { DOM } from './core/registry.js';
+import path from "path";
 
 // Экспортируем публичные API
 export { Expect, ExpectError } from "./expects/expect.js";
@@ -84,10 +85,13 @@ export const run = async (root, options = {}) => {
         
         if (options.reportType === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js');
-            createReport.default(options.reportFile || 'easy-report.lcov', filteredCoverage);
+            createReport.default(options.reportDir + path.sep + (options.reportFile || 'easy-report.lcov'), filteredCoverage);
         } else if (options.reportType === 'html') {
             const createReport = await import('./reporters/html/index.js');
-            createReport.default(options.reportFile || 'easy-report.html', global.testResults,  filteredCoverage);
+            createReport.default(options.reportDir + path.sep + (options.reportFile || 'easy-report.html'), global.testResults,  filteredCoverage);
+        } else if (options.reportType === 'junit') { // Добавляем новое условие для junit
+            const createReport = await import('./reporters/junit/index.js');
+            createReport.default(options.reportDir + path.sep + (options.reportFile || 'junit.xml'), global.testResults);
         }
     }
     

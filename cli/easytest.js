@@ -51,7 +51,7 @@ const argv = yargs(hideBin(process.argv))
     .option('report-type', {
         alias: 'r',
         type: 'string',
-        choices: ['lcov', 'html'],
+        choices: ['lcov', 'html', 'junit'],
         default: 'lcov',
         description: 'Report Type'
     })
