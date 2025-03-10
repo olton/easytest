@@ -1,8 +1,7 @@
 import chalk from 'chalk'
-import { stringify} from "../helpers/json.js";
+import {stringify} from "../helpers/json.js";
 import matchInArray from "../helpers/match-in-array.js";
-import {getFileHash} from "../helpers/hasher.js";
-import {realpathSync} from "fs";
+import {ProgressBar} from "./progress.js";
 
 const log = console.log
 
@@ -25,20 +24,30 @@ const setupAndTeardown = async (funcs, type) => {
 }
 
 export const runner = async (queue, options) => {
-    const {verbose, test: spec, skip} = options
     const startTime = process.hrtime()
+    const {verbose, test: spec, skip} = options
+
     let passedTests = 0
     let failedTests = 0
     let totalTests = 0
+    let totalTestCount = 0
+    let progressBar = null
+
+    for (const q of queue) {
+        for (const job of q[1].describes) {
+            totalTestCount += job.it.length;
+        }
+        totalTestCount += q[1].tests.length;
+    }
+    if (!verbose) {
+        log(`\n`)
+        progressBar = new ProgressBar(totalTestCount);
+    }
 
     global.testResults = {}
     
     for (const [file, jobs] of queue) {
-        const fileHash = await getFileHash(realpathSync(file))
-        // if (config.skipPassed && global.passed[fileHash]) {
-        //     console.log(chalk.gray(`[-] ${file}`))
-        //     continue
-        // }
+        // const fileHash = await getFileHash(realpathSync(file))
 
         let startFileTime = process.hrtime()
         let testFileStatus = true
@@ -83,12 +92,11 @@ export const runner = async (queue, options) => {
                         }
                     }
 
-                    await setupAndTeardown(test.beforeEach, 'beforeEach')
-
                     // Execute test function
                     const startTestTime = process.hrtime()
 
                     try {
+                        await setupAndTeardown(test.beforeEach, 'beforeEach')
                         await test.fn()
                         expect.result = true
                     } catch (error) {
@@ -99,6 +107,8 @@ export const runner = async (queue, options) => {
                             expected: error.expected,
                             received: error.received,
                         }
+                    } finally {
+                        await setupAndTeardown(test.afterEach, 'afterEach')
                     }
 
                     describes.tests.push({
@@ -109,13 +119,7 @@ export const runner = async (queue, options) => {
 
                     const [seconds, nanoseconds] = process.hrtime(startTestTime);
                     const testDuration = (seconds * 1e9 + nanoseconds) / 1e6;
-
-                    if (verbose) {
-                        logExpect(test.name, expect, testDuration)
-                    }
-
-                    await setupAndTeardown(test.afterEach, 'afterEach')
-
+                    
                     if (expect.result) {
                         passedTests++
                         testFilePassed++
@@ -126,6 +130,12 @@ export const runner = async (queue, options) => {
                     }
 
                     totalTests++
+
+                    if (verbose) {
+                        logExpect(test.name, expect, testDuration)
+                    } else {
+                        progressBar && progressBar.increment();
+                    }
                 }
 
                 await setupAndTeardown(describe.afterAll, 'afterAll')
@@ -179,50 +189,36 @@ export const runner = async (queue, options) => {
                     testFileFailed++
                     testFileStatus = false
                 }
-
-                if (verbose) {
-                    logExpect(test.name, expect)
-                }
-
+                
                 await setupAndTeardown(test.afterEach, 'afterEach')
 
                 totalTests++
+
+                if (verbose) {
+                    logExpect(test.name, expect)
+                } else {
+                    progressBar && progressBar.increment();
+                }
             }
         }
         
         const [seconds, nanoseconds] = process.hrtime(startFileTime);
-        const fileDuration = (seconds * 1e9 + nanoseconds) / 1e6;
-
-        if (!verbose) {
-            const fileStatus = testFileStatus ? chalk.green('🟢') : chalk.red('🔴')
-            const testsStatus = `[${chalk.green.bold(testFilePassed)} of ${chalk.red.cyanBright(testFilePassed+testFileFailed)}]`
-            const fileName = testFileStatus ? chalk.green(file) : chalk.red(file)
-            log(`${fileStatus} ${fileName}... ${testsStatus} 🕑 ${chalk.whiteBright(`${fileDuration} ms`)}`)
-        }
-        
-        if (testFileStatus) {
-            // global.passed[await getFileHash(file)] = {
-            //     file,
-            //     tests: testFilePassed,
-            //     duration: fileDuration,
-            // }
-        }
+        global.testResults[file].duration = (seconds * 1e9 + nanoseconds) / 1e6
     }
 
     const [seconds, nanoseconds] = process.hrtime(startTime);
     const duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
-    log(`------------------------------------`)
-    log(`Tests completed in ${chalk.whiteBright.bold(duration)} ms`)
-    log(`------------------------------------`)
-    log(`Total: ${chalk.blue.bold(totalTests)}, Passed: ${chalk.green.bold(passedTests)}, Failed: ${chalk.red.bold(failedTests)}`)
-    log(`------------------------------------`)
-
-    if (failedTests > 0) {
-        log(chalk.bgRed.bold('Tests chain failed!'))
-    } else {
-        log(chalk.bgGreen.bold('Tests chain passed! Congrats!'))
+    log(`\n`)
+    for (const [file, result] of Object.entries(global.testResults)) {
+        const fileStatus = result.completed ? chalk.green('🟢') : chalk.red('🔴')
+        log(`${fileStatus} ${file}...${result.completed ? chalk.green("OK") : chalk.red("FAIL")} 🕑 ${chalk.whiteBright(`${result.duration} ms`)}`)
     }
+    
+    log(chalk.gray(`------------------------------------------------`))
+    log(`${chalk.gray("Tests completed in")} ${chalk.whiteBright.bold(duration)} ms`)
+    log(`${chalk.gray("Total")}: ${chalk.blue.bold(totalTests)}, ${chalk.gray("Passed")}: ${chalk.green.bold(passedTests)}, ${chalk.gray("Failed")}: ${chalk.red.bold(failedTests)}`)
+    log(`\n`)
 
     return failedTests
 }

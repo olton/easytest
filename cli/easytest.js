@@ -16,7 +16,6 @@ console.log(`Copyright (c) 2024-2025 by Serhii Pimenov <serhii@pimenov.com.ua>`)
 console.log(`You can support EasyTest by PayPal to serhii@pimenov.com.ua`)
 console.log(`-----------------------------------------------------------------\n`)
 
-
 const argv = yargs(hideBin(process.argv))
     .option('watch', {
         alias: 'w',

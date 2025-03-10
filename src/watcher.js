@@ -101,10 +101,7 @@ export async function startWatchMode(root, options) {
     }
 
     watcher.on('ready', () => {
-        // const watchedPaths = watcher.getWatched();
-        // console.log('Watched paths:', Object.keys(watchedPaths).length);
-        // Раскомментируйте для детального списка:
-        // console.log('Watched files:', watchedPaths);
+        
     });
     
     // We process file changes

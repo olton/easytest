@@ -2,8 +2,6 @@ import fs from "fs";
 import chalk from "chalk";
 import { merge } from "../helpers/merge.js"
 
-const log = console.log
-
 export const defaultConfig = {
     include: ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.js", "**/*.spec.jsx", "**/*.test.js", "**/*.test.jsx"],
     exclude: ["node_modules/**"],
@@ -22,16 +20,18 @@ export const defaultConfig = {
 }
 
 export const updateConfig = (args) => {
-    global.config = merge({}, defaultConfig, global.config)
+    global.config = Object.assign({}, defaultConfig)
 
     const configFileName = args.config ?? ("easytest.json" || "easytest.config.json")
 
+    console.log(chalk.gray(`🔍 Searching for a config file...`))
     if (fs.existsSync(configFileName)) {
+        console.log(chalk.gray(`🔍 Config file found!`))
         const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
         Object.assign(config, userConfig)
     } else {
-        log(chalk.gray(`🔍 Config file not found! Using default config!`))
-        log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure EasyTest`))
+        console.log(chalk.gray(`🔍 Config file not found! Using default config!`))
+        console.log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure EasyTest`))
     }
 
     if (args.dom) { config.dom = true; }
