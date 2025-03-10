@@ -18,6 +18,7 @@ export const defaultConfig = {
     reportFile: "",
     parallel: false,
     maxWorkers: 4,
+    watch: false,
 }
 
 export const updateConfig = (args) => {
@@ -46,6 +47,7 @@ export const updateConfig = (args) => {
     if (args.reportFile) { config.reportDir = args.reportFile; }
     if (args.parallel) { config.parallel = args.parallel; }
     if (args.maxWorkers) { config.maxWorkers = args.maxWorkers; }
+    if (args.watch) { config.watch = args.watch; }
 
     if (config.reportType && !['lcov', 'html'].includes(config.reportType)) {
         console.warn(`Unknown type of report: ${config.reportType}. LCOV will be used.`);

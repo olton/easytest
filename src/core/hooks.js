@@ -24,6 +24,11 @@ class HooksRegistry {
         this.beforeEachSuite = []
         this.afterEachSuite = []
     }
+    
+    clearAllHooks() {
+        this.clearFileLevelHooks()
+        this.clearSuiteLevelHooks()
+    }
 }
 
 import { parentFunc } from "../helpers/parent-func.js";

@@ -24,8 +24,8 @@ const setupAndTeardown = async (funcs, type) => {
     }
 }
 
-export const runner = async (queue) => {
-    const {verbose, test: spec, skip} = global.config
+export const runner = async (queue, options) => {
+    const {verbose, test: spec, skip} = options
     const startTime = process.hrtime()
     let passedTests = 0
     let failedTests = 0
@@ -35,10 +35,10 @@ export const runner = async (queue) => {
     
     for (const [file, jobs] of queue) {
         const fileHash = await getFileHash(realpathSync(file))
-        if (config.skipPassed && global.passed[fileHash]) {
-            console.log(chalk.gray(`[-] ${file}`))
-            continue
-        }
+        // if (config.skipPassed && global.passed[fileHash]) {
+        //     console.log(chalk.gray(`[-] ${file}`))
+        //     continue
+        // }
 
         let startFileTime = process.hrtime()
         let testFileStatus = true
@@ -51,8 +51,9 @@ export const runner = async (queue) => {
             describes: [],
             tests: [],
             duration: 0,
+            completed: true,
         }
-        
+
         if (jobs.describes.length) {
             if (verbose) log(`  Tests  Suites ${jobs.describes.length}:`)
             for (const describe of jobs.describes) {
@@ -91,6 +92,7 @@ export const runner = async (queue) => {
                         await test.fn()
                         expect.result = true
                     } catch (error) {
+                        global.testResults[file].completed = false
                         expect = {
                             result: false,
                             message: error.message,
@@ -154,6 +156,7 @@ export const runner = async (queue) => {
                     await test.fn()
                     expect.result = true
                 } catch (error) {
+                    global.testResults[file].completed = false
                     expect = {
                         result: false,
                         message: error.message,
@@ -191,18 +194,18 @@ export const runner = async (queue) => {
         const fileDuration = (seconds * 1e9 + nanoseconds) / 1e6;
 
         if (!verbose) {
-            const fileStatus = testFileStatus ? chalk.green('[√] ') : chalk.red('💀 ')
+            const fileStatus = testFileStatus ? chalk.green('🟢') : chalk.red('🔴')
             const testsStatus = `[${chalk.green.bold(testFilePassed)} of ${chalk.red.cyanBright(testFilePassed+testFileFailed)}]`
             const fileName = testFileStatus ? chalk.green(file) : chalk.red(file)
             log(`${fileStatus} ${fileName}... ${testsStatus} 🕑 ${chalk.whiteBright(`${fileDuration} ms`)}`)
         }
         
         if (testFileStatus) {
-            global.passed[await getFileHash(file)] = {
-                file,
-                tests: testFilePassed,
-                duration: fileDuration,
-            }
+            // global.passed[await getFileHash(file)] = {
+            //     file,
+            //     tests: testFilePassed,
+            //     duration: fileDuration,
+            // }
         }
     }
 

@@ -1,18 +1,13 @@
 import { glob } from 'glob';
 import { pathToFileURL } from 'url';
 import { realpathSync } from 'fs';
-import { exit } from 'node:process';
 import inspector from 'inspector/promises';
 import { coverageFilter, displayReport } from './core/coverage.js';
-import { updateConfig } from "./config/index.js";
 import {runner} from "./core/runner.js";
 import {parallel} from "./core/parallel-runner.js";
-import { testQueue } from './core/queue.js';
+import {testQueue} from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
-import { initTestDirectory, saveTestResults } from './helpers/file.js';
-import { registerGlobals } from './core/registry.js';
 import { DOM } from './core/registry.js';
-import chalk from 'chalk';
 
 // Экспортируем публичные API
 export { Expect, ExpectError } from "./expects/expect.js";
@@ -20,21 +15,11 @@ export * from './core/registry.js';
 export { coverageFilter, generateReport, displayReport } from './core/coverage.js';
 
 // Главная функция запуска тестов
-export const run = async (root, args) => {
-    // Инициализация глобальных переменных
-    global.config = {};
-    global.passed = {};
-
-    // Инициализация директории для тестов и загрузка данных о прошлых запусках
-    const { passedTestsFile, passed } = initTestDirectory();
-    global.passed = passed;
-
-    // Обновление конфигурации
-    updateConfig(args);
-    config.root = root;
+export const run = async (root, options = {}) => {
+    options.root = root;
 
     // Настройка DOM, если требуется
-    if (config.dom) {
+    if (options.dom) {
         await DOM.setup();
     }
 
@@ -48,11 +33,20 @@ export const run = async (root, args) => {
         detailed: true
     });
 
-    // Регистрация глобальных функций и объектов
-    registerGlobals();
+    testQueue.clearQueue();
 
-    // Поиск файлов тестов
-    let files = await glob(config.include, { ignore: config.exclude });
+    let files = [];
+    
+    // Если указаны конкретные файлы, используем их
+    if (options.files && options.files.length) {
+        files = options.files;
+    }
+    // Иначе используем паттерны включения/исключения
+    else {
+        const includePattern = options.include || '**/__tests__/**/*.test.js';
+        const excludePattern = options.exclude || [];
+        files = await glob(includePattern, { ignore: excludePattern });
+    }
 
     // Загрузка и выполнение тестовых файлов
     for (const file of files) {
@@ -60,41 +54,42 @@ export const run = async (root, args) => {
         hooksRegistry.clearFileLevelHooks();
 
         const fileUrl = pathToFileURL(realpathSync(file)).href;
-        await import(fileUrl);
+
+        // При повторном запуске тестов нужно удалить кеш модуля
+        if (options.watch) {
+            delete require.cache[require.resolve(file)];
+        }
+
+        await import(fileUrl + `?t=${Date.now()}`);
     }
 
     let result
     
     // Запуск тестов
-    if (config.parallel) {
-        console.log(chalk.gray(`[-] Running tests in parallel...`));
-        result = await parallel(testQueue.getQueue(), config.maxWorkers || 4);
+    if (options.parallel) {
+        // console.log(chalk.gray(`[-] Running tests in parallel...`));
+        result = await parallel(testQueue.getQueue(), options.maxWorkers);
     } else {
-        console.log(chalk.gray(`[-] Running tests in serial...`));
-        result = await runner(testQueue.getQueue());
+        // console.log(chalk.gray(`[-] Running tests in serial...`));
+        result = await runner(testQueue.getQueue(), options);
     }
 
     const coverage = await session.post('Profiler.takePreciseCoverage');
     await session.post('Profiler.stopPreciseCoverage');
 
     // Обработка покрытия кода, если включено
-    if (config.coverage) {
-
+    if (options.coverage) {
         const filteredCoverage = coverageFilter(coverage);
         displayReport(filteredCoverage);
         
-        if (config.reportType === 'lcov') {
+        if (options.reportType === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js');
-            createReport.default(config.reportFile || 'easy-report.lcov', filteredCoverage);
-        } else if (config.reportType === 'html') {
+            createReport.default(options.reportFile || 'easy-report.lcov', filteredCoverage);
+        } else if (options.reportType === 'html') {
             const createReport = await import('./reporters/html/index.js');
-            createReport.default(config.reportFile || 'easy-report.html', global.testResults,  filteredCoverage);
+            createReport.default(options.reportFile || 'easy-report.html', global.testResults,  filteredCoverage);
         }
     }
-
-    // Сохранение результатов тестов
-    saveTestResults(passedTestsFile, global.passed);
-
-    // Завершение процесса с соответствующим кодом выхода
-    exit(result > 0 ? 1 : 0);
+    
+    return global.testResults;
 };

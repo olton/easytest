@@ -1,4 +1,3 @@
-// Глобальная регистрация функций и хранение состояния
 import { expect as expectFn } from '../expects/expect.js';
 import mockFn from "./mock.js";
 import { Browser } from "../browser/browser.js";

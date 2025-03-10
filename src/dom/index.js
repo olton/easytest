@@ -42,6 +42,9 @@ const windowDefaults = {
 }
 
 const setup = async (options) => {
+    try {
+        await GlobalRegistrator.unregister()
+    } catch (e) {}
     GlobalRegistrator.register(merge(windowDefaults, options))
     flush()
 }

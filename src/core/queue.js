@@ -43,6 +43,11 @@ export class TestQueue {
     getQueue() {
         return this.queue;
     }
+
+    clearQueue() {
+        this.queue = new Map();
+        this.currentFile = null;
+    }
 }
 
 export const testQueue = new TestQueue();

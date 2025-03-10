@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "tsx cli/easytest.js --dom --verbose --coverage --report-type=html --include='__tests__/*.test.js'"
+    "test": "tsx cli/easytest.js --dom --verbose --coverage --report-type=html --include='__tests__/*.test.js'",
+    "test:watch": "tsx cli/easytest.js --watch --include=__tests__/array.test.js"
   },
   "keywords": [
     "javascript",
@@ -39,6 +40,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "chokidar": "^4.0.3",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
