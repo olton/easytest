@@ -1,7 +1,7 @@
 {
   "name": "@olton/easytest",
-  "version": "0.42.0",
-  "main": "src/old/index.js",
+  "version": "0.43.0",
+  "main": "src/index.js",
   "bin": {
     "easytest": "cli/easytest.js"
   },
@@ -38,10 +38,10 @@
     "html-escaper": "^3.0.3",
     "puppeteer": "^24.4.0",
     "table": "^6.9.0",
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "chokidar": "^4.0.3"
   },
   "devDependencies": {
-    "chokidar": "^4.0.3",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

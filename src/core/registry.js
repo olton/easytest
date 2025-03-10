@@ -35,3 +35,5 @@ export function registerGlobals() {
 export const expect = expectFn;
 export const mock = mockFn;
 export const B = Browser;
+
+export { describe, it, test, beforeEach, afterEach, beforeAll, afterAll, delay, getFileUrl };

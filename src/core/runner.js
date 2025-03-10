@@ -214,8 +214,11 @@ export const runner = async (queue, options) => {
     const duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
     if (!parallel) { log(`\n`) }
-    
+
     for (const [file, result] of Object.entries(global.testResults)) {
+        if (result.completed) {
+            continue
+        } 
         const fileStatus = result.completed ? chalk.green('🟢') : chalk.red('🔴')
         log(`${fileStatus} ${file}...${result.completed ? chalk.green("OK") : chalk.red("FAIL")} 🕑 ${chalk.whiteBright(`${result.duration} ms`)}`)
     }
