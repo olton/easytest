@@ -7,6 +7,7 @@ import { startWatchMode } from '../src/watcher.js';
 import chalk from 'chalk';
 import {updateConfig} from "../src/config/index.js";
 import {clearConsole} from "../src/helpers/console.js";
+import { getProjectName } from '../src/helpers/project.js';
 
 clearConsole()
 
@@ -27,52 +28,59 @@ const argv = yargs(hideBin(process.argv))
         type: 'boolean',
         description: 'Run in parallel mode'
     })
-    .option('include', {
-        alias: 'i',
-        type: 'string',
-        description: 'Test files switching templates'
-    })
-    .option('exclude', {
-        alias: 'e',
-        type: 'string',
-        description: 'Test file excluding templates'
-    })
     .option('dom', {
         alias: 'd',
         type: 'boolean',
-        description: 'Enable DOM support'
+        description: 'Enable DOM emulation'
     })
     .option('verbose', {
         alias: 'v',
         type: 'boolean',
-        description: 'Detailed conclusion'
+        description: 'Detailed report'
     })
     .option('coverage', {
         alias: 'c',
         type: 'boolean',
         description: 'Code coverage report'
     })
-    .option('report-type', {
-        alias: 'r',
+    .option('include', {
         type: 'string',
-        choices: ['lcov', 'html', 'junit'],
-        default: 'lcov',
-        description: 'Report Type'
+        description: 'Test files switching templates'
+    })
+    .option('exclude', {
+        type: 'string',
+        description: 'Test file excluding templates'
+    })
+    .option('report-type', {
+        type: 'string',
+        description: 'Report Type [\'lcov\', \'html\', \'junit\']'
     })
     .option('report-dir', {
-        alias: 'a',
         type: 'string',
         description: 'Reports Directory'
     })
     .option('report-file', {
-        alias: 'f',
         type: 'string',
         description: 'Report File Name'
+    })
+    .option('init', {
+        type: 'boolean',
+        description: 'Create a configuration file'
     })
     .help()
     .argv;
 
 const root = process.cwd();
+
+const projectName = getProjectName(root);
+console.log(`${chalk.cyan('Project:')} ${chalk.bold(projectName)}\n`);
+
+if (argv.init) {
+    const configFileName = argv.config || "easytest.json";
+    const { createConfigFile } = await import('../src/config/index.js');
+    createConfigFile(configFileName);
+    process.exit(0);
+}
 
 global.config = {};
 updateConfig(argv);

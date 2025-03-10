@@ -1,6 +1,6 @@
 import { glob } from 'glob';
 import { pathToFileURL } from 'url';
-import { realpathSync } from 'fs';
+import { realpathSync, existsSync, writeFileSync } from 'fs';
 import inspector from 'inspector/promises';
 import { coverageFilter, displayReport } from './core/coverage.js';
 import {runner} from "./core/runner.js";
@@ -9,6 +9,7 @@ import {testQueue} from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
 import { DOM } from './core/registry.js';
 import path from "path";
+import chalk from 'chalk';
 
 // Экспортируем публичные API
 export { Expect, ExpectError } from "./expects/expect.js";
