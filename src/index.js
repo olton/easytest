@@ -36,7 +36,7 @@ export const run = async (root, options = {}) => {
     testQueue.clearQueue();
 
     let files = [];
-    
+
     // Если указаны конкретные файлы, используем их
     if (options.files && options.files.length) {
         files = options.files;

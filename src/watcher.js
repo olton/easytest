@@ -6,9 +6,11 @@ import chalk from 'chalk';
 import fs from 'fs';
 import { testQueue } from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
+import {glob} from 'glob';
 
 let isFirstRun = true;
 let runningTests = false;
+let watcher = null;
 
 const help = () => {
     console.log("\n")
@@ -71,14 +73,24 @@ export async function startWatchMode(root, options) {
     }
 
     // We create an observer for all supported file types
-    const watcher = chokidar.watch(['**/*.js', '**/*.ts', '**/*.tsx', '**/*.jsx'], {
+    watcher = chokidar.watch(await glob([
+        ...validPatterns,
+        '**/*.js', 
+        '**/*.ts', 
+        '**/*.tsx', 
+        '**/*.jsx'
+    ], { ignore: excludePatterns }), {
+        depth: 10,
+        awaitWriteFinish: {
+            stabilityThreshold: 2000,
+            pollInterval: 100
+        },
         ignored: ignorePatterns,
         persistent: true,
         ignoreInitial: true,
-        cwd: root
+        cwd: "."
     });
 
-    // We adjust the interactive mode in the console
     setupInteractiveMode(watcher, root, options);
 
     // Launch tests at the first start
@@ -88,6 +100,13 @@ export async function startWatchMode(root, options) {
         isFirstRun = false;
     }
 
+    watcher.on('ready', () => {
+        // const watchedPaths = watcher.getWatched();
+        // console.log('Watched paths:', Object.keys(watchedPaths).length);
+        // Раскомментируйте для детального списка:
+        // console.log('Watched files:', watchedPaths);
+    });
+    
     // We process file changes
     watcher.on('all', (event, filePath) => {
         const extension = path.extname(filePath);
@@ -95,6 +114,8 @@ export async function startWatchMode(root, options) {
         // We check that this is a supported file and other tests are not currently executed
         if (fileExtensions.includes(extension) && !runningTests) {
             clearConsole();
+
+            console.log(chalk.cyan(`File ${filePath} was ${event}\n`)); 
 
             // Check if the file corresponds to the power patterns
             const isTestFile = validPatterns.some(pattern => {
@@ -108,14 +129,6 @@ export async function startWatchMode(root, options) {
                     .replace(/\*\*\//g, '.*')
                     .replace(/\*/g, '[^/]*')).test(filePath);
             });
-
-            console.log(chalk.cyan(`File ${filePath} was ${
-                event === 'add' 
-                    ? 'added' 
-                    : event === 'change' 
-                        ? 'changed' 
-                        : 'deleted'
-            }`));
 
             // If it is a test file, we only start it
             if (isTestFile && event !== 'unlink') {
@@ -131,7 +144,7 @@ export async function startWatchMode(root, options) {
                     runTests(root, testOptions);
                 } else {
                     // If you haven't found a related test, we start all the tests
-                    runTests(root, options);
+                    runTests(root, options); 
                 }
             }
         }
@@ -154,7 +167,7 @@ function setupInteractiveMode(watcher, root, options) {
         // The exit from Watch-mode when pressed 'q'
         if (key === 'q') {
             watcher.close().then(() => {
-                console.log(chalk.green('Watch mode is completed.'));
+                console.log(chalk.green('\nWatch mode is completed. Bye!\n'));
                 process.exit(0);
             });
         }
@@ -163,7 +176,6 @@ function setupInteractiveMode(watcher, root, options) {
         if (key === 'a' && !runningTests) {
             clearConsole();
             console.log(chalk.cyan('Launch all tests ...'));
-            console.log(options);
             await runTests(root, options);
         }
 
@@ -245,7 +257,7 @@ async function runTests(root, options) {
         }
 
         // const endTime = Date.now();
-        // const duration = ((endTime - startTime) / 1000).toFixed(2);
+        // const duration = ((endTime - startTime) / 1000).toFixed(2); 
 
         // console.log(chalk.cyan(`\nCompleted for ${duration} seconds`));
         console.log(chalk.yellow('\nWaiting for changes...'));

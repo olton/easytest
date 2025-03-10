@@ -29,7 +29,7 @@ async function runTest() {
 
     // Инициализация сессии для измерения покрытия кода
     let session;
-    let coverage = null;
+    let coverage = null; 
     session = new inspector.Session();
     session.connect();
 

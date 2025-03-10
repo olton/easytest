@@ -5,7 +5,7 @@ import { merge } from "../helpers/merge.js"
 const log = console.log
 
 export const defaultConfig = {
-    include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
+    include: ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.js", "**/*.spec.jsx", "**/*.test.js", "**/*.test.jsx"],
     exclude: ["node_modules/**"],
     skip: "",
     test: "",
@@ -24,7 +24,7 @@ export const defaultConfig = {
 export const updateConfig = (args) => {
     global.config = merge({}, defaultConfig, global.config)
 
-    const configFileName = args.config ?? "easytest.json"
+    const configFileName = args.config ?? ("easytest.json" || "easytest.config.json")
 
     if (fs.existsSync(configFileName)) {
         const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
