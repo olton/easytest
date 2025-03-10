@@ -22,6 +22,11 @@ const argv = yargs(hideBin(process.argv))
         type: 'boolean',
         description: 'Run in observation mode'
     })
+    .option('parallel', {
+        alias: 'p',
+        type: 'boolean',
+        description: 'Run in parallel mode'
+    })
     .option('include', {
         alias: 'i',
         type: 'string',

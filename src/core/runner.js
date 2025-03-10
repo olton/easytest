@@ -25,7 +25,7 @@ const setupAndTeardown = async (funcs, type) => {
 
 export const runner = async (queue, options) => {
     const startTime = process.hrtime()
-    const {verbose, test: spec, skip} = options
+    const {verbose, test: spec, skip, parallel} = options
 
     let passedTests = 0
     let failedTests = 0
@@ -39,7 +39,7 @@ export const runner = async (queue, options) => {
         }
         totalTestCount += q[1].tests.length;
     }
-    if (!verbose) {
+    if (!verbose && !parallel) {
         log(`\n`)
         progressBar = new ProgressBar(totalTestCount);
     }
@@ -134,7 +134,9 @@ export const runner = async (queue, options) => {
                     if (verbose) {
                         logExpect(test.name, expect, testDuration)
                     } else {
-                        progressBar && progressBar.increment();
+                        if (!parallel) {
+                            progressBar && progressBar.increment();
+                        }
                     }
                 }
 
@@ -197,7 +199,9 @@ export const runner = async (queue, options) => {
                 if (verbose) {
                     logExpect(test.name, expect)
                 } else {
-                    progressBar && progressBar.increment();
+                    if (!parallel) { 
+                        progressBar && progressBar.increment();
+                    }
                 }
             }
         }
@@ -209,16 +213,19 @@ export const runner = async (queue, options) => {
     const [seconds, nanoseconds] = process.hrtime(startTime);
     const duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
-    log(`\n`)
+    if (!parallel) { log(`\n`) }
+    
     for (const [file, result] of Object.entries(global.testResults)) {
         const fileStatus = result.completed ? chalk.green('🟢') : chalk.red('🔴')
         log(`${fileStatus} ${file}...${result.completed ? chalk.green("OK") : chalk.red("FAIL")} 🕑 ${chalk.whiteBright(`${result.duration} ms`)}`)
     }
     
-    log(chalk.gray(`------------------------------------------------`))
-    log(`${chalk.gray("Tests completed in")} ${chalk.whiteBright.bold(duration)} ms`)
-    log(`${chalk.gray("Total")}: ${chalk.blue.bold(totalTests)}, ${chalk.gray("Passed")}: ${chalk.green.bold(passedTests)}, ${chalk.gray("Failed")}: ${chalk.red.bold(failedTests)}`)
-    log(`\n`)
+    if (!parallel) {
+        log(chalk.gray(`------------------------------------------------`))
+        log(`${chalk.gray("Tests completed in")} ${chalk.whiteBright.bold(duration)} ms`)
+        log(`${chalk.gray("Total")}: ${chalk.blue.bold(totalTests)}, ${chalk.gray("Passed")}: ${chalk.green.bold(passedTests)}, ${chalk.gray("Failed")}: ${chalk.red.bold(failedTests)}`)
+        log(`\n`)
+    } 
 
     return failedTests
 }

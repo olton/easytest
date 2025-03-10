@@ -2,7 +2,7 @@ import { Worker } from 'worker_threads';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Получаем правильный путь к worker.js относительно текущего модуля
+// Отримуємо правильний шлях до worker.js відносно поточного модуля
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const workerPath = path.join(__dirname, '..', 'workers', 'worker.js');
 
@@ -12,12 +12,12 @@ export async function parallel(testQueue, maxWorkers = 4) {
     let failedTests = 0;
     let coverage = [];
 
-    // Разделяем файлы на группы для параллельного запуска
+    // Розділяємо файли на групи для паралельного запуску
     for (let i = 0; i < files.length; i += maxWorkers) {
         chunks.push(files.slice(i, i + maxWorkers));
     }
 
-    // Выполняем тесты для каждого чанка
+    // Виконуємо тести для кожного чанка
     for (const chunk of chunks) {
         const workerPromises = chunk.map(file => {
             return new Promise((resolve, reject) => {
@@ -54,12 +54,12 @@ export async function parallel(testQueue, maxWorkers = 4) {
             });
         });
 
-        // Ждем завершения всех тестов в текущем чанке
+        // Чекаємо завершення всіх тестів у поточному чанку
         const results = await Promise.all(workerPromises);
         failedTests += results.reduce((sum, val) => sum + val, 0);
     }
 
-    // Возвращаем количество проваленных тестов и данные о покрытии
+    // Повертаємо кількість провалених тестів та дані про покриття
     return {
         failedTests,
         coverage

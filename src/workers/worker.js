@@ -10,26 +10,26 @@ import { hooksRegistry } from '../core/hooks.js';
 import { registerGlobals } from '../core/registry.js';
 import { coverageFilter } from '../core/coverage.js';
 
-// Получаем данные о файле теста из основного потока
+// Отримуємо дані про файл тесту з основного потоку
 const { file, config: workerConfig } = workerData;
 
-// Асинхронное выполнение тестов в отдельном потоке
+// Асинхронне виконання тестів в окремому потоці
 async function runTest() {
-    // Инициализация глобальных объектов
+    // Ініціалізація глобальних об'єктів
     global.config = workerConfig;
     global.passed = {};
 
-    // Регистрируем глобальные функции и переменные
+    // Реєструємо глобальні функції та змінні
     registerGlobals();
 
-    // Настройка DOM если требуется
-    if (config.dom) {
+    // Налаштування DOM якщо потрібно
+    if (global.config.dom) {
         await DOM.setup();
     }
 
-    // Инициализация сессии для измерения покрытия кода
+    // Ініціалізація сесії для вимірювання покриття коду
     let session;
-    let coverage = null; 
+    let coverage = null;
     session = new inspector.Session();
     session.connect();
 
@@ -39,32 +39,32 @@ async function runTest() {
         detailed: true
     });
 
-    // Подготавливаем очередь для тестируемого файла
+    // Підготовка черги для тестованого файлу
     testQueue.setCurrentFile(file);
     hooksRegistry.clearFileLevelHooks();
 
-    // Импортируем тестовый файл
+    // Імпорт тестового файлу
     const fileUrl = pathToFileURL(realpathSync(file)).href;
     await import(fileUrl);
 
-    // Создаем временную очередь только для этого файла
+    // Створюємо тимчасову чергу тільки для цього файлу
     const fileQueue = new Map();
     fileQueue.set(file, testQueue.getQueue().get(file));
 
-    // Запускаем тесты для этого файла
-    const result = await runner(fileQueue);
+    // Запускаємо тести для цього файлу
+    const result = await runner(fileQueue, config);
 
-    // Собираем информацию о покрытии кода
+    // Збираємо інформацію про покриття коду
     const coverageData = await session.post('Profiler.takePreciseCoverage');
     await session.post('Profiler.stopPreciseCoverage');
     coverage = coverageFilter(coverageData);
 
-    // Очищаем DOM, если он был инициализирован
-    if (config.dom) {
+    // Очищення DOM, якщо він був ініціалізований
+    if (global.config.dom) {
         await DOM.bye();
     }
 
-    // Отправляем результат обратно в основной поток
+    // Відправляємо результат назад в основний потік
     parentPort.postMessage({
         file,
         result,
@@ -72,7 +72,7 @@ async function runTest() {
     });
 }
 
-// Обработка ошибок
+// Обробка помилок
 process.on('unhandledRejection', (reason) => {
     parentPort.postMessage({
         file,
@@ -85,7 +85,7 @@ process.on('unhandledRejection', (reason) => {
     process.exit(1);
 });
 
-// Запускаем выполнение тестов
+// Запускаємо виконання тестів
 runTest().catch(error => {
     parentPort.postMessage({
         file,
