@@ -53,6 +53,10 @@ try {
             type: 'boolean',
             description: 'Enable DOM emulation'
         })
+        .option('debug', {
+            type: 'boolean',
+            description: 'Run tests in debug mode'
+        })
         .option('verbose', {
             alias: 'v',
             type: 'boolean',
@@ -77,7 +81,7 @@ try {
         })
         .option('report-type', {
             type: 'string',
-            description: 'Report Type [\'lcov\', \'html\', \'junit\']'
+            description: 'Report Type [\'console\', \'lcov\', \'html\', \'junit\']'
         })
         .option('report-dir', {
             type: 'string',

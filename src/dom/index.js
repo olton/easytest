@@ -58,7 +58,7 @@ const html = (str) => {
 }
 
 const flush = () => {
-    document.write(`
+    document.documentElement.innerHTML = `
         <html lang="en">
             <head>
                  <title>Test page</title>
@@ -66,7 +66,7 @@ const flush = () => {
             <body>
             </body>
         </html>
-    `)
+    `
 }
 
 const $ = (selector) => {
@@ -132,7 +132,7 @@ const css = {
 }
 
 // Пример расширения DOM-модуля (src/dom/helpers.js)
-function waitForElement(selector, timeout = 5000) {
+function waitFor(selector, timeout = 5000) {
     return new Promise((resolve, reject) => {
         const element = document.querySelector(selector);
         if (element) {
@@ -170,5 +170,5 @@ export {
     $,
     $$,
     flush,
-    waitForElement,
+    waitFor,
 }

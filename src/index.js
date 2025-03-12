@@ -21,6 +21,15 @@ export { coverageFilter, generateReport, displayReport } from './core/coverage.j
 export const run = async (root, options = {}) => {
     options.root = root;
 
+    const inspectPort = options.debug ? (options.debugPort || 9229) : undefined;
+
+    if (options.debug) {
+        console.log(chalk.yellow('[Debug] Waiting for debugger to attach...'));
+        process.execArgv.push(`--inspect-brk=${inspectPort}`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log(chalk.green(`[Debug] Starting in debug mode on port ${inspectPort}`));
+    }
+
     // Настройка DOM, если требуется
     if (options.dom) {
         await DOM.setup();
@@ -83,7 +92,6 @@ export const run = async (root, options = {}) => {
     // Обработка покрытия кода, если включено
     if (options.coverage) {
         const filteredCoverage = coverageFilter(coverage);
-        displayReport(filteredCoverage);
         
         if (options.reportType === 'lcov') {
             const createReport = await import('./reporters/lcov/index.js');
@@ -94,6 +102,8 @@ export const run = async (root, options = {}) => {
         } else if (options.reportType === 'junit') { // Добавляем новое условие для junit
             const createReport = await import('./reporters/junit/index.js');
             createReport.default(options.reportDir + path.sep + (options.reportFile || 'junit.xml'), global.testResults);
+        } else {
+            displayReport(filteredCoverage);
         }
     }
     

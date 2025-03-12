@@ -125,6 +125,24 @@ export class Browser {
     }
 
     /**
+     * Get elements by selector
+     * @param selector
+     * @returns {Promise<*>}
+     */
+    static async find(selector){
+        return await this.currentPage.$$(selector);
+    }
+
+    /**
+     * Get the first element by selector
+     * @param selector
+     * @returns {Promise<*>}
+     */
+    static async findFirst(selector){
+        return await this.currentPage.$(selector);
+    }
+    
+    /**
      * Get document properties
      * @type {{html: function(): Promise<*>, title: function(): Promise<*>, url: function(): Promise<*>, cookies: function(...[*]): Promise<*>}}
      */
@@ -133,6 +151,7 @@ export class Browser {
         url: async () => await this.currentPage.url(),
         html: async () => await this.currentPage.content(),
         cookies: async (...urls) => await this.currentPage.cookies(...urls),
+        body: async () => await this.currentPage.evaluate(() => document.body),
     }
 
     /**
@@ -147,7 +166,7 @@ export class Browser {
     /**
      * This method fetches an element with selector, scrolls it into view if needed, and then uses Page.mouse to click in the center of the element. If there's no element matching selector, the method throws an error.
      * @param selector
-     * @param options
+     * @param options {offset}
      * @returns {Promise<*>}
      */
     static click = async (selector, options) => {
@@ -167,7 +186,7 @@ export class Browser {
      * Sends a keydown, keypress/input, and keyup event for each character in the text to element, specified by selector.
      * @param selector
      * @param text
-     * @param options
+     * @param options {delay}
      * @returns {Promise<*>}
      */
     static type = async (selector, text, options) => {
@@ -182,6 +201,16 @@ export class Browser {
      */
     static screenshot = async (path, options) => {
         return await this.currentPage.screenshot({...options, path})
+    }
+
+    /**
+     * Generate pdf
+     * @param path
+     * @param options = {displayHeaderFooter, footerTemplate, format, headerTemplate, height, landscape, margin, omitBackground, outline, pageRanges, path, preferCSSPageSize, printBackground, scale, width, timeout, waitForFonts, tagged}
+     * @returns {Promise<*>}
+     */
+    static pdf = async (path, options) => {
+        return await this.currentPage.pdf({...options, path})
     }
 
     /**
@@ -206,6 +235,33 @@ export class Browser {
      */
     static addCss = async (options) => {
         return await this.currentPage.addStyleTag(options)
+    }
+
+    /**
+     * Add CSS from string
+     * @param content
+     * @returns {Promise<*>}
+     */
+    static addCssFromString = async (content) => {
+        return await this.currentPage.addStyleTag({content})
+    }
+
+    /**
+     * Create CSS tag link from URL
+     * @param url
+     * @returns {Promise<*>}
+     */
+    static addCssFromUrl = async (url) => {
+        return await this.currentPage.addStyleTag({url})
+    }
+
+    /**
+     * Create CSS style from a file
+     * @param path
+     * @returns {Promise<*>}
+     */
+    static addCssFromFile = async (path) => {
+        return await this.currentPage.addStyleTag({path})
     }
 
     /**
@@ -241,7 +297,7 @@ export class Browser {
      * @returns {Promise<*>}
      */
     static page = async (index) => {
-        return (await this.pages())[index]
+        return typeof index === "undefined" || index === null ? (await this.currentPage) : (await this.pages())[index]
     }
 
     /**
@@ -296,7 +352,7 @@ export class Browser {
         if (typeof page === 'number') {
             pageToCLose = await this.page(page)
         } else {
-            if (page === null || page === undefined) {
+            if (page === null || typeof page === "undefined") {
                 pageToCLose = this.currentPage
             } else {
                 pageToCLose = page
@@ -311,7 +367,7 @@ export class Browser {
      * @param runBeforeOnLoad
      * @returns {Promise<void>}
      */
-    static closeAllPages = async (runBeforeOnLoad = false) => {
+    static closeAll = async (runBeforeOnLoad = false) => {
         const pages = await this.pages()
         for (let p of pages) {
             await p.close({runBeforeOnLoad})
@@ -367,6 +423,11 @@ export class Browser {
         // createReport(fileName, coverageFiltered)
     }
 
+    /**
+     * Filter coverage
+     * @param coverage
+     * @returns {*}
+     */
     static filterCoverage = (coverage) => {
         const filter = typeof this.options.coverage.filter === 'string'
             ? this.options.coverage.filter.split(',')
@@ -375,5 +436,36 @@ export class Browser {
         return coverage.result.filter((r) => {
             return matchInArray(r.url, filter)
         })
+    }
+
+    /**
+     * Go back in history
+     * @returns {Promise<*>}
+     */
+    static async back() {
+        return await this.currentPage.goBack()
+    }
+    
+    /**
+     * Go forward in history
+     * @returns {Promise<*>}
+     */
+    static async forward() {
+        return await this.currentPage.goForward()
+    }
+    
+    /**
+     * Reload page
+     * @returns {Promise<*>}
+     */
+    static async reload() {
+        return await this.currentPage.reload()
+    }
+
+    /**
+     * Get the page metrics
+     */
+    static async metrics() {
+        return await this.currentPage.metrics()
     }
 }

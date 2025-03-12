@@ -1,6 +1,6 @@
 {
   "name": "@olton/easytest",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "main": "src/index.js",
   "bin": {
     "easytest": "cli/easytest.js"
@@ -9,8 +9,8 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "tsx cli/easytest.js --dom --include='__tests__/*.test.js'",
-    "test:watch": "tsx cli/easytest.js --watch --include=__tests__/array.test.js"
+    "test": "tsx cli/easytest.js --dom -c --include='__tests__/*.test.js'",
+    "test:watch": "tsx cli/easytest.js --watch --include=__tests__/*.test.js"
   },
   "keywords": [
     "javascript",
