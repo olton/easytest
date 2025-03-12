@@ -224,10 +224,10 @@ export const runner = async (queue, options) => {
     }
     
     if (!parallel) {
-        log(chalk.gray(`------------------------------------------------`))
+        log(chalk.gray(`-----------------------------------------------------------------`))
         log(`${chalk.gray("Tests completed in")} ${chalk.whiteBright.bold(duration)} ms`)
         log(`${chalk.gray("Total")}: ${chalk.blue.bold(totalTests)}, ${chalk.gray("Passed")}: ${chalk.green.bold(passedTests)}, ${chalk.gray("Failed")}: ${chalk.red.bold(failedTests)}`)
-        log(`\n`)
+        log(` `)
     } 
 
     return failedTests

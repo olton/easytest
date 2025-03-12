@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import {updateConfig} from "../src/config/index.js";
 import {clearConsole} from "../src/helpers/console.js";
 import { getProjectName } from '../src/helpers/project.js';
-import pkg from '../package.json' with { type: "json" };
+import { banner } from '../src/helpers/banner.js';
 
 // Глобальная обработка ошибок
 process.on('uncaughtException', (error) => {
@@ -35,13 +35,8 @@ process.on('SIGTERM', () => {
 
 try {
     clearConsole()
-
-    console.log(`${chalk.bold("EasyTest")} ${chalk.bold.cyanBright(`v${pkg.version}`)}`)
-    console.log(`-----------------------------------------------------------------`)
-    console.log(`${chalk.gray("Copyright (c) 2024-2025 by")} ${chalk.bold.whiteBright("Serhii Pimenov <serhii@pimenov.com.ua>")}`)
-    console.log(`${chalk.gray("You can support EasyTest by PayPal to")} ${chalk.bold.cyan("serhii@pimenov.com.ua")}`)
-    console.log(`-----------------------------------------------------------------\n`)
-
+    banner();
+    
     const argv = yargs(hideBin(process.argv))
         .option('watch', {
             alias: 'w',
