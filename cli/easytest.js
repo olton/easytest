@@ -68,6 +68,10 @@ try {
             type: 'boolean',
             description: 'Code coverage report'
         })
+        .option('max-workers', {
+            type: 'string',
+            description: 'Maximum number of parallel workers'
+        })
         .option('include', {
             type: 'string',
             description: 'Test files switching templates'
@@ -98,7 +102,7 @@ try {
     const root = process.cwd();
 
     const projectName = getProjectName(root);
-    console.log(`${chalk.cyan('Project:')} ${chalk.bold(projectName)}\n`);
+    console.log(`${chalk.cyan('Executing tests for project:')} ${chalk.bold(projectName)}\n`);
 
     if (argv.init) {
         const configFileName = argv.config || "easytest.json";

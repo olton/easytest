@@ -2,15 +2,7 @@ import {compareStructure, deepEqual} from "../helpers/objects.js";
 import {stringify} from "../helpers/json.js";
 import {testValue} from "../helpers/test-value.js";
 import checkArraySorted from "../helpers/check-array-sorted.js";
-
-export class ExpectError extends Error {
-    constructor(message, matcher, received, expected) {
-        super(message)
-        this.name = matcher
-        this.received = received
-        this.expected = expected
-    }
-}
+import {ExpectError} from "./errors.js";
 
 export class Expect {
     received = null
@@ -186,11 +178,11 @@ export class Expect {
      */
     toMatch(expected, msg = null) {
         let received = this.received
-        
+
         if (typeof received !== 'string') {
             throw new ExpectError(msg || `Expected value is not a string`, 'toMatch', received, 'string')
         }
-        
+
         let result = received.match(expected)
 
         if (!result) {
@@ -206,11 +198,11 @@ export class Expect {
      */
     toNotMatch(expected, msg = null) {
         let received = this.received
-        
+
         if (typeof received !== 'string') {
             throw new ExpectError(msg || `Expected value is not a string`, 'toNotMatch', received, 'string')
         }
-        
+
         let result = !received.match(expected)
 
         if (!result) {
@@ -1610,3 +1602,4 @@ export function expect(received) {
     return new Expect(received);
 }
 
+export { ExpectError }

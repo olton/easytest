@@ -34,12 +34,6 @@ Support for PayPal to **serhii@pimenov.com.ua**
 ![NPM Downloads](https://img.shields.io/npm/dw/%40olton%2Feasytest)
 
 
----
-
-![verbose-off.png](verbose-off.png)
-
----
-
 ## Installation
 
 ```bash
@@ -99,14 +93,13 @@ Update `package.json` to run tests with `easytest` command.
 ### Functions
 - `describe` - create test suite
 - `it` - create a test case
+- `test` - create simple test
 - `expect` - create assertion
 - `beforeEach` - run before each test case
 - `afterEach` - run after each test case
 - `beforeAll` - run before all test cases
 - `afterAll` - run after all test cases
-- `test` - create simple test
 - `mock` - create mock function
-- `DOM` - create DOM object (not global)
 
 ### Matchers
 EasyTest contains a big set of built-in matchers:
@@ -130,7 +123,7 @@ EasyTest contains a big set of built-in matchers:
 ### TypeScript
 To use `EasyTest` with TypeScript you need to install `tsx` package.
 ```bash
-npm install tsx -D
+npm install -D tsx cross-env
 ```
 and then 
 ```json
@@ -139,97 +132,6 @@ and then
         "test": "cross-env NODE_OPTIONS=\"--import tsx\" easytest"
     }
 }
-```
-
-### cross-env
-Run scripts that set and use environment variables across platforms.
-```bash
-npm install --save-dev cross-env
-```
-
-## Configuration
-To configure `EasyTest` you need to create a `easytest.json` file in the root of your project.
-Also, you can use argument `--config=fileName` to specify a configuration file.
-
-```json
-{
-    "scripts": {
-        "test": "easytest --config=myconfig.json"
-    }
-}
-```
-
-EasyTest designed as a config-free testing framework. But you can configure it to your needs.
-**The default values are:**
-```javascript
-export const defaultConfig = {
-    include: ["**/*.spec.{t,j}s", "**/*.spec.{t,j}sx", "**/*.test.{t,j}s", "**/*.test.{t,j}sx"],
-    exclude: ["node_modules/**"],
-    skip: "",
-    test: "",
-    verbose: false,
-    dom: false,
-    coverage: false,
-    skipPassed: false,
-    reportType: "lcov",
-    reportDir: "coverage",
-    reportFile: "lcov.info",
-}
-```
-
-You can use cli arguments to configure EasyTest:
-
-- `--config=file_name.json` - path to the configuration file.
-- `--coverage` - enable coverage tool.
-- `--verbose` - enable verbose mode.
-- `--include=**/*.spec.{t,j}s` - include files for testing.
-- `--exclude=node_modules/**` - exclude files from testing.
-- `--test=test_name` - execute only tests whose name contains value.
-- `--dom` - enable global DOM.
-- `--skip=skip_name` - skip tests whose name contains value.
-- `--skip-passed` - skip passed tests.
-
-```json
-{
-  "scripts": {
-    "test": "easytest --coverage --verbose --include=**/core.spec.{t,j}s"
-  }
-}
-```
-
-## DOM Environment
-EasyTest has a global DOM object for testing HTML objects (we use `JSDOM` to create DOM environment).
-To enable global DOM, you need to use parameter `--dom` in the command line, or set `dom` to `true` in the configuration file.
-
-```json
-{
-    "scripts": {
-        "test": "easytest --dom"
-    }
-}
-```
-
-## Extend expect
-You can extend the `expect` function with your own matchers.
-
-```javascript
-import {Expect} from "@olton/easytest";
-
-class MyExpect extends Expect {
-    toBeEven() {
-        let received = this.received
-        let result = received % 2 === 0
-        if (!result) {
-            this.message = `Expected ${received} to be even`
-        }
-    }
-}
-
-const expect = (received) => new MyExpect(received)
-
-test(`Custom expect`, () => {
-    expect(2).toBeEven()
-})
 ```
 
 ## License

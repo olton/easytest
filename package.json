@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "tsx cli/easytest.js --dom --verbose --coverage --report-type=html --include='__tests__/*.test.js'",
+    "test": "tsx cli/easytest.js --dom --include='__tests__/*.test.js'",
     "test:watch": "tsx cli/easytest.js --watch --include=__tests__/array.test.js"
   },
   "keywords": [
@@ -31,10 +31,10 @@
     "email": "serhii@pimenov.com.ua"
   },
   "dependencies": {
-    "@happy-dom/global-registrator": "^17.4.3",
+    "@happy-dom/global-registrator": "^17.4.4",
     "chalk": "^5.4.1",
     "glob": "^11.0.1",
-    "happy-dom": "^17.4.3",
+    "happy-dom": "^17.4.4",
     "html-escaper": "^3.0.3",
     "puppeteer": "^24.4.0",
     "table": "^6.9.0",

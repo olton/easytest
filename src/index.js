@@ -12,7 +12,8 @@ import path from "path";
 import chalk from 'chalk';
 
 // Экспортируем публичные API
-export { Expect, ExpectError } from "./expects/expect.js";
+export { Expect, expect } from "./expects/expect.js";
+export { ExpectError } from "./expects/errors.js";
 export * from './core/registry.js';
 export { coverageFilter, generateReport, displayReport } from './core/coverage.js';
 

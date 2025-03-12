@@ -40,7 +40,7 @@ export const runner = async (queue, options) => {
         totalTestCount += q[1].tests.length;
     }
     if (!verbose && !parallel) {
-        log(`\n`)
+        log(` `)
         progressBar = new ProgressBar(totalTestCount);
     }
 
