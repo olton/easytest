@@ -22,7 +22,7 @@ export const defaultConfig = {
 export const updateConfig = (args) => {
     global.config = Object.assign({}, defaultConfig)
 
-    const configFileName = args.config ?? ("easytest.json" || "easytest.config.json")
+    const configFileName = args.config ?? ("latte.json" || "latte.config.json")
 
     console.log(chalk.gray(`🔍 Searching for a config file...`))
     if (fs.existsSync(configFileName)) {
@@ -58,7 +58,7 @@ export const updateConfig = (args) => {
     }
 }
 
-export const createConfigFile = (configFileName = "easytest.json") => {
+export const createConfigFile = (configFileName = "latte.json") => {
     // Проверка существования файла
     if (existsSync(configFileName)) {
         console.log(chalk.yellow(`⚠️ Config file ${chalk.cyanBright(configFileName)} already exists.`));

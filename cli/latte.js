@@ -104,7 +104,7 @@ try {
     console.log(`${chalk.cyan('Executing tests for project:')} ${chalk.bold(projectName)}\n`);
 
     if (argv.init) {
-        const configFileName = argv.config || "easytest.json";
+        const configFileName = argv.config || "latte.json";
         const { createConfigFile } = await import('../src/config/index.js');
         createConfigFile(configFileName);
         process.exit(0);
@@ -121,7 +121,7 @@ try {
         await run(root, config);
     }
 } catch (error) {
-    console.error(chalk.red(`\n❌ Error when executing EasyTest: ${error.message}`));
+    console.error(chalk.red(`\n❌ Error when executing Latte Testing: ${error.message}`));
     console.error(chalk.gray(error.stack));
     process.exit(1);
 }

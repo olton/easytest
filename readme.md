@@ -1,52 +1,55 @@
-# EasyTest
+# Latte
 
-Simple testing framework for JavaScript and TypeScript, written in pure JavaScript.
+Latte (a play on words "laconic testing") is a testing framework for JavaScript and TypeScript, written in pure JavaScript with DOM support and with headless browser.
 
 ---
 
-Documentation: https://easy.org.ua/
+Documentation: https://latte.org.ua/
 
 ---
 
 Core features:
-- No need to import `it`, `test`, `describe` or `ecpext` in your test file. These functions are available globally.
+- Config free. No need to create any config files, but you can create `latte.json` or `latte.config.json` file to set up your own configuration.
+- No need to import `it`, `test`, `describe` or `expect` in your test file. These functions are available globally.
+- Built-in headless browser in scope `B` and `DOM` support with option `--dom` (you have access to global DOM objects).
 - You can use both `js` and `ts` test files in the same project.
 - Asynchronous code testing.
 - TypeScript testing out of the box.
-- Global DOM object for testing HTML objects.
-- Built-in coverage tool.
-- Verbose or non verbose mode.
 - Mock functions.
 - Big set of built-in matchers.
 - Extend `expect` function with your own matchers.
-- Compatible with `codecov` report viewer.
 - A lot of expects in one test case.
 - Setup and Teardown functions (`beforeEach`, `afterEach`, `beforeAll`, `afterAll`).
+- Built-in coverage tool.
+- Verbose or non verbose mode.
+- Different Reporters: `lcov`, `console`, `html`, and `junit`.
 ---
 
 Support for PayPal to **serhii@pimenov.com.ua**
 
 ---
 
-[![NPM Version](https://img.shields.io/npm/v/@olton/easytest?color=green)](https://www.npmjs.com/package/@olton/easytest)
+[![NPM Version](https://img.shields.io/npm/v/@olton/latte?color=green)](https://www.npmjs.com/package/@olton/latte)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=7852a9)](https://opensource.org/licenses/MIT)
-[![codecov](https://codecov.io/gh/olton/easytest/branch/master/graph/badge.svg?token=7HT3E91GUA)](https://codecov.io/gh/olton/easytest)
-![NPM Downloads](https://img.shields.io/npm/dw/%40olton%2Feasytest)
+[![codecov](https://codecov.io/gh/olton/latte/branch/master/graph/badge.svg?token=7HT3E91GUA)](https://codecov.io/gh/olton/latte)
+![NPM Downloads](https://img.shields.io/npm/dw/%40olton%2Flatte)
 
 
 ## Installation
 
 ```bash
-npm install @olton/easytest -D
+npm install @olton/latte -D
 ```
 
 ## Usage
 
-To use `EasyTest` you don't need to import `it`, `test` or `describe` in your test file.
+To use `Latte` you don't need to import `it`, `test`, `describe` or `expect` in your test file. 
+All these functions are available globally.
+
 Create a test file with `*.test.js` or `*.test.ts` extension (for example).
 You can use both of them in the same project.
 
-```javascript
+```js
 function hello() {
     return "Hello"
 }
@@ -64,7 +67,10 @@ test(`Bad test 2 !== 1`, () => {
 ```
 
 ### Async tests
-```javascript
+
+You can test async code with `async/await` syntax.
+
+```js
 async function fetchData() {
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -81,19 +87,19 @@ describe('Async function tests', async () => {
 });
 ```
 
-Update `package.json` to run tests with `easytest` command.
+Update `package.json` to run tests with `latte` command.
 ```json
 {
     "scripts": {
-        "test": "easytest"
+        "test": "latte"
     }
 }
 ```
 
 ### Functions
-- `describe` - create test suite
-- `it` - create a test case
-- `test` - create simple test
+- `describe`, `suite` – create a test suite
+- `it` - create a test case in suite
+- `test` - create standalone test
 - `expect` - create assertion
 - `beforeEach` - run before each test case
 - `afterEach` - run after each test case
@@ -121,7 +127,7 @@ EasyTest contains a big set of built-in matchers:
 
 
 ### TypeScript
-To use `EasyTest` with TypeScript you need to install `tsx` package.
+To use `Latte` with TypeScript you need to install `tsx` package.
 ```bash
 npm install -D tsx cross-env
 ```
@@ -129,7 +135,7 @@ and then
 ```json
 {
     "scripts": {
-        "test": "cross-env NODE_OPTIONS=\"--import tsx\" easytest"
+        "test": "cross-env NODE_OPTIONS=\"--import tsx\" latte"
     }
 }
 ```

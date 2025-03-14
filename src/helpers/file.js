@@ -7,7 +7,7 @@ import { join } from 'path';
  * @returns {Object} Загруженные данные о пройденных тестах
  */
 export function initTestDirectory() {
-    const easyTestDir = join(process.cwd(), '.easytest');
+    const easyTestDir = join(process.cwd(), '.latte');
     if (!existsSync(easyTestDir)) {
         mkdirSync(easyTestDir);
     }

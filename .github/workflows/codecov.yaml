@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: node ./cli/easytest --coverage --dom --include='__tests__/*.test.js'
+        run: node ./cli/latte --coverage --dom --include='__tests__/*.test.js'
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v4

@@ -1,33 +1,36 @@
 {
-  "name": "@olton/easytest",
-  "version": "0.47.0",
+  "name": "@olton/latte",
+  "version": "0.1.0",
   "main": "src/index.js",
   "bin": {
-    "easytest": "cli/easytest.js"
+    "latte": "cli/latte.js"
   },
   "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "tsx cli/easytest.js --dom -c --include='__tests__/*.test.js'",
-    "test:watch": "tsx cli/easytest.js --watch --include=__tests__/*.test.js"
+    "test": "tsx cli/latte.js --dom -c --include='__tests__/*.test.js'",
+    "test:watch": "tsx cli/latte.js --watch --include=__tests__/*.test.js"
   },
   "keywords": [
     "javascript",
     "typescript",
     "test",
     "framework",
-    "html"
+    "html",
+    "dom",
+    "browser",
+    "testing"
   ],
   "author": "Serhii Pimenov <serhii@pimenov.com.ua> (https://pimenov.com.ua)",
   "license": "MIT",
   "description": "Simple test framework for JavaScript and TypeScript with DOM supports",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olton/easytest.git"
+    "url": "git+https://github.com/olton/latte.git"
   },
   "bugs": {
-    "url": "https://github.com/olton/easytest/issues",
+    "url": "https://github.com/olton/latte/issues",
     "email": "serhii@pimenov.com.ua"
   },
   "dependencies": {
