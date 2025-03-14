@@ -27,12 +27,12 @@ export const updateConfig = (args) => {
     console.log(chalk.gray(`🔍 Searching for a config file...`))
     if (fs.existsSync(configFileName)) {
         console.log(chalk.gray(`✅ Config file found!`))
-        console.log(chalk.gray(`   └── We use ${chalk.cyanBright(configFileName)} to configure EasyTest`))
+        console.log(chalk.gray(`   └── We use ${chalk.cyanBright(configFileName)} to configure Latte`))
         const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
         Object.assign(config, userConfig)
     } else {
         console.log(chalk.gray(`✖️ Config file not found! Using default config!`))
-        console.log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure EasyTest`))
+        console.log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure Latte`))
     }
 
     if (args.dom) { config.dom = true; }

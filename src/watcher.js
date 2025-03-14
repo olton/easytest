@@ -29,7 +29,7 @@ export async function startWatchMode(root, options) {
 
     global.failedTests = [];
     
-    console.log(chalk.cyan('\n=== EasyTest Watch Mode ==='));
+    console.log(chalk.cyan('\n=== Latte Watch Mode ==='));
 
     const includePatterns = options.include ?
         (Array.isArray(options.include) ? options.include : [options.include]) :
