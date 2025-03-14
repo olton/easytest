@@ -97,7 +97,7 @@ Update `package.json` to run tests with `latte` command.
 ```
 
 ### Functions
-- `describe`, `suite` – create a test suite
+- `describe` – create a test suite
 - `it` - create a test case in suite
 - `test` - create standalone test
 - `expect` - create assertion
