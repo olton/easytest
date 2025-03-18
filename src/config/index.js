@@ -3,18 +3,31 @@ import chalk from "chalk";
 import yargs from "yargs";
 import {hideBin} from "yargs/helpers";
 
+const defaultInclude = [
+    "**/*.spec.ts", 
+    "**/*.spec.tsx", 
+    "**/*.test.ts", 
+    "**/*.test.tsx", 
+    "**/*.spec.js", 
+    "**/*.spec.jsx", 
+    "**/*.test.js", 
+    "**/*.test.jsx"
+]
+const defaultExclude = [
+    "node_modules/**"
+]
+
 export const defaultConfig = {
     verbose: false,
     dom: false,
     react: false,
-    reactVersion: "latest",
     coverage: false,
     skipPassed: false,
     parallel: false,
     watch: false,
     debug: false,
-    include: ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.js", "**/*.spec.jsx", "**/*.test.js", "**/*.test.jsx"],
-    exclude: ["node_modules/**"],
+    include: defaultInclude,
+    exclude: defaultExclude,
     skip: "",
     test: "",
     reportType: "console",
@@ -39,9 +52,13 @@ export const updateConfig = (args) => {
         console.log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure Latte`))
     }
 
+    if (args.react && !args.dom) {
+        console.log(chalk.yellow('⚠️ Option --react requires --dom. Enabling DOM emulation automatically.'));
+        args.dom = true;
+    }
+
     if (args.dom) { config.dom = true; }
     if (args.react) { config.dom = true; config.react = true; }
-    if (args.reactVersion) { config.reactVersion = args.reactVersion; }
     if (args.coverage) { config.coverage = true; }
     if (args.verbose) { config.verbose = true; }
     if (args.skipPassed) { config.skipPassed = true; }
@@ -104,7 +121,13 @@ export const processArgv = () => {
             type: 'boolean',
             description: 'Enable DOM emulation'
         })
+        .option('react', {
+            alias: 'r',
+            type: 'boolean',
+            description: 'Enable React testing support (requires --dom)'
+        })
         .option('debug', {
+            alias: 'g',
             type: 'boolean',
             description: 'Run tests in debug mode'
         })

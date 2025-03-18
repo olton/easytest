@@ -5,6 +5,10 @@ import { setup as setupDom, bye as byeDom, js, css, html } from "../dom/index.js
 import { delay, getFileUrl } from "../helpers/delay.js";
 import { describe, it, test } from "./api.js";
 import { beforeEach, afterEach, beforeAll, afterAll } from "./hooks.js";
+import chalk from "chalk";
+
+import { checkReactDependencies } from '../react/check-deps.js';
+import { initReact, render, cleanup, snapshot } from '../react/index.js';
 
 export const DOM = {
     setup: setupDom,
@@ -29,10 +33,47 @@ export function registerGlobals() {
     global.getFileUrl = getFileUrl;
     global.DOM = DOM;
     global.B = Browser;
+
+    if (global.config && global.config.react) {
+        const reactInitialized = initReact();
+        if (reactInitialized) {
+            // Додаємо React API глобально
+            global.React = {
+                render,
+                cleanup,
+                snapshot
+            };
+        }
+    }
 }
 
 export const register = (name, component) => {
     global[name] = component;
+}
+
+export const registerGlobalEvents = () => {
+    // Глобальная обработка ошибок
+    process.on('uncaughtException', (error) => {
+        console.error(chalk.red(`\n❌ Unprocessed exception: ${error.message}\n`));
+        console.error(chalk.gray(error.stack));
+        process.exit(1);
+    });
+
+    process.on('unhandledRejection', (reason, promise) => {
+        console.error(chalk.red(`\n❌ Unprocessed promise reject: ${reason}\n`));
+        process.exit(1);
+    });
+
+// Обработка сигналов завершения
+    process.on('SIGINT', () => {
+        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the user!\n'));
+        process.exit(0);
+    });
+
+    process.on('SIGTERM', () => {
+        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the system!\n'));
+        process.exit(0);
+    });
 }
 
 export const expect = expectFn;

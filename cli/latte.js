@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { registerGlobals, run, registerGlobalEvents } from '../src/index.js';
+import { registerGlobals, run } from '../src/index.js';
 import { startWatchMode } from '../src/watcher.js';
 import chalk from 'chalk';
 import { processArgv, updateConfig } from "../src/config/index.js";
@@ -10,6 +10,8 @@ import { banner } from '../src/helpers/banner.js';
 import { dirname, resolve } from 'path';
 import { pathToFileURL, fileURLToPath } from 'url';
 import { register } from 'node:module';
+import { registerGlobalEvents } from '../src/core/registry.js';
+import { configureJsxSupport } from '../src/config/jsx.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,6 +43,15 @@ try {
     
     // global.config = {};
     updateConfig(argv);
+
+    if (argv.react) {
+        const jsxSupported = configureJsxSupport(root);
+
+        if (!jsxSupported) {
+            console.log(chalk.yellow('🤖 JSX/TSX support might be limited without proper Babel configuration!'));
+        }
+    }
+
     registerGlobals();
 
     if (argv.watch) {

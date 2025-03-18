@@ -10,7 +10,7 @@
   "scripts": {
     "pub": "npm publish --access public",
     "test": "node cli/latte.js --dom",
-    "test:watch": "node cli/latte.js --watch --include=__tests__/*.test.js"
+    "test:watch": "node cli/latte.js --watch --include=__tests__/*.test.jsx"
   },
   "keywords": [
     "javascript",

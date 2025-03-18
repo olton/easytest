@@ -3,13 +3,16 @@ import { pathToFileURL } from 'url';
 import { realpathSync, existsSync, writeFileSync } from 'fs';
 import inspector from 'inspector/promises';
 import { coverageFilter, displayReport } from './core/coverage.js';
-import {runner} from "./core/runner.js";
-import {parallel} from "./core/parallel-runner.js";
-import {testQueue} from './core/queue.js';
+import { runner } from "./core/runner.js";
+import { parallel } from "./core/parallel-runner.js";
+import { testQueue } from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
 import { DOM } from './core/registry.js';
+
 import path from "path";
 import chalk from 'chalk';
+import {checkReactDependencies} from "./react/check-deps.js";
+import {cleanup} from "./react/index.js";
 
 // Экспортируем публичные API
 export { Expect, expect } from "./expects/expect.js";
@@ -22,7 +25,6 @@ export { waitFor } from './utils/index.js';
 // Главная функция запуска тестов
 export const run = async (root, options = {}) => {
     global.testResults = {}
-
     options.root = root;
 
     const inspectPort = options.debug ? (options.debugPort || 9229) : undefined;
@@ -37,8 +39,17 @@ export const run = async (root, options = {}) => {
     // Настройка DOM, если требуется
     if (options.dom) {
         await DOM.setup();
+        console.log(chalk.green('🤖 DOM testing support is enabled!'));
     }
-    
+
+    if (options.react) {
+        if (!checkReactDependencies(root)) {
+            console.error(chalk.red('💀 React testing cannot be initialized due to missing dependencies.'));
+            process.exit(1);
+        }
+        console.log(chalk.green('🤖 React testing support is enabled!'));
+    }
+
     // Инициализация сессии для измерения покрытия кода
     const session = new inspector.Session();
     session.connect();
@@ -89,6 +100,14 @@ export const run = async (root, options = {}) => {
     const coverage = await session.post('Profiler.takePreciseCoverage');
     await session.post('Profiler.stopPreciseCoverage');
 
+    if (options.react) {
+        try {
+            cleanup();
+        } catch (e) {
+            // Ігноруємо помилки
+        }
+    }
+
     // Обработка покрытия кода, если включено
     if (options.coverage) {
         const filteredCoverage = coverageFilter(coverage);
@@ -109,28 +128,3 @@ export const run = async (root, options = {}) => {
     
     return global.testResults;
 };
-
-export const registerGlobalEvents = () => {
-    // Глобальная обработка ошибок
-    process.on('uncaughtException', (error) => {
-        console.error(chalk.red(`\n❌ Unprocessed exception: ${error.message}\n`));
-        console.error(chalk.gray(error.stack));
-        process.exit(1);
-    });
-
-    process.on('unhandledRejection', (reason, promise) => {
-        console.error(chalk.red(`\n❌ Unprocessed promise reject: ${reason}\n`));
-        process.exit(1);
-    });
-
-// Обработка сигналов завершения
-    process.on('SIGINT', () => {
-        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the user!\n'));
-        process.exit(0);
-    });
-
-    process.on('SIGTERM', () => {
-        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the system!\n'));
-        process.exit(0);
-    });
-}
