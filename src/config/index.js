@@ -48,7 +48,7 @@ export const updateConfig = (args) => {
         const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
         Object.assign(config, userConfig)
     } else {
-        console.log(chalk.gray(`🤖 Config file not found! We use default settings and CLI arguments!`))
+        console.log(chalk.gray(`🥤 Config file not found! We use default settings and CLI arguments!`))
         console.log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure Latte`))
     }
 

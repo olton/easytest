@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "node cli/latte.js --dom --react --include='__tests__/*.test.jsx,__tests__/*.test.js'",
+    "test": "node cli/latte.js --dom --react --include='__tests__/*.test.jsx,__tests__/*.test.jsx'",
     "test:watch": "node cli/latte.js --watch --include=__tests__/*.test.jsx"
   },
   "keywords": [

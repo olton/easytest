@@ -28,7 +28,7 @@ export const checkReactDependencies = (projectRoot) => {
 
         if (missingDeps.length > 0) {
             console.error( chalk.red(`💀 Missing required dependencies for React testing: ${missingDeps.join(', ')}`));
-            console.log(chalk.yellow(`🤖 Please install them using: npm install ${missingDeps.join(' ')}`));
+            console.log(chalk.yellow(`🥤 Please install them using: npm install ${missingDeps.join(' ')}`));
             return false;
         }
 

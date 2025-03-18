@@ -23,8 +23,8 @@ export const configureJsxSupport = (projectRoot) => {
     }
 
     if (!babelConfigFound) {
-        console.warn(chalk.yellow('🤖 No Babel configuration found for transpiling JSX/TSX.'));
-        console.warn(chalk.yellow('🤖 You may need to create a Babel configuration for proper React testing.'));
+        console.warn(chalk.yellow('🥤 No Babel configuration found for transpiling JSX/TSX.'));
+        console.warn(chalk.yellow('🥤 You may need to create a Babel configuration for proper React testing.'));
     }
 
     // Перевіряємо наявність необхідних пресетів для transpiling JSX/TSX
@@ -42,11 +42,11 @@ export const configureJsxSupport = (projectRoot) => {
         const missingPresets = requiredPresets.filter(preset => !deps[preset]);
 
         if (missingPresets.length > 0) {
-            console.warn(chalk.yellow(`🤖 React testing may require these Babel presets: ${missingPresets.join(', ')}`));
+            console.warn(chalk.yellow(`🥤 React testing may require these Babel presets: ${missingPresets.join(', ')}`));
         }
 
     } catch (error) {
-        console.error(chalk.red(`🤖 Error checking Babel presets: ${error.message}`));
+        console.error(chalk.red(`🥤 Error checking Babel presets: ${error.message}`));
     }
 
     return babelConfigFound;

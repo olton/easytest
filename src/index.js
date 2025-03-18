@@ -41,18 +41,22 @@ export const run = async (root, options = {}) => {
         console.log(chalk.green(`[Debug] Starting in debug mode on port ${inspectPort}`));
     }
 
+    if (options.dom || options.react) {
+        console.log(chalk.green('🥤 Preparing test environment...'));
+    }
+    
     // Настройка DOM, если требуется
     if (options.dom) {
         await DOM.setup();
-        console.log(chalk.green('🤖 DOM enabled!'));
+            console.log(chalk.green(`   ${options.react ? "├" : "└"}── 📦 DOM ready!`));
     }
 
     if (options.react) {
         if (!checkReactDependencies(root)) {
-            console.error(chalk.red('💀 React cannot be initialized due to missing dependencies.'));
+            console.error(chalk.red('   └── ⚛️ React cannot be initialized due to missing dependencies.'));
             process.exit(1);
         }
-        console.log(chalk.green('🤖 React enabled!'));
+        console.log(chalk.green(    '   └── ⚛️ React ready!'));
     }
 
     // Инициализация сессии для измерения покрытия кода
