@@ -1,9 +1,13 @@
 import fs, {existsSync, writeFileSync} from "fs";
 import chalk from "chalk";
+import yargs from "yargs";
+import {hideBin} from "yargs/helpers";
 
 export const defaultConfig = {
     verbose: false,
     dom: false,
+    react: false,
+    reactVersion: "latest",
     coverage: false,
     skipPassed: false,
     parallel: false,
@@ -31,11 +35,13 @@ export const updateConfig = (args) => {
         const userConfig = JSON.parse(fs.readFileSync(configFileName, 'utf-8'))
         Object.assign(config, userConfig)
     } else {
-        console.log(chalk.gray(`✖️ Config file not found! Using default config!`))
+        console.log(chalk.gray(`🤖 Config file not found! We use default settings and CLI arguments!`))
         console.log(chalk.gray(`   └── You can create ${chalk.cyanBright(configFileName)} to configure Latte`))
     }
 
     if (args.dom) { config.dom = true; }
+    if (args.react) { config.dom = true; config.react = true; }
+    if (args.reactVersion) { config.reactVersion = args.reactVersion; }
     if (args.coverage) { config.coverage = true; }
     if (args.verbose) { config.verbose = true; }
     if (args.skipPassed) { config.skipPassed = true; }
@@ -79,4 +85,72 @@ export const createConfigFile = (configFileName = "latte.json") => {
         console.log(`\n`)
         return false;
     }
+}
+
+export const processArgv = () => {
+    return yargs(hideBin(process.argv))
+        .option('watch', {
+            alias: 'w',
+            type: 'boolean',
+            description: 'Run in observation mode'
+        })
+        .option('parallel', {
+            alias: 'p',
+            type: 'boolean',
+            description: 'Run in parallel mode'
+        })
+        .option('dom', {
+            alias: 'd',
+            type: 'boolean',
+            description: 'Enable DOM emulation'
+        })
+        .option('debug', {
+            type: 'boolean',
+            description: 'Run tests in debug mode'
+        })
+        .option('verbose', {
+            alias: 'b',
+            type: 'boolean',
+            description: 'Detailed report'
+        })
+        .option('coverage', {
+            alias: 'c',
+            type: 'boolean',
+            description: 'Code coverage report'
+        })
+        .option('loader', {
+            alias: 'l',
+            type: 'boolean',
+            description: 'Use experimental resolver for imports'
+        })
+        .option('max-workers', {
+            type: 'string',
+            description: 'Maximum number of parallel workers'
+        })
+        .option('include', {
+            type: 'string',
+            description: 'Test files switching templates'
+        })
+        .option('exclude', {
+            type: 'string',
+            description: 'Test file excluding templates'
+        })
+        .option('report-type', {
+            type: 'string',
+            description: 'Report Type [\'console\', \'lcov\', \'html\', \'junit\']'
+        })
+        .option('report-dir', {
+            type: 'string',
+            description: 'Reports Directory'
+        })
+        .option('report-file', {
+            type: 'string',
+            description: 'Report File Name'
+        })
+        .option('init', {
+            type: 'boolean',
+            description: 'Create a configuration file'
+        })
+        .help()
+        .argv;
 }

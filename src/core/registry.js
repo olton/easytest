@@ -15,7 +15,6 @@ export const DOM = {
 };
 
 export function registerGlobals() {
-    // Регистрация API
     global.describe = describe;
     global.it = it;
     global.test = test;
@@ -25,15 +24,21 @@ export function registerGlobals() {
     global.beforeAll = beforeAll;
     global.afterAll = afterAll;
     global.mock = mockFn;
+    global.fetch = mockFn(() => Promise.resolve({ json: () => ({}) }));
     global.delay = delay;
     global.getFileUrl = getFileUrl;
     global.DOM = DOM;
     global.B = Browser;
 }
 
-// Экспортируем все публичные функции и объекты
+export const register = (name, component) => {
+    global[name] = component;
+}
+
 export const expect = expectFn;
 export const mock = mockFn;
+export const fetch = mockFn(() => Promise.resolve({ json: () => ({}) }));
 export const B = Browser;
 
 export { describe, it, test, beforeEach, afterEach, beforeAll, afterAll, delay, getFileUrl };
+

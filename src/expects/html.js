@@ -11,7 +11,7 @@ export default {
         let result = typeof HTMLElement !== "undefined" && received instanceof HTMLElement
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not a HTMLElement`, 'toBeHtmlElement', received, 'HTMLElement')
+            throw new ExpectError(msg || `Received value is not a HTMLElement`, 'toBeHtmlElement', received, 'HTMLElement')
         }
     },
 
@@ -25,7 +25,7 @@ export default {
         let result = typeof Node !== "undefined" && received instanceof Node
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not a Node`, 'toBeHtmlNode', received, 'Node')
+            throw new ExpectError(msg || `Received value is not a Node`, 'toBeHtmlNode', received, 'Node')
         }
     },
 
@@ -39,7 +39,7 @@ export default {
         let result = typeof document !== "undefined" && received instanceof document
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not a Document`, 'toBeDocument', received, 'Document')
+            throw new ExpectError(msg || `Received value is not a Document`, 'toBeDocument', received, 'Document')
         }
     },
 
@@ -53,7 +53,7 @@ export default {
         let result = typeof HTMLCollection !== "undefined" && received instanceof HTMLCollection
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not a HTMLCollection`, 'toBeHtmlCollection', received, 'HTMLCollection')
+            throw new ExpectError(msg || `Received value is not a HTMLCollection`, 'toBeHtmlCollection', received, 'HTMLCollection')
         }
     },
 
@@ -67,7 +67,7 @@ export default {
         let result = typeof window !== "undefined" && received instanceof window
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not a Window object`, 'toBeWindow', received, 'Window')
+            throw new ExpectError(msg || `Received value is not a Window object`, 'toBeWindow', received, 'Window')
         }
     },
 
@@ -81,7 +81,7 @@ export default {
         let result = received instanceof Text
 
         if (!result) {
-            throw new ExpectError(msg || `Expected value is not a Text node`, 'toBeTextNode', received, 'Text Node')
+            throw new ExpectError(msg || `Received value is not a Text node`, 'toBeTextNode', received, 'Text Node')
         }
     },
 
@@ -96,7 +96,7 @@ export default {
         let result = received.classList && received.classList.contains(expected)
 
         if (!result) {
-            throw new ExpectError(msg || `Expected HTMLElement has not class ${expected}`, 'hasClass', received.className, expected)
+            throw new ExpectError(msg || `Received HTMLElement has not class ${expected}`, 'hasClass', received.className, expected)
         }
     },
 
@@ -111,7 +111,7 @@ export default {
         let result = received.classList && received.classList.contains(expected) === false
 
         if (!result) {
-            throw new ExpectError(msg || `Expected HTMLElement has a class ${expected}`, 'hasClass', received, expected)
+            throw new ExpectError(msg || `Received HTMLElement has a class ${expected}`, 'hasClass', received, expected)
         }
     },
 
@@ -126,7 +126,7 @@ export default {
         let result = received instanceof HTMLElement && received.hasAttribute(expected)
 
         if (!result) {
-            throw new ExpectError(msg || `Expected element has not attribute ${expected}`, 'hasAttribute', received, expected)
+            throw new ExpectError(msg || `Received element has not attribute ${expected}`, 'hasAttribute', received, expected)
         }
     },
 
@@ -141,7 +141,7 @@ export default {
         let result = received instanceof HTMLElement && received.hasAttribute(expected) === false
 
         if (!result) {
-            throw new ExpectError(msg || `Expected element has an attribute ${expected}`, 'hasAttribute', received, expected)
+            throw new ExpectError(msg || `Received element has an attribute ${expected}`, 'hasAttribute', received, expected)
         }
     },
 
@@ -155,7 +155,7 @@ export default {
         let result = received instanceof HTMLElement && received.children.length > 0
 
         if (!result) {
-            throw new ExpectError(msg || `Expected element has no children`, 'hasChildren', received, 'Children')
+            throw new ExpectError(msg || `Received element has no children`, 'hasChildren', received, 'Children')
         }
     },
 
@@ -169,7 +169,7 @@ export default {
         let result = received instanceof HTMLElement && received.children.length === 0
 
         if (!result) {
-            throw new ExpectError(msg || `Expected element has children`, 'hasChildren', received, 'Children')
+            throw new ExpectError(msg || `Received element has children`, 'hasChildren', received, 'Children')
         }
     },
 
@@ -183,7 +183,7 @@ export default {
         let result = received instanceof HTMLElement && received.parentElement !== null
 
         if (!result) {
-            throw new ExpectError(msg || `Expected element has no parent`, 'hasParent', received, 'Parent')
+            throw new ExpectError(msg || `Received element has no parent`, 'hasParent', received, 'Parent')
         }
     },
 
@@ -197,7 +197,7 @@ export default {
         let result = received instanceof HTMLElement && received.parentElement === null
 
         if (!result) {
-            throw new ExpectError(msg || `Expected element has a parent`, 'hasParent', received, 'Parent')
+            throw new ExpectError(msg || `Received element has a parent`, 'hasParent', received, 'Parent')
         }
     },
 }

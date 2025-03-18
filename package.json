@@ -1,6 +1,6 @@
 {
   "name": "@olton/latte",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "src/index.js",
   "bin": {
     "latte": "cli/latte.js"
@@ -9,8 +9,8 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "tsx cli/latte.js --dom -c --include='__tests__/*.test.js'",
-    "test:watch": "tsx cli/latte.js --watch --include=__tests__/*.test.js"
+    "test": "node cli/latte.js --dom",
+    "test:watch": "node cli/latte.js --watch --include=__tests__/*.test.js"
   },
   "keywords": [
     "javascript",
@@ -36,16 +36,34 @@
   "dependencies": {
     "@happy-dom/global-registrator": "^17.4.4",
     "chalk": "^5.4.1",
+    "chokidar": "^4.0.3",
     "glob": "^11.0.1",
     "happy-dom": "^17.4.4",
     "html-escaper": "^3.0.3",
     "puppeteer": "^24.4.0",
     "table": "^6.9.0",
-    "yargs": "^17.7.2",
-    "chokidar": "^4.0.3"
+    "yargs": "^17.7.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "@babel/register": "^7.25.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

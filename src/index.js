@@ -16,9 +16,13 @@ export { Expect, expect } from "./expects/expect.js";
 export { ExpectError } from "./expects/errors.js";
 export * from './core/registry.js';
 export { coverageFilter, generateReport, displayReport } from './core/coverage.js';
+export { fire } from './events/index.js';
+export { waitFor } from './utils/index.js';
 
 // Главная функция запуска тестов
 export const run = async (root, options = {}) => {
+    global.testResults = {}
+
     options.root = root;
 
     const inspectPort = options.debug ? (options.debugPort || 9229) : undefined;
@@ -34,7 +38,7 @@ export const run = async (root, options = {}) => {
     if (options.dom) {
         await DOM.setup();
     }
-
+    
     // Инициализация сессии для измерения покрытия кода
     const session = new inspector.Session();
     session.connect();
@@ -75,15 +79,11 @@ export const run = async (root, options = {}) => {
         await import(fileUrl + `?t=${Date.now()}`);
     }
 
-    let result
-    
     // Запуск тестов
     if (options.parallel) {
-        // console.log(chalk.gray(`[-] Running tests in parallel...`));
-        result = await parallel(testQueue.getQueue(), options.maxWorkers);
+        await parallel(testQueue.getQueue(), options.maxWorkers);
     } else {
-        // console.log(chalk.gray(`[-] Running tests in serial...`));
-        result = await runner(testQueue.getQueue(), options);
+        await runner(testQueue.getQueue(), options);
     }
 
     const coverage = await session.post('Profiler.takePreciseCoverage');
@@ -109,3 +109,28 @@ export const run = async (root, options = {}) => {
     
     return global.testResults;
 };
+
+export const registerGlobalEvents = () => {
+    // Глобальная обработка ошибок
+    process.on('uncaughtException', (error) => {
+        console.error(chalk.red(`\n❌ Unprocessed exception: ${error.message}\n`));
+        console.error(chalk.gray(error.stack));
+        process.exit(1);
+    });
+
+    process.on('unhandledRejection', (reason, promise) => {
+        console.error(chalk.red(`\n❌ Unprocessed promise reject: ${reason}\n`));
+        process.exit(1);
+    });
+
+// Обработка сигналов завершения
+    process.on('SIGINT', () => {
+        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the user!\n'));
+        process.exit(0);
+    });
+
+    process.on('SIGTERM', () => {
+        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the system!\n'));
+        process.exit(0);
+    });
+}

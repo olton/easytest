@@ -1,108 +1,31 @@
 #!/usr/bin/env node
 
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import {registerGlobals, run} from '../src/index.js';
+import { registerGlobals, run, registerGlobalEvents } from '../src/index.js';
 import { startWatchMode } from '../src/watcher.js';
 import chalk from 'chalk';
-import {updateConfig} from "../src/config/index.js";
-import {clearConsole} from "../src/helpers/console.js";
+import { processArgv, updateConfig } from "../src/config/index.js";
+import { clearConsole } from "../src/helpers/console.js";
 import { getProjectName } from '../src/helpers/project.js';
 import { banner } from '../src/helpers/banner.js';
+import { dirname, resolve } from 'path';
+import { pathToFileURL, fileURLToPath } from 'url';
+import { register } from 'node:module';
 
-// Глобальная обработка ошибок
-process.on('uncaughtException', (error) => {
-    console.error(chalk.red(`\n❌ Unprocessed exception: ${error.message}`));
-    console.error(chalk.gray(error.stack));
-    process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-    console.error(chalk.red(`\n❌ Unprocessed promise reject: ${reason}`));
-    process.exit(1);
-});
-
-// Обработка сигналов завершения
-process.on('SIGINT', () => {
-    console.log(chalk.yellow('\n\n⚠️ The testing process was interrupted by the user!'));
-    process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-    console.log(chalk.yellow('\n\n⚠️ The testing process was interrupted by the system!'));
-    process.exit(0);
-});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 try {
+    registerGlobalEvents();
+    
+    const argv = processArgv();
+    const root = process.cwd();
+
     clearConsole()
     banner();
-    
-    const argv = yargs(hideBin(process.argv))
-        .option('watch', {
-            alias: 'w',
-            type: 'boolean',
-            description: 'Run in observation mode'
-        })
-        .option('parallel', {
-            alias: 'p',
-            type: 'boolean',
-            description: 'Run in parallel mode'
-        })
-        .option('dom', {
-            alias: 'd',
-            type: 'boolean',
-            description: 'Enable DOM emulation'
-        })
-        .option('debug', {
-            type: 'boolean',
-            description: 'Run tests in debug mode'
-        })
-        .option('verbose', {
-            alias: 'v',
-            type: 'boolean',
-            description: 'Detailed report'
-        })
-        .option('coverage', {
-            alias: 'c',
-            type: 'boolean',
-            description: 'Code coverage report'
-        })
-        .option('max-workers', {
-            type: 'string',
-            description: 'Maximum number of parallel workers'
-        })
-        .option('include', {
-            type: 'string',
-            description: 'Test files switching templates'
-        })
-        .option('exclude', {
-            type: 'string',
-            description: 'Test file excluding templates'
-        })
-        .option('report-type', {
-            type: 'string',
-            description: 'Report Type [\'console\', \'lcov\', \'html\', \'junit\']'
-        })
-        .option('report-dir', {
-            type: 'string',
-            description: 'Reports Directory'
-        })
-        .option('report-file', {
-            type: 'string',
-            description: 'Report File Name'
-        })
-        .option('init', {
-            type: 'boolean',
-            description: 'Create a configuration file'
-        })
-        .help()
-        .argv;
-
-    const root = process.cwd();
 
     const projectName = getProjectName(root);
     console.log(`${chalk.cyan('Executing tests for project:')} ${chalk.bold(projectName)}\n`);
-
+    
     if (argv.init) {
         const configFileName = argv.config || "latte.json";
         const { createConfigFile } = await import('../src/config/index.js');
@@ -110,9 +33,14 @@ try {
         process.exit(0);
     }
 
-    global.config = {};
+    if (argv.loader) {
+        console.log(chalk.yellow(`🤖 Experimental loader mode is enabled!`));
+        const resolverPath = resolve(__dirname, '../src/resolver/index.js');
+        register(pathToFileURL(resolverPath).href);
+    }
+    
+    // global.config = {};
     updateConfig(argv);
-
     registerGlobals();
 
     if (argv.watch) {
@@ -121,7 +49,16 @@ try {
         await run(root, config);
     }
 } catch (error) {
-    console.error(chalk.red(`\n❌ Error when executing Latte Testing: ${error.message}`));
-    console.error(chalk.gray(error.stack));
-    process.exit(1);
+    if (error.message.includes('Directory import') && error.message.includes('is not supported')
+    ) {
+        console.error(chalk.red(`\n💀 Import of the Directory has been identified!`));
+        console.error(chalk.yellow(`Please change import from: import {} from './directory'`));
+        console.error(chalk.green(`To: import {} from './directory/index.js'`));
+        console.error(chalk.cyan(`Or create package.json in this Directory with Field "exports"\n`));
+        console.error(`${chalk.gray("Original message:")} ${error.message}\n`)
+    } else {
+        console.error(chalk.red(`\n💀 Latte executing stopped with message: ${error.message}`));
+        console.error(chalk.gray(error.stack));
+        process.exit(1);
+    }
 }

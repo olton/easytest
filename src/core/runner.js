@@ -43,8 +43,6 @@ export const runner = async (queue, options) => {
         log(` `)
         progressBar = new ProgressBar(totalTestCount);
     }
-
-    global.testResults = {}
     
     for (const [file, jobs] of queue) {
         // const fileHash = await getFileHash(realpathSync(file))
