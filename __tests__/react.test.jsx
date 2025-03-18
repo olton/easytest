@@ -1,8 +1,9 @@
-import {describe, it, expect, afterEach, waitFor } from '../src/index.js';
-
 const Button = ({ text, onClick }) => {
     return <button onClick={onClick}>{text}</button>;
 };
+
+beforeAll(() => {
+});
 
 afterEach(() => {
     document.body.innerHTML = '';
@@ -10,7 +11,7 @@ afterEach(() => {
 
 describe('React Button (JSX)', () => {
     it('should render a button with text', async () => {
-        const { container } = React.render(<Button text="Click me" />);
+        const { container, debug } = await R.render(<Button text="Click me" />);
 
         await waitFor(100);
 
@@ -27,7 +28,7 @@ describe('React Button (JSX)', () => {
             clicked = true;
         };
 
-        const { container } = React.render(<Button text="Click me" onClick={handleClick} />);
+        const { container } = await R.render(<Button text="Click me" onClick={handleClick} />);
 
         await waitFor(100);
 

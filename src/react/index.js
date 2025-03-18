@@ -10,19 +10,28 @@ export const initReact = () => {
         // Динамічний імпорт React, щоб не вимагати його наявності 
         // для тих, хто не використовує React тестування
         React = require('react');
-        ReactDOM = require('react-dom');
+        ReactDOM = require('react-dom/client');
         ReactTestUtils = require('react-dom/test-utils');
+
+        global.React = React;
+        global.ReactDOM = ReactDOM;
+        global.ReactTestUtils = ReactTestUtils;
+        
         return true;
     } catch (error) {
-        console.error(`Failed to initialize React testing: ${error.message}`);
+        console.error(`Failed to initialize React: ${error.message}`);
         return false;
     }
 };
 
 // Утиліта для рендерингу компонентів
-export const render = (Component, props = {}, container = null) => {
+export const render = async (Component, props = {}, container = null) => {
+    
     if (!React || !ReactDOM) {
         throw new Error('React not initialized. Make sure to call initReact() first.');
+    } else {
+        // console.log(`🤖 Found React version: ${React.version}`);
+        // console.log(`🤖 Found ReactDOM version: ${ReactDOM.version}`);
     }
 
     // Якщо контейнер не передано, створюємо новий
@@ -31,18 +40,38 @@ export const render = (Component, props = {}, container = null) => {
         document.body.appendChild(container);
     }
 
-    let element;
-    if (React.isValidElement(Component)) {
-        element = Component;
+    // Перевірка, чи є createRoot в ReactDOM (React 18+)
+    if (ReactDOM.createRoot) {
+        // console.log('🤖 Using React createRoot API (18+)');
+        const root = ReactDOM.createRoot(container);
+        await new Promise(resolve => {
+            root.render(Component);
+            setTimeout(resolve, 10); // Даємо час для завершення рендерингу
+        });
     } else {
-        element = React.createElement(Component, props);
+        // console.log('🤖 Using React render API (< 18)');
+        // Використовуємо старий API для React < 18
+        ReactDOM.render(Component, container);
+        await new Promise(resolve => setTimeout(resolve, 10));
     }
-
-    ReactDOM.render(element, container);
 
     return {
         container,
-        unmount: () => ReactDOM.unmountComponentAtNode(container),
+        unmount: () => {
+            try {
+                if (ReactDOM.createRoot) {
+                    // Для React 18+
+                    const root = ReactDOM.createRoot(container);
+                    root.unmount();
+                } else {
+                    // Для React < 18
+                    ReactDOM.unmountComponentAtNode(container);
+                }
+                container.remove();
+            } catch (e) {
+                console.error('Error when removing the component:', e);
+            }
+        },
         rerender: (newProps) => {
             ReactDOM.render(React.createElement(Component, newProps), container);
         },

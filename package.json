@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "node cli/latte.js --dom",
+    "test": "node cli/latte.js --dom --react --include='__tests__/*.test.jsx,__tests__/*.test.js'",
     "test:watch": "node cli/latte.js --watch --include=__tests__/*.test.jsx"
   },
   "keywords": [
@@ -59,6 +59,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/plugin-transform-react-jsx": "^7.25.9",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
     "@babel/preset-typescript": "^7.26.0",

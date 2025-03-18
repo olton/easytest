@@ -5,9 +5,9 @@ import { setup as setupDom, bye as byeDom, js, css, html } from "../dom/index.js
 import { delay, getFileUrl } from "../helpers/delay.js";
 import { describe, it, test } from "./api.js";
 import { beforeEach, afterEach, beforeAll, afterAll } from "./hooks.js";
+import { waitFor } from "../utils/index.js";
 import chalk from "chalk";
 
-import { checkReactDependencies } from '../react/check-deps.js';
 import { initReact, render, cleanup, snapshot } from '../react/index.js';
 
 export const DOM = {
@@ -33,12 +33,12 @@ export function registerGlobals() {
     global.getFileUrl = getFileUrl;
     global.DOM = DOM;
     global.B = Browser;
+    global.waitFor = waitFor;
 
     if (global.config && global.config.react) {
         const reactInitialized = initReact();
         if (reactInitialized) {
-            // Додаємо React API глобально
-            global.React = {
+            global.R = {
                 render,
                 cleanup,
                 snapshot

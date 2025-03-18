@@ -7,7 +7,7 @@ import { processArgv, updateConfig } from "../src/config/index.js";
 import { clearConsole } from "../src/helpers/console.js";
 import { getProjectName } from '../src/helpers/project.js';
 import { banner } from '../src/helpers/banner.js';
-import { dirname, resolve } from 'path';
+import {dirname, join, resolve} from 'path';
 import { pathToFileURL, fileURLToPath } from 'url';
 import { register } from 'node:module';
 import { registerGlobalEvents } from '../src/core/registry.js';
@@ -15,6 +15,10 @@ import { configureJsxSupport } from '../src/config/jsx.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const __root = dirname(__dirname);
+const babelLoaderPath = pathToFileURL(join(__root, 'src/babel/loader.js'));
+
+console.log(`Babel loader path: ${babelLoaderPath}`);
 
 try {
     registerGlobalEvents();
@@ -50,6 +54,11 @@ try {
         if (!jsxSupported) {
             console.log(chalk.yellow('🤖 JSX/TSX support might be limited without proper Babel configuration!'));
         }
+
+        register(babelLoaderPath, {
+            parentURL: pathToFileURL('./'),
+            extensions: ['.jsx', '.tsx']
+        });
     }
 
     registerGlobals();

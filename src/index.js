@@ -1,6 +1,6 @@
 import { glob } from 'glob';
-import { pathToFileURL } from 'url';
-import { realpathSync, existsSync, writeFileSync } from 'fs';
+import { fileURLToPath, pathToFileURL } from 'url';
+import { realpathSync } from 'fs';
 import inspector from 'inspector/promises';
 import { coverageFilter, displayReport } from './core/coverage.js';
 import { runner } from "./core/runner.js";
@@ -9,10 +9,12 @@ import { testQueue } from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
 import { DOM } from './core/registry.js';
 
-import path from "path";
+import path, {dirname, join} from "path";
 import chalk from 'chalk';
-import {checkReactDependencies} from "./react/check-deps.js";
-import {cleanup} from "./react/index.js";
+import { checkReactDependencies } from "./react/check-deps.js";
+import { cleanup } from "./react/index.js";
+import { register } from 'node:module';
+
 
 // Экспортируем публичные API
 export { Expect, expect } from "./expects/expect.js";
@@ -21,6 +23,9 @@ export * from './core/registry.js';
 export { coverageFilter, generateReport, displayReport } from './core/coverage.js';
 export { fire } from './events/index.js';
 export { waitFor } from './utils/index.js';
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
 // Главная функция запуска тестов
 export const run = async (root, options = {}) => {
@@ -39,15 +44,15 @@ export const run = async (root, options = {}) => {
     // Настройка DOM, если требуется
     if (options.dom) {
         await DOM.setup();
-        console.log(chalk.green('🤖 DOM testing support is enabled!'));
+        console.log(chalk.green('🤖 DOM enabled!'));
     }
 
     if (options.react) {
         if (!checkReactDependencies(root)) {
-            console.error(chalk.red('💀 React testing cannot be initialized due to missing dependencies.'));
+            console.error(chalk.red('💀 React cannot be initialized due to missing dependencies.'));
             process.exit(1);
         }
-        console.log(chalk.green('🤖 React testing support is enabled!'));
+        console.log(chalk.green('🤖 React enabled!'));
     }
 
     // Инициализация сессии для измерения покрытия кода
