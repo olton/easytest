@@ -133,7 +133,7 @@ export const runner = async (queue, options) => {
                         logExpect(test.name, expect, testDuration)
                     } else {
                         if (!parallel) {
-                            progressBar && progressBar.increment();
+                            progressBar && progressBar.increment(file);
                         }
                     }
                 }
@@ -198,7 +198,7 @@ export const runner = async (queue, options) => {
                     logExpect(test.name, expect)
                 } else {
                     if (!parallel) { 
-                        progressBar && progressBar.increment();
+                        progressBar && progressBar.increment(file);
                     }
                 }
             }
@@ -219,6 +219,21 @@ export const runner = async (queue, options) => {
         } 
         const fileStatus = result.completed ? chalk.green('🟢') : chalk.red('🔴')
         log(`${fileStatus} ${file}...${result.completed ? chalk.green("OK") : chalk.red("FAIL")} 🕑 ${chalk.whiteBright(`${result.duration} ms`)}`)
+        for (const desc of result.describes) {
+            let testsCount = desc.tests.length
+            if (desc.result) {
+                continue
+            }
+            let testIndex = 0
+            for (const test of desc.tests) {
+                testIndex++
+                if (test.result) {
+                    continue
+                }
+                const s = testIndex === testsCount ? "└──" : "├──"
+                log(chalk.white(` ${s} ${chalk.white(test.name)} >>> ${chalk.gray(test.message)} <<<`))
+            }
+        }
     }
     
     if (!parallel) {

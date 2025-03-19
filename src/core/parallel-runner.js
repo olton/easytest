@@ -1,6 +1,8 @@
 import { Worker } from 'worker_threads';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import chalk from 'chalk';
+import {FAIL} from "../config/index.js";
 
 // Отримуємо правильний шлях до worker.js відносно поточного модуля
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -30,8 +32,7 @@ export async function parallel(testQueue, maxWorkers = 4) {
 
                 worker.on('message', (data) => {
                     if (data.error) {
-                        console.error(`Error in file ${file}:`, data.error.message);
-                        console.error(data.error.stack);
+                        console.log(chalk.red(`${FAIL} Error in file ${file}:`), data.error.message);
                     }
 
                     if (data.coverage) {
@@ -42,13 +43,13 @@ export async function parallel(testQueue, maxWorkers = 4) {
                 });
 
                 worker.on('error', (err) => {
-                    console.error(`Worker error for file ${file}:`, err);
+                    console.log(chalk.red(`Worker error for file ${file}:`), err);
                     reject(err);
                 });
 
                 worker.on('exit', (code) => {
                     if (code !== 0) {
-                        reject(new Error(`Worker for ${file} stopped with exit code ${code}`));
+                        reject(new Error(`${FAIL} Worker for ${file} stopped with exit code ${code}`));
                     }
                 });
             });

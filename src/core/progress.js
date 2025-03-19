@@ -10,12 +10,12 @@ export class ProgressBar {
         this.render();
     }
 
-    increment() {
+    increment(file) {
         this.completed++;
-        this.render();
+        this.render(file);
     }
 
-    render() {
+    render(file) {
         const percent = Math.round((this.completed / this.total) * 100);
         const filledWidth = Math.round((this.completed / this.total) * this.width);
         const emptyWidth = this.width - filledWidth;

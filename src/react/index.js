@@ -29,15 +29,24 @@ export const initReact = () => {
  * @param Component
  * @param props
  * @param container
- * @returns {Promise<{container: *, unmount: *, rerender: *, getByText: (function(*): unknown), getAllByText: (function(*): unknown[]), getByTestId: (function(*): *), fireEvent: {click: *, change: *}, debug: *}>}
+ * @returns {Promise<{
+ *      container: *, 
+ *      unmount: *, 
+ *      rerender: *, 
+ *      getByText: (function(*): HTMLElement | null), 
+ *      getAllByText: (function(*): HTMLElement[] | null), 
+ *      getById: (function(*): HTMLElement | null), 
+ *      getByClass: (function(*): HTMLElement[] | null), 
+ *      $: (function(*): HTMLElement | null), 
+ *      $$: (function(*): HTMLElement[] | null), 
+ *      fireEvent: {click: *, change: *}, 
+ *      debug: *
+ * }>}
  */
 export const render = async (Component, props = {}, container = null) => {
     
     if (!React || !ReactDOM) {
         throw new Error('React not initialized. Make sure to call initReact() first.');
-    } else {
-        // console.log(`🥤 Found React version: ${React.version}`);
-        // console.log(`🥤 Found ReactDOM version: ${ReactDOM.version}`);
     }
 
     // Якщо контейнер не передано, створюємо новий
@@ -48,15 +57,12 @@ export const render = async (Component, props = {}, container = null) => {
 
     // Перевірка, чи є createRoot в ReactDOM (React 18+)
     if (ReactDOM.createRoot) {
-        // console.log('🥤 Using React createRoot API (18+)');
         const root = ReactDOM.createRoot(container);
         await new Promise(resolve => {
             root.render(Component);
             setTimeout(resolve, 10); // Даємо час для завершення рендерингу
         });
     } else {
-        // console.log('🥤 Using React render API (< 18)');
-        // Використовуємо старий API для React < 18
         ReactDOM.render(Component, container);
         await new Promise(resolve => setTimeout(resolve, 10));
     }
@@ -85,6 +91,10 @@ export const render = async (Component, props = {}, container = null) => {
         getByText: (text) => {
             const elements = Array.from(container.querySelectorAll('*'));
             return elements.find(el => el.textContent === text);
+        },
+        getAllByText: (text) => {
+            const elements = Array.from(container.querySelectorAll('*'));
+            return elements.filter(el => el.textContent === text);
         },
         getById: (id) => {
             return container.querySelector(`#${id}`);

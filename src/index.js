@@ -1,5 +1,5 @@
 import { glob } from 'glob';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { pathToFileURL } from 'url';
 import { realpathSync } from 'fs';
 import inspector from 'inspector/promises';
 import { coverageFilter, displayReport } from './core/coverage.js';
@@ -9,11 +9,11 @@ import { testQueue } from './core/queue.js';
 import { hooksRegistry } from './core/hooks.js';
 import { DOM } from './core/registry.js';
 
-import path, {dirname, join} from "path";
+import path from "path";
 import chalk from 'chalk';
 import { checkReactDependencies } from "./react/check-deps.js";
 import { cleanup } from "./react/index.js";
-import { register } from 'node:module';
+import {BOT} from "./config/index.js";
 
 
 // Экспортируем публичные API
@@ -23,9 +23,6 @@ export * from './core/registry.js';
 export { coverageFilter, generateReport, displayReport } from './core/coverage.js';
 export { fire } from './events/index.js';
 export { waitFor } from './utils/index.js';
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
 
 // Главная функция запуска тестов
 export const run = async (root, options = {}) => {
@@ -42,7 +39,7 @@ export const run = async (root, options = {}) => {
     }
 
     if (options.dom || options.react) {
-        console.log(chalk.green('🥤 Preparing test environment...'));
+        console.log(chalk.green(`${BOT} Preparing test environment...`));
     }
     
     // Настройка DOM, если требуется

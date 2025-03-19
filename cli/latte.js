@@ -3,7 +3,7 @@
 import { registerGlobals, run } from '../src/index.js';
 import { startWatchMode } from '../src/watcher.js';
 import chalk from 'chalk';
-import { processArgv, updateConfig } from "../src/config/index.js";
+import {BOT, FAIL, LOGO, processArgv, updateConfig} from "../src/config/index.js";
 import { clearConsole } from "../src/helpers/console.js";
 import { getProjectName } from '../src/helpers/project.js';
 import { banner } from '../src/helpers/banner.js';
@@ -30,7 +30,7 @@ try {
     banner();
 
     const projectName = getProjectName(root);
-    console.log(`${chalk.cyan('Executing tests for project:')} ${chalk.bold(projectName)}\n`);
+    console.log(`${chalk.cyan(`🚀 Executing tests for project:`)} ${chalk.bold(projectName)}\n`);
     
     if (argv.init) {
         const configFileName = argv.config || "latte.json";
@@ -40,7 +40,7 @@ try {
     }
 
     if (argv.loader) {
-        console.log(chalk.yellow(`🤖 Experimental loader mode is enabled!`));
+        console.log(chalk.yellow(`${BOT} Experimental loader mode is enabled!`));
         const resolverPath = resolve(__dirname, '../src/resolver/index.js');
         register(pathToFileURL(resolverPath).href);
     }
@@ -52,7 +52,7 @@ try {
         const jsxSupported = configureJsxSupport(root);
 
         if (!jsxSupported) {
-            console.log(chalk.yellow('🤖 JSX/TSX support might be limited without proper Babel configuration!'));
+            console.log(chalk.yellow(`${BOT} JSX/TSX support might be limited without proper Babel configuration!`));
         }
 
         register(babelLoaderPath, {
@@ -71,14 +71,14 @@ try {
 } catch (error) {
     if (error.message.includes('Directory import') && error.message.includes('is not supported')
     ) {
-        console.error(chalk.red(`\n💀 Import of the Directory has been identified!`));
+        console.error(chalk.red(`\n${FAIL} Import of the Directory has been identified!`));
         console.error(chalk.yellow(`Please change import from: import {} from './directory'`));
         console.error(chalk.green(`To: import {} from './directory/index.js'`));
         console.error(chalk.cyan(`Or create package.json in this Directory with Field "exports"\n`));
         console.error(`${chalk.gray("Original message:")} ${error.message}\n`)
+        process.exit(1);
     } else {
-        console.error(chalk.red(`\n💀 Latte executing stopped with message: ${error.message}`));
-        console.error(chalk.gray(error.stack));
+        console.error(chalk.red(`\n${FAIL} Latte executing stopped with message: ${error.message}`));
         process.exit(1);
     }
 }

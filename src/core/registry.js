@@ -54,24 +54,24 @@ export const register = (name, component) => {
 export const registerGlobalEvents = () => {
     // Глобальная обработка ошибок
     process.on('uncaughtException', (error) => {
-        console.error(chalk.red(`\n❌ Unprocessed exception: ${error.message}\n`));
+        console.error(chalk.red(`\n⛔ Unprocessed exception: ${error.message}\n`));
         console.error(chalk.gray(error.stack));
         process.exit(1);
     });
 
     process.on('unhandledRejection', (reason, promise) => {
-        console.error(chalk.red(`\n❌ Unprocessed promise reject: ${reason}\n`));
+        console.error(chalk.red(`\n⛔ Unprocessed promise reject: ${reason}\n`));
         process.exit(1);
     });
 
 // Обработка сигналов завершения
     process.on('SIGINT', () => {
-        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the user!\n'));
+        console.log(chalk.yellow('\n⛔ The testing process was interrupted by the user!\n'));
         process.exit(0);
     });
 
     process.on('SIGTERM', () => {
-        console.log(chalk.yellow('\n⚠️ The testing process was interrupted by the system!\n'));
+        console.log(chalk.yellow('\n⛔ The testing process was interrupted by the system!\n'));
         process.exit(0);
     });
 }
