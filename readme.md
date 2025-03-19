@@ -2,9 +2,13 @@
 
 Latte (an abbreviation from `laconic testing`) is a testing framework for JavaScript and TypeScript, written in pure JavaScript.
 
-<h3>
+---
+
+<h2>
 It is designed to be straightforward to use, with a focus on speed, performance, and user information.
-</h3>
+</h2>
+
+---
 
 Latte is an alternative to other testing frameworks like Jest, Mocha, and Jasmine with the following features:
 
