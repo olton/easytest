@@ -9,10 +9,10 @@ Latte is an alternative to other testing frameworks like Jest, Mocha, and Jasmin
 
 + Built-in DOM support
 + Built-in headless browser
-+ Support for testing HTML
-+ Support for testing React components
-+ Support for testing Vue components (in development) 
-+ Support for testing Angular components (in development) 
++ Testing HTML elements
++ Testing React components
++ Testing Vue components (in development) 
++ Testing Angular components (in development) 
 
 ---
 
