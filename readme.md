@@ -34,6 +34,7 @@ Core features:
 - Setup and Teardown functions (`beforeEach`, `afterEach`, `beforeAll`, `afterAll`).
 - Built-in coverage tool.
 - Verbose or non verbose mode.
+- Watching mode.
 - Different Reporters: `lcov`, `console`, `html`, and `junit`.
 ---
 
