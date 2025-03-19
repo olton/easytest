@@ -1,4 +1,4 @@
-# Latte
+# 🥛 Latte
 
 Latte (an abbreviation from `laconic testing`) is a testing framework for JavaScript and TypeScript, written in pure JavaScript.
 
