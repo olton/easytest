@@ -9,6 +9,7 @@ Latte is an alternative to other testing frameworks like Jest, Mocha, and Jasmin
 
 + Built-in DOM support
 + Built-in headless browser
++ Support for testing HTML
 + Support for testing React components
 + Support for testing Vue components (in development) 
 + Support for testing Angular components (in development) 
@@ -24,7 +25,7 @@ Core features:
 - No need to import `it`, `test`, `describe` or `expect` in your test file. These functions are available globally.
 - Built-in headless browser in scope `B` and `DOM` support with option `--dom` (you have access to global DOM objects).
 - You can use both `js` and `ts` test files in the same project.
-- React Components testing (with `jsx`, `tsx`).
+- React Components testing (`jsx` syntax supported).
 - Asynchronous code testing.
 - TypeScript testing out of the box.
 - Mock functions.
