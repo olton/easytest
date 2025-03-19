@@ -1,6 +1,17 @@
 # Latte
 
-Latte (a play on words "laconic testing") is a testing framework for JavaScript and TypeScript, written in pure JavaScript with DOM support and with headless browser.
+Latte (an abbreviation from `laconic testing`) is a testing framework for JavaScript and TypeScript, written in pure JavaScript.
+
+> [!TIP]
+> It is designed to be straightforward to use, with a focus on speed, performance, and user information.
+
+Latte is an alternative to other testing frameworks like Jest, Mocha, and Jasmine with the following features:
+
++ Built-in DOM support
++ Built-in headless browser
++ Support for testing React components
++ Support for testing Vue components (in development) 
++ Support for testing Angular components (in development) 
 
 ---
 
@@ -9,10 +20,11 @@ Documentation: https://latte.org.ua/
 ---
 
 Core features:
-- Config free. No need to create any config files, but you can create `latte.json` or `latte.config.json` file to set up your own configuration.
+- Config free. No need to create any config files, but you can create `latte.json` file to set up your own configuration.
 - No need to import `it`, `test`, `describe` or `expect` in your test file. These functions are available globally.
 - Built-in headless browser in scope `B` and `DOM` support with option `--dom` (you have access to global DOM objects).
 - You can use both `js` and `ts` test files in the same project.
+- React Components testing (with `jsx`, `tsx`).
 - Asynchronous code testing.
 - TypeScript testing out of the box.
 - Mock functions.
