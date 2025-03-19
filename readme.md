@@ -35,7 +35,8 @@ Core features:
 - Built-in coverage tool.
 - Verbose or non verbose mode.
 - Watching mode.
-- Different Reporters: `lcov`, `console`, `html`, and `junit`.
+- Different Reporters: `lcov`, `console`, `html`, and `junit`.\
+- Open source and MIT license.
 ---
 
 Support for PayPal to **serhii@pimenov.com.ua**
