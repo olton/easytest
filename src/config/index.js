@@ -39,6 +39,7 @@ export const defaultConfig = {
     reportDir: "coverage",
     reportFile: "",
     maxWorkers: 4,
+    progress: "default",
 }
 
 export const updateConfig = (args) => {
@@ -79,6 +80,7 @@ export const updateConfig = (args) => {
     if (args.reportDir) { config.reportDir = args.reportDir; }
     if (args.reportFile) { config.reportDir = args.reportFile; }
     if (args.maxWorkers) { config.maxWorkers = args.maxWorkers; }
+    if (args.progress) { config.progress = args.progress; }
 
     if (config.reportType && !['console', 'lcov', 'html', 'junit'].includes(config.reportType)) {
         console.log(chalk.yellow(`${BOT} Unknown type of report: ${config.reportType}. Console will be used.`));
@@ -174,6 +176,10 @@ export const processArgv = () => {
         .option('report-file', {
             type: 'string',
             description: 'Report File Name'
+        })
+        .option('progress', {
+            type: 'string',
+            description: 'Progress Bar mode [\'default\', \'dots\', \'bar\']'
         })
         .option('init', {
             type: 'boolean',

@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import {stringify} from "../helpers/json.js";
 import matchInArray from "../helpers/match-in-array.js";
-import {ProgressBar} from "./progress.js";
+import { Progress } from "@olton/progress";
 
 const log = console.log
 
@@ -41,7 +41,18 @@ export const runner = async (queue, options) => {
     }
     if (!verbose && !parallel) {
         log(` `)
-        progressBar = new ProgressBar(totalTestCount);
+        // progressBar = new Progress(totalTestCount);
+        progressBar = new Progress({
+            total: totalTestCount,
+            width: 30,
+            mode: options.progress,
+            startMessageColor: 'whiteBright',
+            completeMessage: 'Tests completed in {{elapsed}}s',
+            completeMessageColor: 'gray',
+            processMessageColor: 'whiteBright',
+            processMessage: '',
+            showCompleteMessage: true,
+        });
     }
     
     for (const [file, jobs] of queue) {
@@ -133,7 +144,7 @@ export const runner = async (queue, options) => {
                         logExpect(test.name, expect, testDuration)
                     } else {
                         if (!parallel) {
-                            progressBar && progressBar.increment(file);
+                            progressBar && progressBar.process(1, `${chalk.yellow("[{{percent}}%]")} ${file}`);
                         }
                     }
                 }
@@ -197,8 +208,8 @@ export const runner = async (queue, options) => {
                 if (verbose) {
                     logExpect(test.name, expect)
                 } else {
-                    if (!parallel) { 
-                        progressBar && progressBar.increment(file);
+                    if (!parallel) {
+                        progressBar && progressBar.process(1, `${chalk.yellow("[{{percent}}%]")} ${file}`);
                     }
                 }
             }
@@ -211,7 +222,7 @@ export const runner = async (queue, options) => {
     const [seconds, nanoseconds] = process.hrtime(startTime);
     const duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
-    if (!parallel) { log(`\n`) }
+    // if (!parallel) { log(`\n`) }
 
     for (const [file, result] of Object.entries(global.testResults)) {
         if (result.completed) {
@@ -237,8 +248,7 @@ export const runner = async (queue, options) => {
     }
     
     if (!parallel) {
-        log(chalk.gray(`-----------------------------------------------------------------`))
-        log(`${chalk.gray("Tests completed in")} ${chalk.whiteBright.bold(duration)} ms`)
+        log(chalk.gray(`\n-----------------------------------------------------------------`))
         log(`${chalk.gray("Total")}: ${chalk.blue.bold(totalTests)}, ${chalk.gray("Passed")}: ${chalk.green.bold(passedTests)}, ${chalk.gray("Failed")}: ${chalk.red.bold(failedTests)}`)
         log(` `)
     } 
