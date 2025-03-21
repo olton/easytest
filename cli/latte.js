@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node
 
 import { registerGlobals, run } from '../src/index.js';
 import { startWatchMode } from '../src/watcher.js';

@@ -222,7 +222,7 @@ export const runner = async (queue, options) => {
     const [seconds, nanoseconds] = process.hrtime(startTime);
     const duration = (seconds * 1e9 + nanoseconds) / 1e6;
 
-    // if (!parallel) { log(`\n`) }
+    if (failedTests) { log(`\n`) }
 
     for (const [file, result] of Object.entries(global.testResults)) {
         if (result.completed) {
