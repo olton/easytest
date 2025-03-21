@@ -1,6 +1,6 @@
-import { createRequire } from 'module';
-
-global.require = createRequire(import.meta.url);
+// import { createRequire } from 'module';
+//
+// const localRequire = createRequire(import.meta.url);
 
 let React, ReactDOM, ReactTestUtils;
 

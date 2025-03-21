@@ -3,27 +3,25 @@
 import { registerGlobals, run } from '../src/index.js';
 import { startWatchMode } from '../src/watcher.js';
 import chalk from 'chalk';
-import {BOT, FAIL, LOGO, processArgv, updateConfig} from "../src/config/index.js";
+import { BOT, FAIL, LOGO, processArgv, testJSX, updateConfig } from "../src/config/index.js";
 import { clearConsole } from "../src/helpers/console.js";
 import { getProjectName } from '../src/helpers/project.js';
 import { banner } from '../src/helpers/banner.js';
-import {dirname, join, resolve} from 'path';
+import { dirname, resolve} from 'path';
 import { pathToFileURL, fileURLToPath } from 'url';
 import { register } from 'node:module';
 import { registerGlobalEvents } from '../src/core/registry.js';
-import { configureJsxSupport } from '../src/config/jsx.js';
+import { checkTsx } from "../src/typescript/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const __root = dirname(__dirname);
-const babelLoaderPath = pathToFileURL(join(__root, 'src/babel/loader.js'));
 
-console.log(`Babel loader path: ${babelLoaderPath}`);
+const argv = processArgv();
 
 try {
     registerGlobalEvents();
     
-    const argv = processArgv();
     const root = process.cwd();
 
     clearConsole()
@@ -45,22 +43,18 @@ try {
         register(pathToFileURL(resolverPath).href);
     }
     
-    // global.config = {};
     updateConfig(argv);
 
-    if (argv.react) {
-        const jsxSupported = configureJsxSupport(root);
-
-        if (!jsxSupported) {
-            console.log(chalk.yellow(`${BOT} JSX/TSX support might be limited without proper Babel configuration!`));
+    if (argv.ts || argv.react) {
+        if (!checkTsx(root)) {
+            console.log(chalk.red(`${BOT} To use TypeScript or test React Components you need to install TSX (https://tsx.is)!`));
+            console.log(chalk.red(`${BOT} └── After use: NODE_OPTIONS="--import tsx" latte ...`));
+            process.exit(1);
+        } else {
+            console.log(chalk.green(`${BOT} TSX found! TypeScript and JSX/TSX support is enabled!`));            
         }
-
-        register(babelLoaderPath, {
-            parentURL: pathToFileURL('./'),
-            extensions: ['.jsx', '.tsx']
-        });
     }
-
+    
     registerGlobals();
 
     if (argv.watch) {
@@ -79,6 +73,9 @@ try {
         process.exit(1);
     } else {
         console.error(chalk.red(`\n${FAIL} Latte executing stopped with message: ${error.message}`));
+        if (argv.errorStack) {
+            console.error(chalk.gray(error.stack));
+        }
         process.exit(1);
     }
 }

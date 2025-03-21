@@ -1,3 +1,5 @@
+import { createRequire } from 'module';
+
 import { expect as expectFn } from '../expects/expect.js';
 import mockFn from "./mock.js";
 import { Browser } from "../browser/browser.js";
@@ -19,6 +21,7 @@ export const DOM = {
 };
 
 export function registerGlobals() {
+    global.require = createRequire(import.meta.url);
     global.describe = describe;
     global.it = it;
     global.test = test;
@@ -36,14 +39,6 @@ export function registerGlobals() {
     global.waitFor = waitFor;
 
     if (global.config && global.config.react) {
-        const reactInitialized = initReact();
-        if (reactInitialized) {
-            global.R = {
-                render,
-                cleanup,
-                snapshot
-            };
-        }
     }
 }
 

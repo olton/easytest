@@ -1,4 +1,4 @@
-import {Expect} from "../src/expects/expect.js";
+import {Expect} from "../src/index.js";
 
 class MyExpect extends Expect {
     toBeEven() {

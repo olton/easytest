@@ -5,22 +5,10 @@ import {hideBin} from "yargs/helpers";
 
 export const LOGO = "🥛"
 export const BOT = "🤖"
-// export const LOGO = "🥤"
 export const FAIL = "💀"
 
-const defaultInclude = [
-    "**/*.spec.ts", 
-    "**/*.spec.tsx", 
-    "**/*.test.ts", 
-    "**/*.test.tsx", 
-    "**/*.spec.js", 
-    "**/*.spec.jsx", 
-    "**/*.test.js", 
-    "**/*.test.jsx"
-]
-const defaultExclude = [
-    "node_modules/**"
-]
+const defaultInclude = ["**/*.{test,spec}.{js,ts,jsx,tsx}"]
+const defaultExclude = ["node_modules/**"]
 
 export const defaultConfig = {
     verbose: false,
@@ -65,6 +53,7 @@ export const updateConfig = (args) => {
 
     if (args.dom) { config.dom = true; }
     if (args.react) { config.dom = true; config.react = true; }
+    if (args.ts) { config.ts = true; }
     if (args.coverage) { config.coverage = true; }
     if (args.verbose) { config.verbose = true; }
     if (args.skipPassed) { config.skipPassed = true; }
@@ -131,7 +120,11 @@ export const processArgv = () => {
         .option('react', {
             alias: 'r',
             type: 'boolean',
-            description: 'Enable React testing support (requires --dom)'
+            description: 'Enable React testing support'
+        })
+        .option('ts', {
+            type: 'boolean',
+            description: 'Enable TypeScript support'
         })
         .option('debug', {
             alias: 'g',
@@ -187,4 +180,15 @@ export const processArgv = () => {
         })
         .help()
         .argv;
+}
+
+export const testJSX = () => {
+    let requireTsx = false
+    for (const ext of config.include) {
+        if (ext.endsWith('.tsx') || ext.endsWith('.jsx') || ext.endsWith('.ts')) {
+            requireTsx = true
+            break
+        }        
+    }
+    return requireTsx
 }

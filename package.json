@@ -1,6 +1,6 @@
 {
   "name": "@olton/latte",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "src/index.js",
   "bin": {
     "latte": "cli/latte.js"
@@ -9,8 +9,8 @@
   "type": "module",
   "scripts": {
     "pub": "npm publish --access public",
-    "test": "node cli/latte.js --dom --react",
-    "test:watch": "node cli/latte.js --watch --include=__tests__/*.test.jsx"
+    "test": "cross-env NODE_OPTIONS=\"--import tsx\" latte",
+    "test:watch": "cross-env NODE_OPTIONS=\"--import tsx\" latte --watch --include=__tests__/*.test.jsx"
   },
   "keywords": [
     "javascript",
@@ -58,13 +58,9 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.26.10",
-    "@babel/plugin-transform-react-jsx": "^7.25.9",
-    "@babel/preset-env": "^7.26.9",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
-    "@babel/register": "^7.25.9",
+    "cross-env": "^7.0.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tsx": "^4.19.3"
   }
 }

@@ -12,8 +12,9 @@ import { DOM } from './core/registry.js';
 import path from "path";
 import chalk from 'chalk';
 import { checkReactDependencies } from "./react/check-deps.js";
-import { cleanup } from "./react/index.js";
+import {cleanup, initReact, render, snapshot} from "./react/index.js";
 import {BOT} from "./config/index.js";
+import {findJsxTests, findTypeScriptTests} from "./typescript/index.js";
 
 
 // Экспортируем публичные API
@@ -29,6 +30,19 @@ export const run = async (root, options = {}) => {
     global.testResults = {}
     options.root = root;
 
+    let files = [];
+
+    // Если указаны конкретные файлы, используем их
+    if (options.files && options.files.length) {
+        files = options.files;
+    }
+    // Иначе используем паттерны включения/исключения
+    else {
+        const includePattern = options.include || '**/__tests__/**/*.test.js';
+        const excludePattern = options.exclude || [];
+        files = await glob(includePattern, { ignore: excludePattern });
+    }
+
     const inspectPort = options.debug ? (options.debugPort || 9229) : undefined;
 
     if (options.debug) {
@@ -38,20 +52,40 @@ export const run = async (root, options = {}) => {
         console.log(chalk.green(`[Debug] Starting in debug mode on port ${inspectPort}`));
     }
 
+    if (findJsxTests(files) && !options.react) {
+        console.log(chalk.yellow(`${BOT} We found JSX/TSX tests in your scope! --dom and --react options activated!`));
+        options.react = true;
+        options.dom = true;
+    }
+
+    if (findTypeScriptTests(files) && !options.ts) {
+        console.log(chalk.yellow(`${BOT} We found TypeScript tests in your scope! --ts option activated!`));
+        options.ts = true;
+    }
+
     if (options.dom || options.react) {
         console.log(chalk.green(`${BOT} Preparing test environment...`));
     }
-    
-    // Настройка DOM, если требуется
+
+    console.log(chalk.green(`   ${options.dom || options.react ? "├" : "└"}── ⚙️ Global objects ready!`));
+
     if (options.dom) {
         await DOM.setup();
             console.log(chalk.green(`   ${options.react ? "├" : "└"}── 📦 DOM ready!`));
     }
-
+    
     if (options.react) {
         if (!checkReactDependencies(root)) {
             console.error(chalk.red('   └── ⚛️ React cannot be initialized due to missing dependencies.'));
             process.exit(1);
+        }
+        const reactInitialized = initReact();
+        if (reactInitialized) {
+            global.R = {
+                render,
+                cleanup,
+                snapshot
+            };
         }
         console.log(chalk.green(    '   └── ⚛️ React ready!'));
     }
@@ -67,19 +101,6 @@ export const run = async (root, options = {}) => {
     });
 
     testQueue.clearQueue();
-
-    let files = [];
-
-    // Если указаны конкретные файлы, используем их
-    if (options.files && options.files.length) {
-        files = options.files;
-    }
-    // Иначе используем паттерны включения/исключения
-    else {
-        const includePattern = options.include || '**/__tests__/**/*.test.js';
-        const excludePattern = options.exclude || [];
-        files = await glob(includePattern, { ignore: excludePattern });
-    }
 
     // Загрузка и выполнение тестовых файлов
     for (const file of files) {
