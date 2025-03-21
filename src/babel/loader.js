@@ -8,7 +8,7 @@ export async function load(url, context, defaultLoad) {
     const filePath = fileURLToPath(url);
 
     // Якщо це JSX або TSX файл
-    if (filePath.endsWith('.jsx') || filePath.endsWith('.tsx')) {
+    if (filePath.endsWith('.jsx') || filePath.endsWith('.tsx') || filePath.endsWith('.js') || filePath.endsWith('.ts')) {
         // Читаємо вміст файлу
         const source = fs.readFileSync(filePath, 'utf-8');
 
