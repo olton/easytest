@@ -139,7 +139,7 @@ Update `package.json` to run tests with `latte` command.
 - `mock` - create mock function
 
 ### Matchers
-EasyTest contains a big set of built-in matchers:
+Latte contains a big set of built-in matchers:
 
 - A simple comparison
 - A strong comparison
@@ -172,7 +172,7 @@ and then
 ```
 
 ## License
-EasyTest licensed under MIT license.
+Latte licensed under MIT license.
 
 ## Contributing
 
@@ -181,4 +181,4 @@ Use issue tracker to report bugs or request new features.
 
 ---
 ### Copyright
-© 2024-2025 [Serhii Pimenov](mainto:serhii@pimenov.com.ua). All rights reserved.
+© 2025 [Serhii Pimenov](https://pimenov.com.ua). All rights reserved.
