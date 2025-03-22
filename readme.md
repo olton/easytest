@@ -23,9 +23,9 @@ Latte is an alternative to other testing frameworks like Jest, Mocha, and Jasmin
 + Testing Angular components (in development) 
 
 ---
-
+<div align="center">
 Documentation: https://latte.org.ua/
-
+</div>
 ---
 
 <div align="center">
