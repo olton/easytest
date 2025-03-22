@@ -62,7 +62,6 @@ Support for PayPal to **serhii@pimenov.com.ua**
 
 [![NPM Version](https://img.shields.io/npm/v/@olton/latte?color=green)](https://www.npmjs.com/package/@olton/latte)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?color=7852a9)](https://opensource.org/licenses/MIT)
-[![codecov](https://codecov.io/gh/olton/latte/branch/master/graph/badge.svg?token=7HT3E91GUA)](https://codecov.io/gh/olton/latte)
 ![NPM Downloads](https://img.shields.io/npm/dw/%40olton%2Flatte)
 
 
